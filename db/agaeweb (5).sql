@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 13-07-2026 a las 16:34:51
+-- Tiempo de generación: 14-07-2026 a las 00:30:30
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -1091,6 +1091,32 @@ INSERT INTO `afiliados_auditoria` (`id`, `id_afiliado`, `tipo_auditoria`, `usuar
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `afiliados_confirmados`
+--
+
+CREATE TABLE `afiliados_confirmados` (
+  `id_afiliado` int(11) NOT NULL,
+  `dni` varchar(20) NOT NULL,
+  `apellidos` varchar(100) NOT NULL,
+  `nombres` varchar(100) NOT NULL,
+  `email` varchar(150) NOT NULL,
+  `whatsapp` varchar(50) NOT NULL,
+  `id_fpago` int(11) NOT NULL,
+  `numero_cuenta` varchar(14) DEFAULT NULL,
+  `fecha_alta` datetime DEFAULT current_timestamp(),
+  `id_solicitud_origen` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `afiliados_confirmados`
+--
+
+INSERT INTO `afiliados_confirmados` (`id_afiliado`, `dni`, `apellidos`, `nombres`, `email`, `whatsapp`, `id_fpago`, `numero_cuenta`, `fecha_alta`, `id_solicitud_origen`) VALUES
+(1, '22805302', 'ruben', 'correa', 'rcorrea@derecho', '1122735837', 1, '12345678912345', '2026-07-13 15:25:06', 1);
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `afiliados_domicilios`
 --
 
@@ -1104,6 +1130,18 @@ CREATE TABLE `afiliados_domicilios` (
   `email` varchar(150) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Volcado de datos para la tabla `afiliados_domicilios`
+--
+
+INSERT INTO `afiliados_domicilios` (`id_afiliado`, `domicilio`, `localidad`, `codigo_postal`, `provincia`, `telefono`, `email`) VALUES
+(1, '', '', '', '', '11222222222', 'correa@derecho.uba.ar'),
+(5, '', '', '', '', '11111111111111', 'rcorrea@dere.com.ar'),
+(6, '', '', '', '', '1122735837', 'rcorrea@derecho'),
+(9, '', '', '', '', '11222222222', 'correa@derecho.uba.ar'),
+(10, '', '', '', '', '13213213213', 'tuq@derecho.uba.ar'),
+(11, '', '', '', '', '1321321321', 'tucu@derecho.uba.ar');
+
 -- --------------------------------------------------------
 
 --
@@ -1115,6 +1153,18 @@ CREATE TABLE `afiliados_educacion` (
   `nivel_estudio` varchar(100) DEFAULT NULL,
   `titulo` varchar(150) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `afiliados_educacion`
+--
+
+INSERT INTO `afiliados_educacion` (`id_afiliado`, `nivel_estudio`, `titulo`) VALUES
+(1, NULL, NULL),
+(5, NULL, NULL),
+(6, NULL, NULL),
+(9, NULL, NULL),
+(10, NULL, NULL),
+(11, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1131,6 +1181,18 @@ CREATE TABLE `afiliados_laborales` (
   `localidad_trabajo` varchar(150) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Volcado de datos para la tabla `afiliados_laborales`
+--
+
+INSERT INTO `afiliados_laborales` (`id_afiliado`, `legajo`, `org_liquida_haber`, `org_trabaja`, `domicilio_trabajo`, `localidad_trabajo`) VALUES
+(1, NULL, NULL, NULL, NULL, NULL),
+(5, NULL, NULL, NULL, NULL, NULL),
+(6, NULL, NULL, NULL, NULL, NULL),
+(9, NULL, NULL, NULL, NULL, NULL),
+(10, NULL, NULL, NULL, NULL, NULL),
+(11, NULL, NULL, NULL, NULL, NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -1143,15 +1205,29 @@ CREATE TABLE `afiliados_maestra` (
   `cuil` varchar(20) DEFAULT NULL,
   `apellidos` varchar(100) NOT NULL,
   `nombres` varchar(100) NOT NULL,
-  `nacionalidad` varchar(50) DEFAULT 'Argentina',
+  `nacionalidad` varchar(50) DEFAULT NULL,
   `sexo` varchar(20) DEFAULT NULL,
   `estado_civil` varchar(30) DEFAULT NULL,
   `fecha_nacimiento` date DEFAULT NULL,
+  `id_fpago` int(11) DEFAULT NULL,
+  `numero_cuenta` varchar(14) DEFAULT NULL,
   `fecha_solicitud_original` datetime DEFAULT NULL,
   `fecha_alta_padrón` datetime DEFAULT current_timestamp(),
   `estado` int(11) DEFAULT 1,
   `id_solicitud_origen` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `afiliados_maestra`
+--
+
+INSERT INTO `afiliados_maestra` (`id_afiliado`, `dni`, `cuil`, `apellidos`, `nombres`, `nacionalidad`, `sexo`, `estado_civil`, `fecha_nacimiento`, `id_fpago`, `numero_cuenta`, `fecha_solicitud_original`, `fecha_alta_padrón`, `estado`, `id_solicitud_origen`) VALUES
+(1, '22222222', NULL, 'wienke', 'constantino', NULL, NULL, NULL, NULL, 2, NULL, '2026-07-13 10:00:18', '2026-07-13 17:14:26', 1, 2),
+(5, '123456789', NULL, 'ruben', 'correa', NULL, NULL, NULL, NULL, 2, NULL, '2026-07-13 17:39:02', '2026-07-13 17:55:10', 1, 3),
+(6, '22805302', NULL, 'ruben', 'correa', NULL, NULL, NULL, NULL, 1, '12313213213213', '2026-07-08 16:31:35', '2026-07-13 18:12:58', 1, 1),
+(9, '2132132', NULL, 'wienke', 'constantino', NULL, NULL, NULL, NULL, 2, NULL, '2026-07-13 10:00:18', '2026-07-13 18:18:35', 1, 2),
+(10, '12345678', NULL, 'tuq', 'tuq', NULL, NULL, NULL, NULL, 1, '21321321312321', '2026-07-13 18:24:24', '2026-07-13 18:25:09', 1, 4),
+(11, '21551710', NULL, 'ruben', 'correa', NULL, NULL, NULL, NULL, 2, NULL, '2026-07-13 19:09:35', '2026-07-13 19:19:04', 1, 6);
 
 -- --------------------------------------------------------
 
@@ -1238,8 +1314,15 @@ CREATE TABLE `solicitudes_afiliacion` (
 --
 
 INSERT INTO `solicitudes_afiliacion` (`id`, `dni`, `apellidos`, `nombres`, `email`, `whatsapp`, `fecha_solicitud`, `estado`) VALUES
-(1, '22805302', 'ruben', 'correa', 'rcorrea@derecho', '1122735837', '2026-07-08 16:31:35', 'PENDIENTE'),
-(2, '22222222', 'wienke', 'constantino', 'correa@derecho.uba.ar', '11222222222', '2026-07-13 10:00:18', 'PENDIENTE');
+(1, '22805302', 'ruben', 'correa', 'rcorrea@derecho', '1122735837', '2026-07-08 16:31:35', 'APROBADO'),
+(2, '2132132', 'wienke', 'constantino', 'correa@derecho.uba.ar', '11222222222', '2026-07-13 10:00:18', 'APROBADO'),
+(3, '123456789', 'ruben', 'correa', 'rcorrea@dere.com.ar', '11111111111111', '2026-07-13 17:39:02', 'APROBADO'),
+(4, '12345678', 'tuq', 'tuq', 'tuq@derecho.uba.ar', '13213213213', '2026-07-13 18:24:24', 'APROBADO'),
+(5, '22334455', 'ruben', 'correa', 'tuq@derecho.uba.ar', '13213213123', '2026-07-13 18:33:38', 'PENDIENTE'),
+(6, '21551710', 'ruben', 'correa', 'tucu@derecho.uba.ar', '1321321321', '2026-07-13 19:09:35', 'APROBADO'),
+(7, '22805303', 'ruben', 'correa', 'tucu2@gmail.com', '21321321321', '2026-07-13 19:10:28', 'PENDIENTE'),
+(8, '22805304', 'ruben', 'correa', 'emilio@derecho.uba.ar', '1564565', '2026-07-13 19:17:47', 'PENDIENTE'),
+(9, '22805305', 'ruben', 'correa', 'dodo@gmail.com', '465465465', '2026-07-13 19:18:26', 'PENDIENTE');
 
 -- --------------------------------------------------------
 
@@ -1283,6 +1366,14 @@ ALTER TABLE `afiliados`
 --
 ALTER TABLE `afiliados_auditoria`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `afiliados_confirmados`
+--
+ALTER TABLE `afiliados_confirmados`
+  ADD PRIMARY KEY (`id_afiliado`),
+  ADD UNIQUE KEY `dni` (`dni`),
+  ADD KEY `id_fpago` (`id_fpago`);
 
 --
 -- Indices de la tabla `afiliados_domicilios`
@@ -1359,10 +1450,16 @@ ALTER TABLE `afiliados_auditoria`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=552;
 
 --
+-- AUTO_INCREMENT de la tabla `afiliados_confirmados`
+--
+ALTER TABLE `afiliados_confirmados`
+  MODIFY `id_afiliado` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT de la tabla `afiliados_maestra`
 --
 ALTER TABLE `afiliados_maestra`
-  MODIFY `id_afiliado` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_afiliado` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT de la tabla `afiliado_estados`
@@ -1386,7 +1483,7 @@ ALTER TABLE `bancos`
 -- AUTO_INCREMENT de la tabla `solicitudes_afiliacion`
 --
 ALTER TABLE `solicitudes_afiliacion`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT de la tabla `usuarios`
@@ -1397,6 +1494,12 @@ ALTER TABLE `usuarios`
 --
 -- Restricciones para tablas volcadas
 --
+
+--
+-- Filtros para la tabla `afiliados_confirmados`
+--
+ALTER TABLE `afiliados_confirmados`
+  ADD CONSTRAINT `afiliados_confirmados_ibfk_1` FOREIGN KEY (`id_fpago`) REFERENCES `afiliado_forma_de_pago` (`id_fpago`);
 
 --
 -- Filtros para la tabla `afiliados_domicilios`

@@ -1,303 +1,277 @@
 <!doctype html>
 <html lang="es">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Formulario de Afiliación - AGAE</title>
 
-		<link
-			href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-			rel="stylesheet"
-		/>
-		<link
-			href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Open+Sans&display=swap"
-			rel="stylesheet"
-		/>
-		<link rel="icon" href="assets/favicon.png" />
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Formulario de Afiliación - AGAE</title>
 
-		<link
-			rel="stylesheet"
-			href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css"
-		/>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+	<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Open+Sans&display=swap"
+		rel="stylesheet" />
+	<link rel="icon" href="assets/favicon.png" />
 
-		<style>
-			/* Todos los estilos originales intactos */
-			*,
-			*::before,
-			*::after {
-				box-sizing: border-box;
-				margin: 0;
-				padding: 0;
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" />
+
+	<style>
+		/* Todos los estilos originales intactos */
+		*,
+		*::before,
+		*::after {
+			box-sizing: border-box;
+			margin: 0;
+			padding: 0;
+		}
+
+		html,
+		body {
+			height: 100dvh;
+			overflow: hidden;
+			font-family: "Open Sans", sans-serif;
+			background-color: #19248b;
+			color: white;
+		}
+
+		.split {
+			display: flex;
+			height: 100dvh;
+			overflow: hidden;
+		}
+
+		.left {
+			flex: 0.4;
+			background-color: #19248b;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			text-align: center;
+			padding: 40px;
+		}
+
+		.left .content {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			width: 100%;
+		}
+
+		.left h1 {
+			font-family: "Montserrat", sans-serif;
+			font-size: 3rem;
+			margin-bottom: 20px;
+			font-weight: bold;
+		}
+
+		.left p {
+			font-size: 1.2rem;
+			opacity: 0.9;
+			max-width: 400px;
+			margin-bottom: 0;
+		}
+
+		.right {
+			flex: 0.6;
+			background-color: #f8f9fa;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			padding: 40px;
+		}
+
+		.form-container {
+			background-color: white;
+			border-radius: 16px;
+			box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+			padding: 40px;
+			width: 100%;
+			max-width: 500px;
+		}
+
+		.form-container h2 {
+			font-family: "Montserrat", sans-serif;
+			color: #19248b;
+			text-align: center;
+			margin-bottom: 30px;
+			font-weight: bold;
+		}
+
+		.form-control,
+		.form-select {
+			border-radius: 8px;
+			padding: 12px;
+			margin-bottom: 20px;
+		}
+
+		.form-control:focus,
+		.form-select:focus {
+			border-color: #19248b;
+			box-shadow: 0 0 0 0.2rem rgba(25, 36, 139, 0.25);
+		}
+
+		input::placeholder {
+			text-transform: none;
+		}
+
+		.btn-custom {
+			background-color: #19248b;
+			border-color: #19248b;
+			color: white;
+			border-radius: 8px;
+			padding: 12px;
+			width: 100%;
+			font-size: 1.1rem;
+			font-weight: 600;
+			margin-top: 10px;
+			transition: all 0.3s;
+		}
+
+		.btn-custom:hover:not(:disabled) {
+			background-color: #3a4dbd;
+			border-color: #3a4dbd;
+		}
+
+		.btn-custom:disabled {
+			opacity: 0.7;
+			cursor: not-allowed;
+		}
+
+		@media (max-width: 768px) {
+			.split {
+				flex-direction: column;
+				height: auto;
 			}
+
+			.left,
+			.right {
+				padding: 30px;
+			}
+
+			.left h1 {
+				font-size: 2.4rem;
+			}
+
 			html,
 			body {
-				height: 100dvh;
-				overflow: hidden;
-				font-family: "Open Sans", sans-serif;
-				background-color: #19248b;
-				color: white;
+				overflow: auto;
+				height: auto;
 			}
-			.split {
-				display: flex;
-				height: 100dvh;
-				overflow: hidden;
-			}
-			.left {
-				flex: 0.4;
-				background-color: #19248b;
-				display: flex;
-				align-items: center;
-				justify-content: center;
-				text-align: center;
-				padding: 40px;
-			}
-			.left .content {
-				display: flex;
-				flex-direction: column;
-				align-items: center;
-				justify-content: center;
-				width: 100%;
-			}
-			.left h1 {
-				font-family: "Montserrat", sans-serif;
-				font-size: 3rem;
-				margin-bottom: 20px;
-				font-weight: bold;
-			}
-			.left p {
-				font-size: 1.2rem;
-				opacity: 0.9;
-				max-width: 400px;
-				margin-bottom: 0;
-			}
-			.right {
-				flex: 0.6;
-				background-color: #f8f9fa;
-				display: flex;
-				align-items: center;
-				justify-content: center;
-				padding: 40px;
-			}
-			.form-container {
-				background-color: white;
-				border-radius: 16px;
-				box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-				padding: 40px;
-				width: 100%;
-				max-width: 500px;
-			}
-			.form-container h2 {
-				font-family: "Montserrat", sans-serif;
-				color: #19248b;
-				text-align: center;
-				margin-bottom: 30px;
-				font-weight: bold;
-			}
-			.form-control,
-			.form-select {
-				border-radius: 8px;
-				padding: 12px;
-				margin-bottom: 20px;
-			}
-			.form-control:focus,
-			.form-select:focus {
-				border-color: #19248b;
-				box-shadow: 0 0 0 0.2rem rgba(25, 36, 139, 0.25);
-			}
-			input::placeholder {
-				text-transform: none;
-			}
+		}
+	</style>
+</head>
 
-			.btn-custom {
-				background-color: #19248b;
-				border-color: #19248b;
-				color: white;
-				border-radius: 8px;
-				padding: 12px;
-				width: 100%;
-				font-size: 1.1rem;
-				font-weight: 600;
-				margin-top: 10px;
-				transition: all 0.3s;
-			}
-			.btn-custom:hover:not(:disabled) {
-				background-color: #3a4dbd;
-				border-color: #3a4dbd;
-			}
-			.btn-custom:disabled {
-				opacity: 0.7;
-				cursor: not-allowed;
-			}
-
-			@media (max-width: 768px) {
-				.split {
-					flex-direction: column;
-					height: auto;
-				}
-				.left,
-				.right {
-					padding: 30px;
-				}
-				.left h1 {
-					font-size: 2.4rem;
-				}
-				html,
-				body {
-					overflow: auto;
-					height: auto;
-				}
-			}
-		</style>
-	</head>
-	<body>
-		<div id="app" class="split">
-			<div class="left">
-				<div class="content">
-					<img
-						src="assets/unite.png"
-						alt="Logo AGAE"
-						style="max-width: 200px; margin-bottom: 20px"
-					/>
-					<h1>¡Unite a la AGAE!</h1>
-					<p>
-						Completá tus datos para iniciar tu afiliación y ser parte de nuestra
-						comunidad.
-					</p>
-				</div>
-			</div>
-
-			<div class="right">
-				<div class="form-container">
-					<h2>Comenzá tu afiliación ahora</h2>
-
-					<form @submit.prevent="procesarFormulario">
-						<div class="mb-3">
-							<input
-								type="text"
-								style="text-transform: capitalize"
-								class="form-control"
-								placeholder="Apellido/s *"
-								v-model="form.apellidos"
-								required
-							/>
-						</div>
-
-						<div class="mb-3">
-							<input
-								type="text"
-								style="text-transform: capitalize"
-								class="form-control"
-								placeholder="Nombre/s *"
-								v-model="form.nombres"
-								required
-							/>
-						</div>
-
-						<div class="mb-3">
-							<input
-								type="email"
-								class="form-control"
-								placeholder="Email *"
-								v-model="form.email"
-								required
-								oninput="this.value = this.value.toLowerCase()"
-							/>
-						</div>
-
-						<div class="mb-3">
-							<input
-								type="tel"
-								class="form-control"
-								placeholder="Whatsapp *"
-								v-model="form.whatsapp"
-								inputmode="numeric"
-								required
-								maxlength="14"
-							/>
-						</div>
-
-						<div class="mb-3">
-							<input
-								type="text"
-								class="form-control"
-								placeholder="DNI *"
-								v-model="form.dni"
-								inputmode="numeric"
-								required
-							/>
-						</div>
-
-						<button type="submit" class="btn-custom" :disabled="enviando">
-							{{ enviando ? 'Enviando...' : 'Enviar Solicitud' }}
-						</button>
-					</form>
-				</div>
+<body>
+	<div id="app" class="split">
+		<div class="left">
+			<div class="content">
+				<img src="assets/unite.png" alt="Logo AGAE" style="max-width: 200px; margin-bottom: 20px" />
+				<h1>¡Unite a la AGAE!</h1>
+				<p>
+					Completá tus datos para iniciar tu afiliación y ser parte de nuestra
+					comunidad.
+				</p>
 			</div>
 		</div>
 
-		<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-		<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+		<div class="right">
+			<div class="form-container">
+				<h2>Comenzá tu afiliación ahora</h2>
 
-		<script>
-			const { createApp } = Vue;
+				<form @submit.prevent="procesarFormulario">
+					<div class="mb-3">
+						<input type="text" style="text-transform: capitalize" class="form-control"
+							placeholder="Apellido/s *" v-model="form.apellidos" required />
+					</div>
 
-			createApp({
-				data() {
-					return {
-						form: {
-							apellidos: "",
-							nombres: "",
-							email: "",
-							whatsapp: "",
-							dni: "",
-						},
-						enviando: false, // Para bloquear el botón mientras carga
-					};
-				},
-				watch: {
-					// Vue controla el formato del DNI automáticamente
-					"form.dni"(nuevoValor) {
-						let numeros = nuevoValor.replace(/\D/g, "");
-						if (numeros.length > 8) numeros = numeros.slice(0, 8);
-						this.form.dni = numeros.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+					<div class="mb-3">
+						<input type="text" style="text-transform: capitalize" class="form-control"
+							placeholder="Nombre/s *" v-model="form.nombres" required />
+					</div>
+
+					<div class="mb-3">
+						<input type="email" class="form-control" placeholder="Email *" v-model="form.email" required
+							oninput="this.value = this.value.toLowerCase()" />
+					</div>
+
+					<div class="mb-3">
+						<input type="tel" class="form-control" placeholder="Whatsapp *" v-model="form.whatsapp"
+							inputmode="numeric" required maxlength="14" />
+					</div>
+
+					<div class="mb-3">
+						<input type="text" class="form-control" placeholder="DNI *" v-model="form.dni"
+							inputmode="numeric" required />
+					</div>
+
+					<button type="submit" class="btn-custom" :disabled="enviando">
+						{{ enviando ? 'Enviando...' : 'Enviar Solicitud' }}
+					</button>
+				</form>
+			</div>
+		</div>
+	</div>
+
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+	<script>
+		const { createApp } = Vue;
+
+		createApp({
+			data() {
+				return {
+					form: {
+						apellidos: "",
+						nombres: "",
+						email: "",
+						whatsapp: "",
+						dni: "",
 					},
-					// Vue controla el formato del Whatsapp automáticamente
-					"form.whatsapp"(nuevoValor) {
-						let numeros = nuevoValor.replace(/\D/g, "");
-						if (numeros.length > 14) numeros = numeros.slice(0, 14);
-						this.form.whatsapp = numeros;
-					},
+					enviando: false, // Para bloquear el botón mientras carga
+				};
+			},
+			watch: {
+				// Vue controla el formato del DNI automáticamente
+				"form.dni"(nuevoValor) {
+					let numeros = nuevoValor.replace(/\D/g, "");
+					if (numeros.length > 8) numeros = numeros.slice(0, 8);
+					this.form.dni = numeros.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 				},
-				methods: {
-					async procesarFormulario() {
-						this.enviando = true; // Cambiamos el texto del botón a "Enviando..."
+				// Vue controla el formato del Whatsapp automáticamente
+				"form.whatsapp"(nuevoValor) {
+					let numeros = nuevoValor.replace(/\D/g, "");
+					if (numeros.length > 14) numeros = numeros.slice(0, 14);
+					this.form.whatsapp = numeros;
+				},
+			},
+			methods: {
+				async procesarFormulario() {
+					this.enviando = true; // Cambiamos el texto del botón a "Enviando..."
 
-						try {
-							// Enviamos los datos al backend (API)
+					try {
+						// Enviamos los datos al backend (API)
 
-							const respuesta = await fetch(
-								"controladores/publico_solicitud_controlador.php",
-								{
-									method: "POST",
-									headers: { "Content-Type": "application/json" },
-									body: JSON.stringify(this.form),
-								},
-							);
+						const respuesta = await fetch(
+							"controladores/publico_solicitud_controlador.php",
+							{
+								method: "POST",
+								headers: { "Content-Type": "application/json" },
+								body: JSON.stringify(this.form),
+							},
+						);
 
-							const resultado = await respuesta.json();
+						const resultado = await respuesta.json();
 
-							if (resultado.status === "success") {
-								// Si guardó OK, mostramos el cartelito hermoso
-								Swal.fire({
-									title: "¡Bienvenido a AGAE!",
-									text:
-										"Registramos tus datos básicos con éxito. Pronto nos estaremos comunicando con vos vía email o teléfono para finalizar tu proceso de afiliación.",
-									icon: "success",
-									confirmButtonColor: "#19248B",
-									confirmButtonText: "Entendido, muchas gracias",
-								});
-
-								// Limpiamos los campos del formulario
+						if (resultado.status === "success") {
+							// Si guardó OK, mostramos el cartelito hermoso
+							Swal.fire({
+								title: "¡Bienvenido a AGAE!",
+								text: "Registramos tus datos básicos con éxito. Pronto nos estaremos comunicando con vos vía email o teléfono para finalizar tu proceso de afiliación.",
+								icon: "success",
+								confirmButtonColor: "#19248B",
+								confirmButtonText: "Entendido, muchas gracias",
+							}).then(() => {
+								// Limpiamos los campos del formulario por prolijidad
 								this.form = {
 									apellidos: "",
 									nombres: "",
@@ -305,29 +279,37 @@
 									whatsapp: "",
 									dni: "",
 								};
-							} else {
-								// Si el PHP nos responde con un error (ej: DNI repetido)
-								Swal.fire({
-									title: "Atención",
-									text: resultado.message,
-									icon: "warning",
-									confirmButtonColor: "#19248B",
-								});
-							}
-						} catch (error) {
-							// Si el servidor está caído o hay un error de conexión
-							Swal.fire({
-								title: "Error de Conexión",
-								text: "No se pudo conectar con el servidor. Intente más tarde.",
-								icon: "error",
-								confirmButtonColor: "#19248B",
+								// ¡Y lo mandamos al inicio!
+								window.location.href = '/agae/';
 							});
-						} finally {
-							this.enviando = false; // Rehabilitamos el botón
 						}
-					},
+						else {
+							// Si el PHP nos responde con un error (ej: DNI repetido)
+							Swal.fire({
+								title: "Atención",
+								text: resultado.message,
+								icon: "warning",
+								confirmButtonColor: "#19248B",
+							}).then(() => {
+								// Una vez que el usuario cierra la alerta, lo pateamos a la raíz
+								window.location.href = '/agae/';
+							});
+						}
+					} catch (error) {
+						// Si el servidor está caído o hay un error de conexión
+						Swal.fire({
+							title: "Error de Conexión",
+							text: "No se pudo conectar con el servidor. Intente más tarde.",
+							icon: "error",
+							confirmButtonColor: "#19248B",
+						});
+					} finally {
+						this.enviando = false; // Rehabilitamos el botón
+					}
 				},
-			}).mount("#app");
-		</script>
-	</body>
+			},
+		}).mount("#app");
+	</script>
+</body>
+
 </html>
