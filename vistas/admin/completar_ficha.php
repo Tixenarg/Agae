@@ -1,3 +1,4 @@
+<?php require_once 'header_admin.php'; ?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -155,9 +156,7 @@
                             </transition>
 
                             <div class="d-grid gap-2 mt-5">
-                                <div class="alert alert-warning">
-    <strong>Debug Vue:</strong> El ID seleccionado es: {{ form.forma_pago }}
-</div>
+
                                 <button type="submit" class="btn btn-lg text-white" style="background-color: #19248B;" :disabled="guardando || (form.id_fpago === 1 && form.numero_cuenta.length !== 14)">
                                     <i class="bi bi-check-circle-fill me-2"></i>
                                     {{ guardando ? 'Procesando alta y migración...' : 'Guardar y Aprobar Afiliado' }}
@@ -241,7 +240,7 @@
                     if (id === 2) return 'bi bi-phone'; // Mercado Pago
                     return 'bi bi-wallet2'; // Otros / Efectivo
                 },
-async guardarFicha() {
+                async guardarFicha() {
                     // 1. Validamos llamando a la variable con su nombre correcto: id_fpago
                     if (!this.form.id_fpago) {
                         alert("Por favor, seleccioná una forma de pago antes de continuar.");
@@ -261,7 +260,7 @@ async guardarFicha() {
                     const datosPost = {
                         id_solicitud: parseInt(idSolicitudUrl),
                         // Usamos la variable correcta también acá
-                        id_fpago: parseInt(this.form.id_fpago), 
+                        id_fpago: parseInt(this.form.id_fpago),
                         numero_cuenta: this.form.numero_cuenta
                     };
 

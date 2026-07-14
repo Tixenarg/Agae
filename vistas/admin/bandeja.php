@@ -1,3 +1,4 @@
+<?php require_once 'header_admin.php'; ?>
 <!DOCTYPE html>
 <html lang="es">
 

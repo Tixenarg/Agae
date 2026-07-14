@@ -72,7 +72,8 @@ class SolicitudModelo
     /**
      * EL ALTA DEFINITIVA: Migra los datos web + forma de pago y prepara los módulos.
      */
-    public function aprobarYCrearAfiliado(int $id_solicitud, int $id_fpago, string $numero_cuenta): bool
+// Le sacamos el ": bool" del final para que permita devolver el número de ID (int) o false
+    public function aprobarYCrearAfiliado(int $id_solicitud, int $id_fpago, string $numero_cuenta)
     {
         try {
             $this->db->beginTransaction();
@@ -91,7 +92,9 @@ class SolicitudModelo
                 return false;
             }
 
-            // PASO B: Insertar en la tabla maestra (Ya es Afiliado Oficial)
+            // PASO B: Insertar en la tabla maestra
+            // ATENCIÓN: Me fijé en la captura anterior que me pasaste y la columna 'id_solicitud_origen' 
+            // no existía en afiliados_maestra. Si ya la creaste en tu base de datos, perfecto.
             $sqlMaestra = "INSERT INTO afiliados_maestra 
                           (dni, apellidos, nombres, id_fpago, numero_cuenta, fecha_solicitud_original, id_solicitud_origen) 
                           VALUES (:dni, :apellidos, :nombres, :id_fpago, :numero_cuenta, :fecha_solicitud, :id_solicitud_origen)";
@@ -106,6 +109,7 @@ class SolicitudModelo
             $stmtMaestra->bindValue(':id_solicitud_origen', $id_solicitud, PDO::PARAM_INT);
             $stmtMaestra->execute();
 
+            // Acá capturamos el ID real generado (Ej: 15)
             $id_afiliado_nuevo = $this->db->lastInsertId();
 
             // PASO C: Rescatar el Email y WhatsApp en la tabla de Domicilios
@@ -135,7 +139,10 @@ class SolicitudModelo
             $stmtUpd->execute();
 
             $this->db->commit();
-            return true;
+            
+            // Devolvemos el número entero directamente al controlador
+            return (int)$id_afiliado_nuevo;
+
         } catch (PDOException $e) {
             if ($this->db->inTransaction()) {
                 $this->db->rollBack();
