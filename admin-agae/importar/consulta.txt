@@ -1,0 +1,18 @@
+SELECT ga.ga_rubro, ga.ga_fecha, sub.sub_nombre, ga.ga_subrubro,sum(ga.ga_importe) as importe
+from gastos ga 
+LEFT JOIN subrubros sub ON ga.ga_subrubro = sub.id_subrubro 
+GROUP BY ga.ga_subrubro, ga.ga_fecha 
+HAVING ga.ga_fecha >= '2021-10-01'AND ga.ga_fecha <= '2021-11-17' AND ga.ga_rubro=1
+
+
+SELECT `id_subrubro`,`sub_nombre`,(SELECT SUM(gastos.ga_importe) FROM gastos
+                                  WHERE gastos.ga_fecha >='2021-11-17' AND gastos.ga_fecha <='2021-11-17' ) AS total
+                                  FROM subrubros
+                                  WHERE `id_rubro`=1
+
+SELECT fecha,comprobante,rubro,subrubro,tabla FROM ( SELECT ga.ga_fecha as fecha,ga.id_gasto as comprobante,ga.ga_rubro as rubro,ga.ga_subrubro as subrubro,('Gastos')as tabla FROM gastos ga UNION ALL SELECT ve.vta_fecha as fecha,ve.id_venta as comprobante,ve.art_rubro as rubro,ve.art_subrubro as subrubro,('Ventas')as tabla FROM vista_ventasdetalle ve ) jugadores
+
+SELECT sub.id_rubro, sub.id_subrubro,sub.sub_nombre,(SELECT SUM(ca.debe) as saldo from cajas ca WHERE ca.caja_sub=sub.id_subrubro )
+FROM `subrubros` as sub WHERE 1
+
+select `sub`.`id_rubro` AS `rubro`,`sub`.`id_subrubro` AS `caja`,`sub`.`sub_nombre` AS `sub_nombre`,(select sum(`ca`.`importe`) AS `saldo` from `colegio-gestion`.`cajas` `ca` where `ca`.`caja_sub` = `sub`.`id_subrubro`) AS `saldo` from `colegio-gestion`.`subrubros` `sub` where 1

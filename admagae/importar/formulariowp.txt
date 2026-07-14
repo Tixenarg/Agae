@@ -1,0 +1,11 @@
+
+tutoriales de syspa
+plugin para wordpress
+contact form (formulario de contacto)
+advanced contact form 7 db (administrar la tabla de contacto)
+
+syspa wordpress enviar mails (por si no envia mail)
+contact form 7 widget for elementor page builder(plugin para dar estilos css a un formulario) 
+
+marketing@amae.com.ar
+SIS*agae2022
