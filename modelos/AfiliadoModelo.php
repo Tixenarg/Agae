@@ -17,18 +17,40 @@ class AfiliadoModelo
   /**
      * Obtiene todos los afiliados y calcula si los módulos están cargados (1) o no (0)
      */
+/**
+     * Obtiene todos los afiliados y calcula estrictamente si los módulos están completos (1) o incompletos (0)
+     */
     public function obtenerPadronConSemaforo() {
-        // Usamos las comillas invertidas estandarizadas para evitar que el motor SQL se maree con el acento en 'padrón'
         $sql = "SELECT 
                     m.id_afiliado, 
                     m.apellidos, 
                     m.nombres, 
                     m.dni, 
                     m.`fecha_alta_padrón` AS fecha_alta,
-                    (CASE WHEN m.cuil IS NOT NULL AND m.cuil != '' THEN 1 ELSE 0 END) AS mod_identidad,
-                    (CASE WHEN d.domicilio IS NOT NULL AND d.domicilio != '' THEN 1 ELSE 0 END) AS mod_domicilio,
+                    
+                    -- Módulo 1 (NUEVO): Forma de Pago (Asumimos que necesita ID de pago y Número de Cuenta)
+                    (CASE 
+                        WHEN m.id_fpago = 1 AND m.numero_cuenta IS NOT NULL AND m.numero_cuenta != '' THEN 1 
+                        WHEN m.id_fpago IN (2, 3) THEN 1 
+                        ELSE 0 
+                    END) AS mod_fpago,
+                    -- Módulo 2: Identidad (Exigimos CUIL, Nacionalidad y Fecha de Nacimiento)
+                    (CASE WHEN m.cuil IS NOT NULL AND m.cuil != '' 
+                           AND m.nacionalidad IS NOT NULL AND m.nacionalidad != '' 
+                           AND m.fecha_nacimiento IS NOT NULL THEN 1 ELSE 0 END) AS mod_identidad,
+                           
+                    -- Módulo 3: Domicilio (Exigimos Domicilio, Localidad y Teléfono)
+                    (CASE WHEN d.domicilio IS NOT NULL AND d.domicilio != '' 
+                           AND d.localidad IS NOT NULL AND d.localidad != '' 
+                           AND d.telefono IS NOT NULL AND d.telefono != '' THEN 1 ELSE 0 END) AS mod_domicilio,
+                           
+                    -- Módulo 4: Educación (Exigimos Nivel de Estudio)
                     (CASE WHEN e.nivel_estudio IS NOT NULL AND e.nivel_estudio != '' THEN 1 ELSE 0 END) AS mod_educacion,
-                    (CASE WHEN l.legajo IS NOT NULL AND l.legajo != '' THEN 1 ELSE 0 END) AS mod_laboral
+                    
+                    -- Módulo 5: Laboral (Exigimos Legajo y Organización donde trabaja)
+                    (CASE WHEN l.legajo IS NOT NULL AND l.legajo != '' 
+                           AND l.org_trabaja IS NOT NULL AND l.org_trabaja != '' THEN 1 ELSE 0 END) AS mod_laboral
+
                 FROM afiliados_maestra m
                 LEFT JOIN afiliados_domicilios d ON m.id_afiliado = d.id_afiliado
                 LEFT JOIN afiliados_educacion e ON m.id_afiliado = e.id_afiliado

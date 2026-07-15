@@ -49,6 +49,9 @@ elseif ($metodo === 'POST') {
 
     // Evaluamos qué botón apretó el operador
     switch ($accion) {
+        case 'guardar_fpago': // <--- AGREGAMOS ESTE CASO
+            $resultado = $modelo->actualizarFormaPago($datos);
+            break;
         case 'guardar_identidad':
             $resultado = $modelo->actualizarIdentidad($datos);
             break;

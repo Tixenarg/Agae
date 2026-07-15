@@ -1,6 +1,7 @@
 <?php require_once 'header_admin.php'; ?>
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,18 +11,77 @@
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
-        body { background-color: #f8f9fa; }
-        .accordion-button { font-weight: 600; color: #19248B; }
-        .accordion-button:not(.collapsed) { background-color: #e9ecef; color: #19248B; box-shadow: none; }
-        .accordion-button:focus { box-shadow: none; border-color: rgba(0,0,0,.125); }
-        .btn-agae { background-color: #19248B; color: white; }
-        .btn-agae:hover { background-color: #121a63; color: white; }
-        .text-agae { color: #19248B !important; }
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .accordion-button {
+            font-weight: 600;
+            color: #19248B;
+        }
+
+        .accordion-button:not(.collapsed) {
+            background-color: #e9ecef;
+            color: #19248B;
+            box-shadow: none;
+        }
+
+        .accordion-button:focus {
+            box-shadow: none;
+            border-color: rgba(0, 0, 0, .125);
+        }
+
+        .btn-agae {
+            background-color: #19248B;
+            color: white;
+        }
+
+        .btn-agae:hover {
+            background-color: #121a63;
+            color: white;
+        }
+
+        .text-agae {
+            color: #19248B !important;
+        }
+
+        /* Estilos para las tarjetas de Forma de Pago */
+        .pago-card {
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+            padding: 20px 15px;
+            height: 100%;
+        }
+
+        .pago-card:hover {
+            border-color: #19248B;
+            background-color: #f8f9fa;
+        }
+
+        .pago-card.selected {
+            border-color: #19248B;
+            background-color: rgba(25, 36, 139, 0.05);
+            font-weight: 600;
+        }
+
+        .pago-icon {
+            font-size: 2.5rem;
+            color: #6c757d;
+            margin-bottom: 10px;
+        }
+
+        .pago-card.selected .pago-icon {
+            color: #19248B;
+        }
     </style>
 </head>
+
 <body>
     <div id="appLegajo" class="container py-4">
-        
+
         <!-- CABECERA PRINCIPAL -->
         <div class="d-flex justify-content-between align-items-center mb-4">
             <div>
@@ -39,7 +99,7 @@
 
         <!-- CONTENEDOR REACTIVO (Se muestra solo si ya cargó el afiliado) -->
         <div v-if="form.id_afiliado">
-            
+
             <!-- TARJETA DEL TERMÓMETRO DE INTEGRIDAD -->
             <div class="card shadow-sm border-0 mb-4 bg-white">
                 <div class="card-body">
@@ -49,7 +109,7 @@
                             <h3 class="fw-bold mb-1 text-agae">{{ form.apellidos }}, {{ form.nombres }}</h3>
                             <p class="text-muted mb-0">DNI: {{ form.dni }} | ID Afiliado: #{{ form.id_afiliado }}</p>
                         </div>
-                        
+
                         <!-- Barra de Progreso Reactiva -->
                         <div class="col-md-5 mt-3 mt-md-0">
                             <div class="d-flex justify-content-between mb-1">
@@ -57,13 +117,13 @@
                                 <span class="fw-bold small" :class="colorTextoProgreso">{{ porcentajeProgreso }}%</span>
                             </div>
                             <div class="progress" style="height: 12px;">
-                                <div class="progress-bar progress-bar-striped progress-bar-animated" 
-                                     role="progressbar" 
-                                     :class="colorBarraProgreso"
-                                     :style="{ width: porcentajeProgreso + '%' }" 
-                                     :aria-valuenow="porcentajeProgreso" 
-                                     aria-valuemin="0" 
-                                     aria-valuemax="100">
+                                <div class="progress-bar progress-bar-striped progress-bar-animated"
+                                    role="progressbar"
+                                    :class="colorBarraProgreso"
+                                    :style="{ width: porcentajeProgreso + '%' }"
+                                    :aria-valuenow="porcentajeProgreso"
+                                    aria-valuemin="0"
+                                    aria-valuemax="100">
                                 </div>
                             </div>
                             <small class="text-muted mt-1 d-block text-end" v-if="porcentajeProgreso < 100">
@@ -79,12 +139,67 @@
 
             <!-- ACORDEÓN DE MÓDULOS -->
             <div class="accordion shadow-sm" id="acordeonLegajo">
-                
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button d-flex justify-content-between align-items-center" type="button" data-bs-toggle="collapse" data-bs-target="#panelCobro">
+                            <div>
+                                <i class="bi bi-wallet2 me-2"></i> 1. Información de Cobro
+                            </div>
+                            <!-- Lógica reactiva: Verifica si es BNA con cuenta, o si es MP/Otros -->
+                            <span class="badge ms-auto me-3"
+                                :class="((form.id_fpago == 1 && form.numero_cuenta) || (form.id_fpago == 2) || (form.id_fpago == 3)) ? 'bg-success' : 'bg-danger'">
+                                {{ ((form.id_fpago == 1 && form.numero_cuenta) || (form.id_fpago == 2) || (form.id_fpago == 3)) ? 'Completo' : 'Incompleto' }}
+                            </span>
+                        </button>
+                    </h2>
+                    <div id="panelCobro" class="accordion-collapse collapse show" data-bs-parent="#acordeonLegajo">
+                        <div class="accordion-body">
+                            <p class="text-muted small mb-3">Seleccione el método por el cual el afiliado abonará su cuota:</p>
+
+                            <div class="row g-3 mb-4">
+                                <div class="col-md-4">
+                                    <div class="pago-card" :class="{'selected': form.id_fpago == 1}" @click="form.id_fpago = 1">
+                                        <i class="bi bi-bank pago-icon d-block"></i>
+                                        <span>Débito automático Bco Nación</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="pago-card" :class="{'selected': form.id_fpago == 2}" @click="form.id_fpago = 2">
+                                        <i class="bi bi-phone pago-icon d-block"></i>
+                                        <span>Mercado Pago</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="pago-card" :class="{'selected': form.id_fpago == 3}" @click="form.id_fpago = 3">
+                                        <i class="bi bi-wallet pago-icon d-block"></i>
+                                        <span>Otros</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3" v-if="form.id_fpago == 1">
+                                <div class="col-md-6 offset-md-3">
+                                    <div class="p-3 border rounded bg-light">
+                                        <label class="form-label text-agae fw-bold">Número de Cuenta / CBU</label>
+                                        <input type="text" class="form-control border-primary" v-model="form.numero_cuenta" placeholder="Ingrese el número de la caja de ahorro">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="text-end border-top pt-3">
+                                <button class="btn btn-agae" @click="guardarModulo('guardar_fpago')">
+                                    <i class="bi bi-floppy me-1"></i> Guardar Información de Cobro
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- MÓDULO 1: IDENTIDAD -->
                 <div class="accordion-item">
                     <h2 class="accordion-header">
                         <button class="accordion-button d-flex align-items-center" type="button" data-bs-toggle="collapse" data-bs-target="#panelIdentidad">
-                            <i class="bi bi-person-vcard me-2"></i> 1. Datos de Identidad
+                            <i class="bi bi-person-vcard me-2"></i> 2. Datos de Identidad
                             <span class="badge ms-auto me-3" :class="moduloIdentidadCompleto ? 'bg-success' : 'bg-danger'">
                                 {{ moduloIdentidadCompleto ? 'Completo' : 'Incompleto' }}
                             </span>
@@ -150,7 +265,7 @@
                 <div class="accordion-item">
                     <h2 class="accordion-header">
                         <button class="accordion-button collapsed d-flex align-items-center" type="button" data-bs-toggle="collapse" data-bs-target="#panelDomicilio">
-                            <i class="bi bi-geo-alt me-2"></i> 2. Domicilio y Contacto
+                            <i class="bi bi-geo-alt me-2"></i> 3. Domicilio y Contacto
                             <span class="badge ms-auto me-3" :class="moduloDomicilioCompleto ? 'bg-success' : 'bg-danger'">
                                 {{ moduloDomicilioCompleto ? 'Completo' : 'Incompleto' }}
                             </span>
@@ -197,7 +312,7 @@
                 <div class="accordion-item">
                     <h2 class="accordion-header">
                         <button class="accordion-button collapsed d-flex align-items-center" type="button" data-bs-toggle="collapse" data-bs-target="#panelEducacion">
-                            <i class="bi bi-book me-2"></i> 3. Nivel Académico
+                            <i class="bi bi-book me-2"></i> 4. Nivel Académico
                             <span class="badge ms-auto me-3" :class="moduloEducacionCompleto ? 'bg-success' : 'bg-danger'">
                                 {{ moduloEducacionCompleto ? 'Completo' : 'Incompleto' }}
                             </span>
@@ -234,7 +349,7 @@
                 <div class="accordion-item">
                     <h2 class="accordion-header">
                         <button class="accordion-button collapsed d-flex align-items-center" type="button" data-bs-toggle="collapse" data-bs-target="#panelLaboral">
-                            <i class="bi bi-briefcase me-2"></i> 4. Datos Laborales
+                            <i class="bi bi-briefcase me-2"></i> 5. Datos Laborales
                             <span class="badge ms-auto me-3" :class="moduloLaboralCompleto ? 'bg-success' : 'bg-danger'">
                                 {{ moduloLaboralCompleto ? 'Completo' : 'Incompleto' }}
                             </span>
@@ -275,7 +390,7 @@
 
             </div>
         </div>
-        
+
         <!-- PANTALLA DE CARGA (Aparece mientras fetch hace su trabajo) -->
         <div v-else class="text-center mt-5">
             <div class="spinner-border text-primary" role="status"></div>
@@ -285,43 +400,63 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        const { createApp } = Vue;
+<script>
+        const {
+            createApp
+        } = Vue;
 
         createApp({
             data() {
                 return {
-                    form: {} // Los datos se cargan dinámicamente desde el controlador
+                    form: {}, // Los datos se cargan dinámicamente desde el controlador
+                    
+                    // Estado de apertura de cada módulo del acordeón (por defecto todos cerrados)
+                    abiertos: {
+                        fpago: false,
+                        identidad: false,
+                        domicilio: false,
+                        educacion: false,
+                        laboral: false
+                    }
                 }
             },
             computed: {
-                // Evaluamos si el Módulo de Identidad tiene los datos clave cargados
+                // 1. Evaluamos si el Módulo de Forma de Pago está completo
+                moduloFpagoCompleto() {
+                    const f = this.form;
+                    if (f.id_fpago == 1 && f.numero_cuenta && f.numero_cuenta.trim() !== '') return true;
+                    if (f.id_fpago == 2 || f.id_fpago == 3) return true;
+                    return false;
+                },
+
+                // 2. Evaluamos si el Módulo de Identidad está completo
                 moduloIdentidadCompleto() {
                     const f = this.form;
                     return !!(f.cuil && f.nacionalidad && f.sexo && f.estado_civil && f.fecha_nacimiento);
                 },
 
-                // Evaluamos si el Módulo de Domicilio está completo
+                // 3. Evaluamos si el Módulo de Domicilio está completo
                 moduloDomicilioCompleto() {
                     const f = this.form;
                     return !!(f.domicilio && f.localidad && f.provincia && f.telefono && f.email);
                 },
 
-                // Evaluamos si el Módulo de Educación está completo
+                // 4. Evaluamos si el Módulo de Educación está completo
                 moduloEducacionCompleto() {
                     const f = this.form;
                     return !!(f.nivel_estudio && f.titulo);
                 },
 
-                // Evaluamos si el Módulo Laboral está completo
+                // 5. Evaluamos si el Módulo Laboral está completo
                 moduloLaboralCompleto() {
                     const f = this.form;
                     return !!(f.legajo && f.org_trabaja);
                 },
 
-                // Cuenta cuántos de los 4 módulos están completamente listos
+                // Cuenta cuántos de los 5 módulos están completamente listos
                 cantidadModulosCompletos() {
                     let total = 0;
+                    if (this.moduloFpagoCompleto) total++;
                     if (this.moduloIdentidadCompleto) total++;
                     if (this.moduloDomicilioCompleto) total++;
                     if (this.moduloEducacionCompleto) total++;
@@ -329,32 +464,32 @@
                     return total;
                 },
 
-                // Convierte la cantidad de módulos listos en porcentaje (0%, 25%, 50%, 75%, 100%)
+                // Convierte la cantidad de módulos listos en porcentaje
                 porcentajeProgreso() {
-                    return this.cantidadModulosCompletos * 25;
+                    return this.cantidadModulosCompletos * 20;
                 },
 
                 // Controla el color de la barra (Rojo -> Amarillo -> Verde)
                 colorBarraProgreso() {
                     const pct = this.porcentajeProgreso;
-                    if (pct <= 25) return 'bg-danger';
-                    if (pct <= 75) return 'bg-warning';
+                    if (pct <= 40) return 'bg-danger';
+                    if (pct <= 80) return 'bg-warning';
                     return 'bg-success';
                 },
 
                 // Controla el color del texto del porcentaje
                 colorTextoProgreso() {
                     const pct = this.porcentajeProgreso;
-                    if (pct <= 25) return 'text-danger';
-                    if (pct <= 75) return 'text-warning';
+                    if (pct <= 40) return 'text-danger';
+                    if (pct <= 80) return 'text-warning';
                     return 'text-success';
                 }
             },
             mounted() {
                 const urlParams = new URLSearchParams(window.location.search);
                 const id = urlParams.get('id');
-                
-                if(id) {
+
+                if (id) {
                     this.cargarDatos(id);
                 } else {
                     Swal.fire('Error', 'No se especificó un afiliado.', 'error');
@@ -365,9 +500,36 @@
                     try {
                         const resp = await fetch(`../../controladores/admin_legajo_controlador.php?id=${id}`);
                         const resultado = await resp.json();
-                        
-                        if(resultado.status === 'success') {
+
+                        if (resultado.status === 'success') {
                             this.form = resultado.data;
+                            
+                            // --- INTELIGENCIA DE APERTURA AUTO ---
+                            // 1. Evaluamos qué módulos están incompletos
+                            const estadosIncompletos = {
+                                fpago: !this.moduloFpagoCompleto,
+                                identidad: !this.moduloIdentidadCompleto,
+                                domicilio: !this.moduloDomicilioCompleto,
+                                educacion: !this.moduloEducacionCompleto,
+                                laboral: !this.moduloLaboralCompleto
+                            };
+
+                            // 2. Buscamos el PRIMER módulo incompleto para dejarlo abierto. Los demás cerrados.
+                            let primerIncompletoEncontrado = false;
+                            for (let key in estadosIncompletos) {
+                                if (estadosIncompletos[key] && !primerIncompletoEncontrado) {
+                                    this.abiertos[key] = true;
+                                    primerIncompletoEncontrado = true;
+                                } else {
+                                    this.abiertos[key] = false;
+                                }
+                            }
+
+                            // 3. Si todo está completo (5/5), dejamos abierto el primero (Forma de pago) por cortesía visual
+                            if (!primerIncompletoEncontrado) {
+                                this.abiertos.fpago = true;
+                            }
+
                         } else {
                             Swal.fire('Error', resultado.message, 'error');
                         }
@@ -377,20 +539,33 @@
                     }
                 },
 
+                // Método para abrir/cerrar pestañas simulando un acordeón nativo
+                togglePanel(panelName) {
+                    const estadoActual = this.abiertos[panelName];
+                    // Cerramos todos primero
+                    for (let key in this.abiertos) {
+                        this.abiertos[key] = false;
+                    }
+                    // Invertimos el que el operador clickeó
+                    this.abiertos[panelName] = !estadoActual;
+                },
+
                 async guardarModulo(accion) {
                     try {
                         const resp = await fetch('../../controladores/admin_legajo_controlador.php', {
                             method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
                             body: JSON.stringify({
                                 accion: accion,
                                 datos: this.form
                             })
                         });
-                        
+
                         const resultado = await resp.json();
-                        
-                        if(resultado.status === 'success') {
+
+                        if (resultado.status === 'success') {
                             Swal.fire({
                                 icon: 'success',
                                 title: '¡Guardado!',
@@ -410,4 +585,5 @@
         }).mount('#appLegajo');
     </script>
 </body>
+
 </html>
