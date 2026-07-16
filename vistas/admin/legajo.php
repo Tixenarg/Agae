@@ -127,7 +127,7 @@
                                 </div>
                             </div>
                             <small class="text-muted mt-1 d-block text-end" v-if="porcentajeProgreso < 100">
-                                Faltan completar {{ 4 - cantidadModulosCompletos }} de 4 módulos.
+                                Faltan completar {{ 5 - cantidadModulosCompletos }} de 5 módulos.
                             </small>
                             <small class="text-success fw-bold mt-1 d-block text-end" v-else>
                                 <i class="bi bi-patch-check-fill"></i> ¡Legajo 100% Completo!
@@ -409,8 +409,8 @@
             data() {
                 return {
                     form: {}, // Los datos se cargan dinámicamente desde el controlador
-                    
-                    // Estado de apertura de cada módulo del acordeón (por defecto todos cerrados)
+
+                    // Estado de apertura de cada módulo del acordeón
                     abiertos: {
                         fpago: false,
                         identidad: false,
@@ -421,47 +421,22 @@
                 }
             },
             computed: {
-                // 1. Evaluamos si el Módulo de Forma de Pago está completo
-                moduloFpagoCompleto() {
-                    const f = this.form;
-                    if (f.id_fpago == 1 && f.numero_cuenta && f.numero_cuenta.trim() !== '') return true;
-                    if (f.id_fpago == 2 || f.id_fpago == 3) return true;
-                    return false;
-                },
-
-                // 2. Evaluamos si el Módulo de Identidad está completo
-                moduloIdentidadCompleto() {
-                    const f = this.form;
-                    return !!(f.cuil && f.nacionalidad && f.sexo && f.estado_civil && f.fecha_nacimiento);
-                },
-
-                // 3. Evaluamos si el Módulo de Domicilio está completo
-                moduloDomicilioCompleto() {
-                    const f = this.form;
-                    return !!(f.domicilio && f.localidad && f.provincia && f.telefono && f.email);
-                },
-
-                // 4. Evaluamos si el Módulo de Educación está completo
-                moduloEducacionCompleto() {
-                    const f = this.form;
-                    return !!(f.nivel_estudio && f.titulo);
-                },
-
-                // 5. Evaluamos si el Módulo Laboral está completo
-                moduloLaboralCompleto() {
-                    const f = this.form;
-                    return !!(f.legajo && f.org_trabaja);
-                },
+                // Las propiedades computadas ahora consumen directamente las funciones de validación
+                moduloFpagoCompleto() { return this.isFpagoCompleto(this.form); },
+                moduloIdentidadCompleto() { return this.isIdentidadCompleta(this.form); },
+                moduloDomicilioCompleto() { return this.isDomicilioCompleto(this.form); },
+                moduloEducacionCompleto() { return this.isEducacionCompleta(this.form); },
+                moduloLaboralCompleto() { return this.isLaboralCompleto(this.form); },
 
                 // Cuenta cuántos de los 5 módulos están completamente listos
                 cantidadModulosCompletos() {
-                    let total = 0;
-                    if (this.moduloFpagoCompleto) total++;
-                    if (this.moduloIdentidadCompleto) total++;
-                    if (this.moduloDomicilioCompleto) total++;
-                    if (this.moduloEducacionCompleto) total++;
-                    if (this.moduloLaboralCompleto) total++;
-                    return total;
+                    let cant = 0;
+                    if (this.moduloFpagoCompleto) cant++;
+                    if (this.moduloIdentidadCompleto) cant++;
+                    if (this.moduloDomicilioCompleto) cant++;
+                    if (this.moduloEducacionCompleto) cant++;
+                    if (this.moduloLaboralCompleto) cant++;
+                    return cant;
                 },
 
                 // Convierte la cantidad de módulos listos en porcentaje
@@ -496,25 +471,87 @@
                 }
             },
             methods: {
+                // ==========================================
+                // ⚙️ MÉTODOS DE VALIDACIÓN PURA (SÍNCRONOS)
+                // ==========================================
+                isFpagoCompleto(f) {
+                    if (!f) return false;
+                    if (f.id_fpago == 1 && f.numero_cuenta && String(f.numero_cuenta).trim() !== '') return true;
+                    if (f.id_fpago == 2 || f.id_fpago == 3) return true;
+                    return false;
+                },
+
+                isIdentidadCompleta(f) {
+                    if (!f) return false;
+                    return !!(
+                        f.cuil && String(f.cuil).trim() !== '' && 
+                        f.nacionalidad && String(f.nacionalidad).trim() !== '' && 
+                        f.sexo && String(f.sexo).trim() !== '' && 
+                        f.estado_civil && String(f.estado_civil).trim() !== '' && 
+                        f.fecha_nacimiento
+                    );
+                },
+
+                isDomicilioCompleto(f) {
+                    if (!f) return false;
+                    return !!(
+                        f.domicilio && String(f.domicilio).trim() !== '' && 
+                        f.localidad && String(f.localidad).trim() !== '' && 
+                        f.provincia && String(f.provincia).trim() !== '' && 
+                        f.telefono && String(f.telefono).trim() !== '' && 
+                        f.email && String(f.email).trim() !== ''
+                    );
+                },
+
+                isEducacionCompleta(f) {
+                    if (!f) return false;
+                    return !!(
+                        f.nivel_estudio && String(f.nivel_estudio).trim() !== '' && 
+                        f.titulo && String(f.titulo).trim() !== ''
+                    );
+                },
+
+                isLaboralCompleto(f) {
+                    if (!f) return false;
+                    return !!(
+                        f.legajo && String(f.legajo).trim() !== '' &&
+                        f.org_liquida_haber && String(f.org_liquida_haber).trim() !== '' &&
+                        f.org_trabaja && String(f.org_trabaja).trim() !== '' &&
+                        f.domicilio_trabajo && String(f.domicilio_trabajo).trim() !== '' &&
+                        f.localidad_trabajo && String(f.localidad_trabajo).trim() !== ''
+                    );
+                },
+
+                // ==========================================
+                // 📡 FLUJO DE ACCIONES
+                // ==========================================
                 async cargarDatos(id) {
                     try {
                         const resp = await fetch(`../../controladores/admin_legajo_controlador.php?id=${id}`);
                         const resultado = await resp.json();
 
                         if (resultado.status === 'success') {
-                            this.form = resultado.data;
+                            const datosCrudos = resultado.data;
                             
-                            // --- INTELIGENCIA DE APERTURA AUTO ---
-                            // 1. Evaluamos qué módulos están incompletos
+                            // Guardamos en el formulario para pintar los inputs
+                            this.form = datosCrudos; 
+
+                            // [AUDITORÍA DE CONSOLA] - Te va a mostrar qué campos están llegando realmente
+                            console.log("🔍 DATOS DEL AFILIADO DESDE PHP:", datosCrudos);
+
+                            // Evaluamos los datos directamente sin esperar a la reactividad lenta de Vue
                             const estadosIncompletos = {
-                                fpago: !this.moduloFpagoCompleto,
-                                identidad: !this.moduloIdentidadCompleto,
-                                domicilio: !this.moduloDomicilioCompleto,
-                                educacion: !this.moduloEducacionCompleto,
-                                laboral: !this.moduloLaboralCompleto
+                                fpago: !this.isFpagoCompleto(datosCrudos),
+                                identidad: !this.isIdentidadCompleta(datosCrudos),
+                                domicilio: !this.isDomicilioCompleto(datosCrudos),
+                                educacion: !this.isEducacionCompleta(datosCrudos),
+                                laboral: !this.isLaboralCompleto(datosCrudos)
                             };
 
-                            // 2. Buscamos el PRIMER módulo incompleto para dejarlo abierto. Los demás cerrados.
+                            // [AUDITORÍA DE CONSOLA] - Mirá esto para saber por qué se abre cada cosa
+                            console.log("🧐 ¿QUÉ MODULOS ESTÁN REALMENTE INCOMPLETOS?:", estadosIncompletos);
+
+                            // Buscamos el PRIMER módulo incompleto para dejarlo abierto.
                             let primerIncompletoEncontrado = false;
                             for (let key in estadosIncompletos) {
                                 if (estadosIncompletos[key] && !primerIncompletoEncontrado) {
@@ -525,7 +562,7 @@
                                 }
                             }
 
-                            // 3. Si todo está completo (5/5), dejamos abierto el primero (Forma de pago) por cortesía visual
+                            // Si todo está 100% completo, abrimos el primero (fpago) como comportamiento por defecto
                             if (!primerIncompletoEncontrado) {
                                 this.abiertos.fpago = true;
                             }
@@ -534,19 +571,17 @@
                             Swal.fire('Error', resultado.message, 'error');
                         }
                     } catch (error) {
-                        console.error(error);
+                        console.error("Error al cargar datos:", error);
                         Swal.fire('Error', 'Fallo al comunicar con el servidor.', 'error');
                     }
                 },
 
-                // Método para abrir/cerrar pestañas simulando un acordeón nativo
+                // Abre/cierra pestañas simulando un acordeón nativo
                 togglePanel(panelName) {
                     const estadoActual = this.abiertos[panelName];
-                    // Cerramos todos primero
                     for (let key in this.abiertos) {
                         this.abiertos[key] = false;
                     }
-                    // Invertimos el que el operador clickeó
                     this.abiertos[panelName] = !estadoActual;
                 },
 
@@ -573,6 +608,13 @@
                                 timer: 1500,
                                 showConfirmButton: false
                             });
+                            
+                            // Refrescamos los datos para recalcular progresos y aperturas inteligentemente
+                            const urlParams = new URLSearchParams(window.location.search);
+                            const id = urlParams.get('id');
+                            if (id) {
+                                this.cargarDatos(id);
+                            }
                         } else {
                             Swal.fire('Error', resultado.message, 'error');
                         }

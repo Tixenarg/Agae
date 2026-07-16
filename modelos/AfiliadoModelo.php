@@ -14,13 +14,14 @@ class AfiliadoModelo
     /**
      * Obtiene el padrón de afiliados calculando el semáforo de integridad
      */
-  /**
+    /**
      * Obtiene todos los afiliados y calcula si los módulos están cargados (1) o no (0)
      */
-/**
+    /**
      * Obtiene todos los afiliados y calcula estrictamente si los módulos están completos (1) o incompletos (0)
      */
-    public function obtenerPadronConSemaforo() {
+public function obtenerPadronConSemaforo()
+    {
         $sql = "SELECT 
                     m.id_afiliado, 
                     m.apellidos, 
@@ -28,28 +29,35 @@ class AfiliadoModelo
                     m.dni, 
                     m.`fecha_alta_padrón` AS fecha_alta,
                     
-                    -- Módulo 1 (NUEVO): Forma de Pago (Asumimos que necesita ID de pago y Número de Cuenta)
+                    -- Módulo 1: Forma de Pago
                     (CASE 
                         WHEN m.id_fpago = 1 AND m.numero_cuenta IS NOT NULL AND m.numero_cuenta != '' THEN 1 
                         WHEN m.id_fpago IN (2, 3) THEN 1 
                         ELSE 0 
                     END) AS mod_fpago,
-                    -- Módulo 2: Identidad (Exigimos CUIL, Nacionalidad y Fecha de Nacimiento)
+
+                    -- Módulo 2: Identidad
                     (CASE WHEN m.cuil IS NOT NULL AND m.cuil != '' 
                            AND m.nacionalidad IS NOT NULL AND m.nacionalidad != '' 
                            AND m.fecha_nacimiento IS NOT NULL THEN 1 ELSE 0 END) AS mod_identidad,
                            
-                    -- Módulo 3: Domicilio (Exigimos Domicilio, Localidad y Teléfono)
+                    -- Módulo 3: Domicilio
                     (CASE WHEN d.domicilio IS NOT NULL AND d.domicilio != '' 
                            AND d.localidad IS NOT NULL AND d.localidad != '' 
                            AND d.telefono IS NOT NULL AND d.telefono != '' THEN 1 ELSE 0 END) AS mod_domicilio,
                            
-                    -- Módulo 4: Educación (Exigimos Nivel de Estudio)
+                    -- Módulo 4: Educación
                     (CASE WHEN e.nivel_estudio IS NOT NULL AND e.nivel_estudio != '' THEN 1 ELSE 0 END) AS mod_educacion,
                     
-                    -- Módulo 5: Laboral (Exigimos Legajo y Organización donde trabaja)
-                    (CASE WHEN l.legajo IS NOT NULL AND l.legajo != '' 
-                           AND l.org_trabaja IS NOT NULL AND l.org_trabaja != '' THEN 1 ELSE 0 END) AS mod_laboral
+                    -- Módulo 5: Información Laboral (Campos 100% correctos de afiliados_laborales)
+                    (CASE 
+                        WHEN l.legajo IS NOT NULL AND l.legajo != '' 
+                             AND l.org_liquida_haber IS NOT NULL AND l.org_liquida_haber != ''
+                             AND l.org_trabaja IS NOT NULL AND l.org_trabaja != ''
+                             AND l.domicilio_trabajo IS NOT NULL AND l.domicilio_trabajo != ''
+                             AND l.localidad_trabajo IS NOT NULL AND l.localidad_trabajo != '' THEN 1 
+                        ELSE 0 
+                    END) AS mod_laboral
 
                 FROM afiliados_maestra m
                 LEFT JOIN afiliados_domicilios d ON m.id_afiliado = d.id_afiliado
@@ -58,10 +66,9 @@ class AfiliadoModelo
 
         $stmt = $this->db->prepare($sql);
         $stmt->execute();
-        
+
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-
     /**
      * Obtiene todos los datos del legajo (las 4 tablas) para un afiliado específico
      */
