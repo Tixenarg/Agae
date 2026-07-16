@@ -9,6 +9,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         body {
             background-color: #f8f9fa;
@@ -116,6 +117,11 @@
                                     <a :href="'legajo.php?id=' + afiliado.id_afiliado" class="btn btn-sm btn-outline-agae">
                                         <i class="bi bi-folder2-open me-1"></i> Abrir Legajo
                                     </a>
+                                    <button class="btn btn-sm btn-outline-danger ms-1"
+                                        title="Desafiliar"
+                                        @click="desafiliarAfiliado(afiliado.id_afiliado, afiliado.nombres + ' ' + afiliado.apellidos)">
+                                        <i class="bi bi-person-x-fill"></i>
+                                    </button>
                                 </td>
                             </tr>
                         </tbody>
@@ -130,7 +136,7 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
+<script>
         const {
             createApp
         } = Vue;
@@ -161,12 +167,11 @@
 
                         // 2. Filtrado por estado del semáforo
                         const puntaje = this.obtenerPuntaje(a);
-                        const estaCompleto = puntaje === 4;
-                        // 1. Lógica del Filtro por Estado
+                        
                         let cumpleEstado = true;
-                        if (this.filtroEstado === 'completo') { // <-- SINGULAR
+                        if (this.filtroEstado === 'completo') { 
                             cumpleEstado = (puntaje === 5);
-                        } else if (this.filtroEstado === 'incompleto') { // <-- SINGULAR
+                        } else if (this.filtroEstado === 'incompleto') { 
                             cumpleEstado = (puntaje < 5);
                         }
 
@@ -205,6 +210,69 @@
                         parseInt(afiliado.mod_domicilio || 0) +
                         parseInt(afiliado.mod_educacion || 0) +
                         parseInt(afiliado.mod_laboral || 0);
+                },
+
+                // NUEVA FUNCIÓN: Módulo de Desafiliación con SweetAlert2
+                async desafiliarAfiliado(id_afiliado, nombreCompleto) {
+                    // 1. Lanzamos el modal pidiendo el motivo
+                    const { value: motivo } = await Swal.fire({
+                        title: 'Desafiliar Afiliado',
+                        text: `Estás a punto de dar de baja a ${nombreCompleto}. Por favor, ingresa el motivo:`,
+                        icon: 'warning',
+                        input: 'textarea',
+                        inputPlaceholder: 'Ej: Renuncia voluntaria, Falta de pago...',
+                        inputAttributes: {
+                            'aria-label': 'Escribe el motivo aquí'
+                        },
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#6c757d',
+                        confirmButtonText: 'Sí, Desafiliar',
+                        cancelButtonText: 'Cancelar',
+                        // Validación: No deja clickear "Sí" si está vacío
+                        inputValidator: (value) => {
+                            if (!value || value.trim() === '') {
+                                return '¡Necesitas escribir un motivo para continuar!';
+                            }
+                        }
+                    });
+
+                    // 2. Si el operador escribió el motivo y le dio a "Sí"
+                    if (motivo) {
+                        try {
+                            // Mandamos los datos al controlador
+                            const resp = await fetch('../../controladores/admin_padron_controlador.php', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({
+                                    accion: 'desafiliar',
+                                    id_afiliado: id_afiliado,
+                                    motivo: motivo.trim()
+                                })
+                            });
+
+                            const resultado = await resp.json();
+
+                            // 3. Evaluamos la respuesta del servidor
+                            if (resultado.status === 'success') {
+                                Swal.fire(
+                                    '¡Desafiliado!',
+                                    'El afiliado fue dado de baja correctamente.',
+                                    'success'
+                                );
+                                
+                                // Recargamos la lista del padrón
+                                this.cargarPadron(); 
+                            } else {
+                                Swal.fire('Error', resultado.message, 'error');
+                            }
+                        } catch (error) {
+                            console.error("Error al desafiliar:", error);
+                            Swal.fire('Error', 'No se pudo conectar con el servidor.', 'error');
+                        }
+                    }
                 }
             }
         }).mount('#appPadron');

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 14-07-2026 a las 00:30:30
+-- Tiempo de generación: 17-07-2026 a las 00:21:17
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -1091,6 +1091,28 @@ INSERT INTO `afiliados_auditoria` (`id`, `id_afiliado`, `tipo_auditoria`, `usuar
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `afiliados_bajas`
+--
+
+CREATE TABLE `afiliados_bajas` (
+  `id_baja` int(11) NOT NULL,
+  `id_afiliado` int(11) NOT NULL,
+  `id_usuario_admin` int(11) NOT NULL,
+  `motivo` text NOT NULL,
+  `fecha_baja` datetime DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `afiliados_bajas`
+--
+
+INSERT INTO `afiliados_bajas` (`id_baja`, `id_afiliado`, `id_usuario_admin`, `motivo`, `fecha_baja`) VALUES
+(1, 1, 2, 'probadita para darlo de baja', '2026-07-16 18:55:14'),
+(2, 5, 2, 'lllllllll', '2026-07-16 19:05:17');
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `afiliados_confirmados`
 --
 
@@ -1135,12 +1157,13 @@ CREATE TABLE `afiliados_domicilios` (
 --
 
 INSERT INTO `afiliados_domicilios` (`id_afiliado`, `domicilio`, `localidad`, `codigo_postal`, `provincia`, `telefono`, `email`) VALUES
-(1, '', '', '', '', '11222222222', 'correa@derecho.uba.ar'),
+(1, 'giribone 2225', 'caba', '1222', 'Ciudad Autonoma de Buenos Aires', '11222222222', 'correa@derecho.uba.ar'),
 (5, '', '', '', '', '11111111111111', 'rcorrea@dere.com.ar'),
 (6, '', '', '', '', '1122735837', 'rcorrea@derecho'),
 (9, '', '', '', '', '11222222222', 'correa@derecho.uba.ar'),
 (10, '', '', '', '', '13213213213', 'tuq@derecho.uba.ar'),
-(11, '', '', '', '', '1321321321', 'tucu@derecho.uba.ar');
+(11, '', '', '', '', '1321321321', 'tucu@derecho.uba.ar'),
+(12, '', '', '', '', '465465465', 'dodo@gmail.com');
 
 -- --------------------------------------------------------
 
@@ -1159,12 +1182,13 @@ CREATE TABLE `afiliados_educacion` (
 --
 
 INSERT INTO `afiliados_educacion` (`id_afiliado`, `nivel_estudio`, `titulo`) VALUES
-(1, NULL, NULL),
-(5, NULL, NULL),
+(1, 'Universitario', 'abogado'),
+(5, 'Posgrado', 'abogado'),
 (6, NULL, NULL),
 (9, NULL, NULL),
 (10, NULL, NULL),
-(11, NULL, NULL);
+(11, NULL, NULL),
+(12, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1186,12 +1210,13 @@ CREATE TABLE `afiliados_laborales` (
 --
 
 INSERT INTO `afiliados_laborales` (`id_afiliado`, `legajo`, `org_liquida_haber`, `org_trabaja`, `domicilio_trabajo`, `localidad_trabajo`) VALUES
-(1, NULL, NULL, NULL, NULL, NULL),
+(1, 'fasdfa', 'sdfasdf', 'asdfasd', 'fasdfasd', 'fasdfasd'),
 (5, NULL, NULL, NULL, NULL, NULL),
 (6, NULL, NULL, NULL, NULL, NULL),
 (9, NULL, NULL, NULL, NULL, NULL),
 (10, NULL, NULL, NULL, NULL, NULL),
-(11, NULL, NULL, NULL, NULL, NULL);
+(11, NULL, NULL, NULL, NULL, NULL),
+(12, NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1222,12 +1247,13 @@ CREATE TABLE `afiliados_maestra` (
 --
 
 INSERT INTO `afiliados_maestra` (`id_afiliado`, `dni`, `cuil`, `apellidos`, `nombres`, `nacionalidad`, `sexo`, `estado_civil`, `fecha_nacimiento`, `id_fpago`, `numero_cuenta`, `fecha_solicitud_original`, `fecha_alta_padrón`, `estado`, `id_solicitud_origen`) VALUES
-(1, '22222222', NULL, 'wienke', 'constantino', NULL, NULL, NULL, NULL, 2, NULL, '2026-07-13 10:00:18', '2026-07-13 17:14:26', 1, 2),
-(5, '123456789', NULL, 'ruben', 'correa', NULL, NULL, NULL, NULL, 2, NULL, '2026-07-13 17:39:02', '2026-07-13 17:55:10', 1, 3),
+(1, '22222222', '2222222222222222', 'wienke', 'constantino', 'argentino', 'M', 'Casado/a', '1972-07-23', 2, NULL, '2026-07-13 10:00:18', '2026-07-13 17:14:26', 2, 2),
+(5, '123456789', '20228053024', 'ruben', 'correa', 'argentino', 'M', 'Casado/a', '1972-07-23', 2, NULL, '2026-07-13 17:39:02', '2026-07-13 17:55:10', 2, 3),
 (6, '22805302', NULL, 'ruben', 'correa', NULL, NULL, NULL, NULL, 1, '12313213213213', '2026-07-08 16:31:35', '2026-07-13 18:12:58', 1, 1),
 (9, '2132132', NULL, 'wienke', 'constantino', NULL, NULL, NULL, NULL, 2, NULL, '2026-07-13 10:00:18', '2026-07-13 18:18:35', 1, 2),
 (10, '12345678', NULL, 'tuq', 'tuq', NULL, NULL, NULL, NULL, 1, '21321321312321', '2026-07-13 18:24:24', '2026-07-13 18:25:09', 1, 4),
-(11, '21551710', NULL, 'ruben', 'correa', NULL, NULL, NULL, NULL, 2, NULL, '2026-07-13 19:09:35', '2026-07-13 19:19:04', 1, 6);
+(11, '21551710', NULL, 'ruben', 'correa', NULL, NULL, NULL, NULL, 2, NULL, '2026-07-13 19:09:35', '2026-07-13 19:19:04', 1, 6),
+(12, '22805305', NULL, 'ruben', 'correa', NULL, NULL, NULL, NULL, 1, '12321321321321', '2026-07-13 19:18:26', '2026-07-16 15:49:09', 1, 9);
 
 -- --------------------------------------------------------
 
@@ -1322,7 +1348,7 @@ INSERT INTO `solicitudes_afiliacion` (`id`, `dni`, `apellidos`, `nombres`, `emai
 (6, '21551710', 'ruben', 'correa', 'tucu@derecho.uba.ar', '1321321321', '2026-07-13 19:09:35', 'APROBADO'),
 (7, '22805303', 'ruben', 'correa', 'tucu2@gmail.com', '21321321321', '2026-07-13 19:10:28', 'PENDIENTE'),
 (8, '22805304', 'ruben', 'correa', 'emilio@derecho.uba.ar', '1564565', '2026-07-13 19:17:47', 'PENDIENTE'),
-(9, '22805305', 'ruben', 'correa', 'dodo@gmail.com', '465465465', '2026-07-13 19:18:26', 'PENDIENTE');
+(9, '22805305', 'ruben', 'correa', 'dodo@gmail.com', '465465465', '2026-07-13 19:18:26', 'APROBADO');
 
 -- --------------------------------------------------------
 
@@ -1366,6 +1392,13 @@ ALTER TABLE `afiliados`
 --
 ALTER TABLE `afiliados_auditoria`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `afiliados_bajas`
+--
+ALTER TABLE `afiliados_bajas`
+  ADD PRIMARY KEY (`id_baja`),
+  ADD KEY `id_afiliado` (`id_afiliado`);
 
 --
 -- Indices de la tabla `afiliados_confirmados`
@@ -1450,6 +1483,12 @@ ALTER TABLE `afiliados_auditoria`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=552;
 
 --
+-- AUTO_INCREMENT de la tabla `afiliados_bajas`
+--
+ALTER TABLE `afiliados_bajas`
+  MODIFY `id_baja` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
 -- AUTO_INCREMENT de la tabla `afiliados_confirmados`
 --
 ALTER TABLE `afiliados_confirmados`
@@ -1459,7 +1498,7 @@ ALTER TABLE `afiliados_confirmados`
 -- AUTO_INCREMENT de la tabla `afiliados_maestra`
 --
 ALTER TABLE `afiliados_maestra`
-  MODIFY `id_afiliado` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id_afiliado` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT de la tabla `afiliado_estados`
@@ -1494,6 +1533,12 @@ ALTER TABLE `usuarios`
 --
 -- Restricciones para tablas volcadas
 --
+
+--
+-- Filtros para la tabla `afiliados_bajas`
+--
+ALTER TABLE `afiliados_bajas`
+  ADD CONSTRAINT `afiliados_bajas_ibfk_1` FOREIGN KEY (`id_afiliado`) REFERENCES `afiliados_maestra` (`id_afiliado`);
 
 --
 -- Filtros para la tabla `afiliados_confirmados`

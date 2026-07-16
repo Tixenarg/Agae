@@ -20,7 +20,7 @@ class AfiliadoModelo
     /**
      * Obtiene todos los afiliados y calcula estrictamente si los módulos están completos (1) o incompletos (0)
      */
-public function obtenerPadronConSemaforo()
+    public function obtenerPadronConSemaforo()
     {
         $sql = "SELECT 
                     m.id_afiliado, 
@@ -62,7 +62,8 @@ public function obtenerPadronConSemaforo()
                 FROM afiliados_maestra m
                 LEFT JOIN afiliados_domicilios d ON m.id_afiliado = d.id_afiliado
                 LEFT JOIN afiliados_educacion e ON m.id_afiliado = e.id_afiliado
-                LEFT JOIN afiliados_laborales l ON m.id_afiliado = l.id_afiliado";
+                LEFT JOIN afiliados_laborales l ON m.id_afiliado = l.id_afiliado
+                WHERE m.estado = 1"; // <--- AGREGAR ESTA LÍNEA (Asumiendo que 1 es Activo)
 
         $stmt = $this->db->prepare($sql);
         $stmt->execute();
@@ -195,4 +196,42 @@ public function obtenerPadronConSemaforo()
             ':localidad_trabajo' => $datos['localidad_trabajo'] ?? null
         ]);
     }
+
+    /**
+     * Da de baja a un afiliado (Cambia su estado y guarda el motivo en auditoría)
+     */
+    public function desafiliarAfiliado($id_afiliado, $motivo, $id_usuario_admin)
+    {
+        try {
+            // Iniciamos una transacción: o se hace todo junto, o no se hace nada
+            $this->db->beginTransaction();
+
+            // 1. Cambiamos el estado en la tabla maestra 
+            // ⚠️ ATENCIÓN: Revisá que tu columna se llame 'id_estado' y que '2' sea el ID de Baja
+            $sql1 = "UPDATE afiliados_maestra SET estado = 2 WHERE id_afiliado = :id_afiliado";
+            $stmt1 = $this->db->prepare($sql1);
+            $stmt1->execute([':id_afiliado' => $id_afiliado]);
+
+            // 2. Guardamos el motivo en nuestra nueva tabla de auditoría
+            $sql2 = "INSERT INTO afiliados_bajas (id_afiliado, id_usuario_admin, motivo) 
+                     VALUES (:id_afiliado, :id_usuario_admin, :motivo)";
+            $stmt2 = $this->db->prepare($sql2);
+            $stmt2->execute([
+                ':id_afiliado' => $id_afiliado,
+                ':id_usuario_admin' => $id_usuario_admin,
+                ':motivo' => $motivo
+            ]);
+
+            // Si todo salió bien, confirmamos los cambios en la base de datos
+            $this->db->commit();
+            return true;
+
+        } catch (Exception $e) {
+            // Si algo falló (ej: la tabla afiliados_bajas no existe), revertimos todo
+            $this->db->rollBack();
+            throw $e;
+        }
+    }
+
+    
 }

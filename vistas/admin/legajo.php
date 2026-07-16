@@ -82,7 +82,6 @@
 <body>
     <div id="appLegajo" class="container py-4">
 
-        <!-- CABECERA PRINCIPAL -->
         <div class="d-flex justify-content-between align-items-center mb-4">
             <div>
                 <h2 class="mb-0 text-agae">
@@ -97,10 +96,8 @@
             </div>
         </div>
 
-        <!-- CONTENEDOR REACTIVO (Se muestra solo si ya cargó el afiliado) -->
         <div v-if="form.id_afiliado">
 
-            <!-- TARJETA DEL TERMÓMETRO DE INTEGRIDAD -->
             <div class="card shadow-sm border-0 mb-4 bg-white">
                 <div class="card-body">
                     <div class="row align-items-center">
@@ -110,7 +107,6 @@
                             <p class="text-muted mb-0">DNI: {{ form.dni }} | ID Afiliado: #{{ form.id_afiliado }}</p>
                         </div>
 
-                        <!-- Barra de Progreso Reactiva -->
                         <div class="col-md-5 mt-3 mt-md-0">
                             <div class="d-flex justify-content-between mb-1">
                                 <span class="fw-bold text-muted small">Integridad del Legajo</span>
@@ -137,22 +133,24 @@
                 </div>
             </div>
 
-            <!-- ACORDEÓN DE MÓDULOS -->
-            <div class="accordion shadow-sm" id="acordeonLegajo">
+            <div class="accordion shadow-sm">
+                
                 <div class="accordion-item">
                     <h2 class="accordion-header">
-                        <button class="accordion-button d-flex justify-content-between align-items-center" type="button" data-bs-toggle="collapse" data-bs-target="#panelCobro">
+                        <button class="accordion-button d-flex justify-content-between align-items-center" 
+                                type="button" 
+                                :class="{ 'collapsed': !abiertos.fpago }"
+                                @click="togglePanel('fpago')">
                             <div>
                                 <i class="bi bi-wallet2 me-2"></i> 1. Información de Cobro
                             </div>
-                            <!-- Lógica reactiva: Verifica si es BNA con cuenta, o si es MP/Otros -->
                             <span class="badge ms-auto me-3"
-                                :class="((form.id_fpago == 1 && form.numero_cuenta) || (form.id_fpago == 2) || (form.id_fpago == 3)) ? 'bg-success' : 'bg-danger'">
-                                {{ ((form.id_fpago == 1 && form.numero_cuenta) || (form.id_fpago == 2) || (form.id_fpago == 3)) ? 'Completo' : 'Incompleto' }}
+                                :class="moduloFpagoCompleto ? 'bg-success' : 'bg-danger'">
+                                {{ moduloFpagoCompleto ? 'Completo' : 'Incompleto' }}
                             </span>
                         </button>
                     </h2>
-                    <div id="panelCobro" class="accordion-collapse collapse show" data-bs-parent="#acordeonLegajo">
+                    <div class="accordion-collapse collapse" :class="{ 'show': abiertos.fpago }">
                         <div class="accordion-body">
                             <p class="text-muted small mb-3">Seleccione el método por el cual el afiliado abonará su cuota:</p>
 
@@ -195,17 +193,19 @@
                     </div>
                 </div>
 
-                <!-- MÓDULO 1: IDENTIDAD -->
                 <div class="accordion-item">
                     <h2 class="accordion-header">
-                        <button class="accordion-button d-flex align-items-center" type="button" data-bs-toggle="collapse" data-bs-target="#panelIdentidad">
+                        <button class="accordion-button d-flex align-items-center" 
+                                type="button" 
+                                :class="{ 'collapsed': !abiertos.identidad }"
+                                @click="togglePanel('identidad')">
                             <i class="bi bi-person-vcard me-2"></i> 2. Datos de Identidad
                             <span class="badge ms-auto me-3" :class="moduloIdentidadCompleto ? 'bg-success' : 'bg-danger'">
                                 {{ moduloIdentidadCompleto ? 'Completo' : 'Incompleto' }}
                             </span>
                         </button>
                     </h2>
-                    <div id="panelIdentidad" class="accordion-collapse collapse show" data-bs-parent="#acordeonLegajo">
+                    <div class="accordion-collapse collapse" :class="{ 'show': abiertos.identidad }">
                         <div class="accordion-body">
                             <div class="row g-3 mb-3">
                                 <div class="col-md-4">
@@ -261,17 +261,19 @@
                     </div>
                 </div>
 
-                <!-- MÓDULO 2: DOMICILIO -->
                 <div class="accordion-item">
                     <h2 class="accordion-header">
-                        <button class="accordion-button collapsed d-flex align-items-center" type="button" data-bs-toggle="collapse" data-bs-target="#panelDomicilio">
+                        <button class="accordion-button d-flex align-items-center" 
+                                type="button" 
+                                :class="{ 'collapsed': !abiertos.domicilio }"
+                                @click="togglePanel('domicilio')">
                             <i class="bi bi-geo-alt me-2"></i> 3. Domicilio y Contacto
                             <span class="badge ms-auto me-3" :class="moduloDomicilioCompleto ? 'bg-success' : 'bg-danger'">
                                 {{ moduloDomicilioCompleto ? 'Completo' : 'Incompleto' }}
                             </span>
                         </button>
                     </h2>
-                    <div id="panelDomicilio" class="accordion-collapse collapse" data-bs-parent="#acordeonLegajo">
+                    <div class="accordion-collapse collapse" :class="{ 'show': abiertos.domicilio }">
                         <div class="accordion-body">
                             <div class="row g-3 mb-3">
                                 <div class="col-md-6">
@@ -308,17 +310,19 @@
                     </div>
                 </div>
 
-                <!-- MÓDULO 3: EDUCACIÓN -->
                 <div class="accordion-item">
                     <h2 class="accordion-header">
-                        <button class="accordion-button collapsed d-flex align-items-center" type="button" data-bs-toggle="collapse" data-bs-target="#panelEducacion">
+                        <button class="accordion-button d-flex align-items-center" 
+                                type="button" 
+                                :class="{ 'collapsed': !abiertos.educacion }"
+                                @click="togglePanel('educacion')">
                             <i class="bi bi-book me-2"></i> 4. Nivel Académico
                             <span class="badge ms-auto me-3" :class="moduloEducacionCompleto ? 'bg-success' : 'bg-danger'">
                                 {{ moduloEducacionCompleto ? 'Completo' : 'Incompleto' }}
                             </span>
                         </button>
                     </h2>
-                    <div id="panelEducacion" class="accordion-collapse collapse" data-bs-parent="#acordeonLegajo">
+                    <div class="accordion-collapse collapse" :class="{ 'show': abiertos.educacion }">
                         <div class="accordion-body">
                             <div class="row g-3 mb-3">
                                 <div class="col-md-6">
@@ -345,17 +349,19 @@
                     </div>
                 </div>
 
-                <!-- MÓDULO 4: LABORAL -->
                 <div class="accordion-item">
                     <h2 class="accordion-header">
-                        <button class="accordion-button collapsed d-flex align-items-center" type="button" data-bs-toggle="collapse" data-bs-target="#panelLaboral">
+                        <button class="accordion-button d-flex align-items-center" 
+                                type="button" 
+                                :class="{ 'collapsed': !abiertos.laboral }"
+                                @click="togglePanel('laboral')">
                             <i class="bi bi-briefcase me-2"></i> 5. Datos Laborales
                             <span class="badge ms-auto me-3" :class="moduloLaboralCompleto ? 'bg-success' : 'bg-danger'">
                                 {{ moduloLaboralCompleto ? 'Completo' : 'Incompleto' }}
                             </span>
                         </button>
                     </h2>
-                    <div id="panelLaboral" class="accordion-collapse collapse" data-bs-parent="#acordeonLegajo">
+                    <div class="accordion-collapse collapse" :class="{ 'show': abiertos.laboral }">
                         <div class="accordion-body">
                             <div class="row g-3 mb-3">
                                 <div class="col-md-3">
@@ -391,7 +397,6 @@
             </div>
         </div>
 
-        <!-- PANTALLA DE CARGA (Aparece mientras fetch hace su trabajo) -->
         <div v-else class="text-center mt-5">
             <div class="spinner-border text-primary" role="status"></div>
             <p class="mt-2 text-muted">Cargando legajo del afiliado...</p>
@@ -400,17 +405,13 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-        const {
-            createApp
-        } = Vue;
+    <script>
+        const { createApp } = Vue;
 
         createApp({
             data() {
                 return {
-                    form: {}, // Los datos se cargan dinámicamente desde el controlador
-
-                    // Estado de apertura de cada módulo del acordeón
+                    form: {},
                     abiertos: {
                         fpago: false,
                         identidad: false,
@@ -421,14 +422,12 @@
                 }
             },
             computed: {
-                // Las propiedades computadas ahora consumen directamente las funciones de validación
                 moduloFpagoCompleto() { return this.isFpagoCompleto(this.form); },
                 moduloIdentidadCompleto() { return this.isIdentidadCompleta(this.form); },
                 moduloDomicilioCompleto() { return this.isDomicilioCompleto(this.form); },
                 moduloEducacionCompleto() { return this.isEducacionCompleta(this.form); },
                 moduloLaboralCompleto() { return this.isLaboralCompleto(this.form); },
 
-                // Cuenta cuántos de los 5 módulos están completamente listos
                 cantidadModulosCompletos() {
                     let cant = 0;
                     if (this.moduloFpagoCompleto) cant++;
@@ -439,12 +438,11 @@
                     return cant;
                 },
 
-                // Convierte la cantidad de módulos listos en porcentaje
                 porcentajeProgreso() {
-                    return this.cantidadModulosCompletos * 20;
+                    let porcentaje = this.cantidadModulosCompletos * 20;
+                    return isNaN(porcentaje) ? 0 : porcentaje;
                 },
 
-                // Controla el color de la barra (Rojo -> Amarillo -> Verde)
                 colorBarraProgreso() {
                     const pct = this.porcentajeProgreso;
                     if (pct <= 40) return 'bg-danger';
@@ -452,7 +450,6 @@
                     return 'bg-success';
                 },
 
-                // Controla el color del texto del porcentaje
                 colorTextoProgreso() {
                     const pct = this.porcentajeProgreso;
                     if (pct <= 40) return 'text-danger';
@@ -471,9 +468,6 @@
                 }
             },
             methods: {
-                // ==========================================
-                // ⚙️ MÉTODOS DE VALIDACIÓN PURA (SÍNCRONOS)
-                // ==========================================
                 isFpagoCompleto(f) {
                     if (!f) return false;
                     if (f.id_fpago == 1 && f.numero_cuenta && String(f.numero_cuenta).trim() !== '') return true;
@@ -522,9 +516,6 @@
                     );
                 },
 
-                // ==========================================
-                // 📡 FLUJO DE ACCIONES
-                // ==========================================
                 async cargarDatos(id) {
                     try {
                         const resp = await fetch(`../../controladores/admin_legajo_controlador.php?id=${id}`);
@@ -532,14 +523,8 @@
 
                         if (resultado.status === 'success') {
                             const datosCrudos = resultado.data;
-                            
-                            // Guardamos en el formulario para pintar los inputs
                             this.form = datosCrudos; 
 
-                            // [AUDITORÍA DE CONSOLA] - Te va a mostrar qué campos están llegando realmente
-                            console.log("🔍 DATOS DEL AFILIADO DESDE PHP:", datosCrudos);
-
-                            // Evaluamos los datos directamente sin esperar a la reactividad lenta de Vue
                             const estadosIncompletos = {
                                 fpago: !this.isFpagoCompleto(datosCrudos),
                                 identidad: !this.isIdentidadCompleta(datosCrudos),
@@ -548,22 +533,21 @@
                                 laboral: !this.isLaboralCompleto(datosCrudos)
                             };
 
-                            // [AUDITORÍA DE CONSOLA] - Mirá esto para saber por qué se abre cada cosa
-                            console.log("🧐 ¿QUÉ MODULOS ESTÁN REALMENTE INCOMPLETOS?:", estadosIncompletos);
+                            // Orden estricto para revisar del 1 al 5 y abrir el primer faltante
+                            const ordenModulos = ['fpago', 'identidad', 'domicilio', 'educacion', 'laboral'];
+                            let seAbrioAlguno = false;
 
-                            // Buscamos el PRIMER módulo incompleto para dejarlo abierto.
-                            let primerIncompletoEncontrado = false;
-                            for (let key in estadosIncompletos) {
-                                if (estadosIncompletos[key] && !primerIncompletoEncontrado) {
-                                    this.abiertos[key] = true;
-                                    primerIncompletoEncontrado = true;
+                            ordenModulos.forEach(modulo => {
+                                if (estadosIncompletos[modulo] && !seAbrioAlguno) {
+                                    this.abiertos[modulo] = true;
+                                    seAbrioAlguno = true;
                                 } else {
-                                    this.abiertos[key] = false;
+                                    this.abiertos[modulo] = false;
                                 }
-                            }
+                            });
 
-                            // Si todo está 100% completo, abrimos el primero (fpago) como comportamiento por defecto
-                            if (!primerIncompletoEncontrado) {
+                            // Si todos están completos, abrimos el de pago por defecto
+                            if (!seAbrioAlguno) {
                                 this.abiertos.fpago = true;
                             }
 
@@ -576,7 +560,6 @@
                     }
                 },
 
-                // Abre/cierra pestañas simulando un acordeón nativo
                 togglePanel(panelName) {
                     const estadoActual = this.abiertos[panelName];
                     for (let key in this.abiertos) {
@@ -609,7 +592,6 @@
                                 showConfirmButton: false
                             });
                             
-                            // Refrescamos los datos para recalcular progresos y aperturas inteligentemente
                             const urlParams = new URLSearchParams(window.location.search);
                             const id = urlParams.get('id');
                             if (id) {
