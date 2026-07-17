@@ -11,16 +11,12 @@ class AfiliadoModelo
         $this->db = $conexion->conectar();
     }
 
+
     /**
-     * Obtiene el padrón de afiliados calculando el semáforo de integridad
+     * Obtiene el padrón de afiliados filtrado por estado, calculando el semáforo de integridad.
+     * @param int $estado Por defecto 1 (Activos). Pasar 2 para obtener los dados de baja.
      */
-    /**
-     * Obtiene todos los afiliados y calcula si los módulos están cargados (1) o no (0)
-     */
-    /**
-     * Obtiene todos los afiliados y calcula estrictamente si los módulos están completos (1) o incompletos (0)
-     */
-    public function obtenerPadronConSemaforo()
+    public function obtenerPadronConSemaforo($estado = 1)
     {
         $sql = "SELECT 
                     m.id_afiliado, 
@@ -63,10 +59,12 @@ class AfiliadoModelo
                 LEFT JOIN afiliados_domicilios d ON m.id_afiliado = d.id_afiliado
                 LEFT JOIN afiliados_educacion e ON m.id_afiliado = e.id_afiliado
                 LEFT JOIN afiliados_laborales l ON m.id_afiliado = l.id_afiliado
-                WHERE m.estado = 1"; // <--- AGREGAR ESTA LÍNEA (Asumiendo que 1 es Activo)
+                WHERE m.estado = :estado"; // Usamos un marcador de posición para inyectar el estado dinámicamente
 
         $stmt = $this->db->prepare($sql);
-        $stmt->execute();
+
+        // Vinculamos el parámetro en el execute asegurando la limpieza del dato contra SQL Injection
+        $stmt->execute([':estado' => $estado]);
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
@@ -225,7 +223,6 @@ class AfiliadoModelo
             // Si todo salió bien, confirmamos los cambios en la base de datos
             $this->db->commit();
             return true;
-
         } catch (Exception $e) {
             // Si algo falló (ej: la tabla afiliados_bajas no existe), revertimos todo
             $this->db->rollBack();
@@ -233,5 +230,33 @@ class AfiliadoModelo
         }
     }
 
-    
+    /**
+     * Vuelve a afiliar a un usuario dado de baja, registrando la auditoría
+     */
+    public function reafiliarAfiliado($id_afiliado, $id_usuario_admin)
+    {
+        try {
+            $this->db->beginTransaction();
+
+            // 1. Restauramos el estado a Activo (1)
+            $sql1 = "UPDATE afiliados_maestra SET estado = 1 WHERE id_afiliado = :id_afiliado";
+            $stmt1 = $this->db->prepare($sql1);
+            $stmt1->execute([':id_afiliado' => $id_afiliado]);
+
+            // 2. Guardamos registro en la tabla de auditoría de re-altas
+            $sql2 = "INSERT INTO afiliados_reafiliaciones (id_afiliado, id_usuario_admin) 
+                     VALUES (:id_afiliado, :id_usuario_admin)";
+            $stmt2 = $this->db->prepare($sql2);
+            $stmt2->execute([
+                ':id_afiliado' => $id_afiliado,
+                ':id_usuario_admin' => $id_usuario_admin
+            ]);
+
+            $this->db->commit();
+            return true;
+        } catch (Exception $e) {
+            $this->db->rollBack();
+            throw $e;
+        }
+    }
 }

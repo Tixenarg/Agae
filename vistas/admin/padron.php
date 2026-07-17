@@ -37,7 +37,7 @@
 
         <div class="d-flex justify-content-between align-items-center mb-4">
             <div>
-                <h2 class="mb-0 text-agae"><i class="bi bi-people-fill me-2"></i>Padrón de Afiliados</h2>
+                <h2 class="mb-0 text-agae"><i class="bi bi-people-fill me-2"></i>Padrón de AGAE</h2>
                 <p class="text-muted mb-0">Gestión general y estado de legajos</p>
             </div>
             <div>
@@ -46,20 +46,45 @@
 
         <div class="card shadow-sm border-0 mb-4 bg-white">
             <div class="card-body">
-                <div class="row g-3">
+                <div class="row g-3 align-items-end">
+                    <!-- 1. Filtrar Padrón (Botones de Alta/Baja) -->
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small fw-bold text-uppercase mb-2">Filtrar Padrón:</label>
+                        <div class="btn-group w-100" role="group" style="height: 38px;">
+                            <!-- Botón Activos -->
+                            <input type="radio" class="btn-check" name="filtroEstadoListado" id="btn-activos" :value="1" v-model="estadoListado" @change="cargarPadron" autocomplete="off">
+                            <label class="btn btn-outline-success d-flex align-items-center justify-content-center gap-2 h-100" for="btn-activos">
+                                <i class="bi bi-person-check-fill fs-5"></i>
+                                <span>Afiliados</span>
+                            </label>
+
+                            <!-- Botón Bajas -->
+                            <input type="radio" class="btn-check" name="filtroEstadoListado" id="btn-bajas" :value="2" v-model="estadoListado" @change="cargarPadron" autocomplete="off">
+                            <label class="btn btn-outline-danger d-flex align-items-center justify-content-center gap-2 h-100" for="btn-bajas">
+                                <i class="bi bi-person-x-fill fs-5"></i>
+                                <span>Desafiliados</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- 2. Filtrar por Estado (Semáforo) -->
                     <div class="col-md-4">
-                        <label class="form-label text-muted small fw-bold text-uppercase">Filtrar por Estado</label>
-                        <select class="form-select" v-model="filtroEstado">
+                        <label class="form-label text-muted small fw-bold text-uppercase mb-2">Filtrar por Estado:</label>
+                        <select class="form-select" v-model="filtroEstado" style="height: 38px;">
                             <option value="todos">🟢🔴 Todos los Legajos</option>
-                            <option value="completo">🟢 Solo Completos (5/5)</option>
-                            <option value="incompleto">🔴 Solo Incompletos</option>
+                            <option value="completo">🟢 Completos</option>
+                            <option value="incompleto">🔴 Incompletos</option>
                         </select>
                     </div>
-                    <div class="col-md-8">
-                        <label class="form-label text-muted small fw-bold text-uppercase">Buscador Inteligente</label>
-                        <div class="input-group">
-                            <span class="input-group-text bg-white"><i class="bi bi-search text-muted"></i></span>
-                            <input type="text" class="form-control" v-model="terminoBusqueda" placeholder="Escribí un DNI, Apellido o Nombre para buscar al instante...">
+
+                    <!-- 3. Buscador Inteligente -->
+                    <div class="col-md-5">
+                        <label class="form-label text-muted small fw-bold text-uppercase mb-2">Buscador Inteligente:</label>
+                        <div class="input-group" style="height: 38px;">
+                            <span class="input-group-text bg-white text-muted border-end-0">
+                                <i class="bi bi-search"></i>
+                            </span>
+                            <input type="text" class="form-control border-start-0" v-model="terminoBusqueda" placeholder="Escribí un DNI, Apellido o Nombre...">
                         </div>
                     </div>
                 </div>
@@ -117,10 +142,23 @@
                                     <a :href="'legajo.php?id=' + afiliado.id_afiliado" class="btn btn-sm btn-outline-agae">
                                         <i class="bi bi-folder2-open me-1"></i> Abrir Legajo
                                     </a>
-                                    <button class="btn btn-sm btn-outline-danger ms-1"
+
+
+
+                                    <!-- Si estamos viendo Activos (1), mostramos botón rojo de desafiliación -->
+                                    <button v-if="estadoListado === 1"
+                                        class="btn btn-sm btn-outline-danger ms-1"
                                         title="Desafiliar"
                                         @click="desafiliarAfiliado(afiliado.id_afiliado, afiliado.nombres + ' ' + afiliado.apellidos)">
                                         <i class="bi bi-person-x-fill"></i>
+                                    </button>
+
+                                    <!-- Si estamos viendo Bajas (2), mostramos botón verde de reactivación -->
+                                    <button v-else
+                                        class="btn btn-sm btn-outline-success ms-1"
+                                        title="Reafiliar / Dar de Alta"
+                                        @click="reafiliarAfiliado(afiliado.id_afiliado, afiliado.nombres + ' ' + afiliado.apellidos)">
+                                        <i class="bi bi-person-check-fill"></i>
                                     </button>
                                 </td>
                             </tr>
@@ -136,7 +174,7 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<script>
+    <script>
         const {
             createApp
         } = Vue;
@@ -147,16 +185,14 @@
                     afiliados: [],
                     terminoBusqueda: '',
                     filtroEstado: 'todos',
+                    estadoListado: 1, // 1 = Ver Activos, 2 = Ver Dados de Baja
                     cargando: true
                 }
             },
             computed: {
-                // Propiedad computada que filtra la tabla AL VUELO sin consultar a la BD de nuevo
                 afiliadosFiltrados() {
                     const busqueda = this.terminoBusqueda.toLowerCase();
-
                     return this.afiliados.filter(a => {
-                        // 1. Filtrado por texto (Maneja nulos por si algún campo viene vacío)
                         const apellidos = a.apellidos ? a.apellidos.toLowerCase() : '';
                         const nombres = a.nombres ? a.nombres.toLowerCase() : '';
                         const dni = a.dni ? a.dni.toString() : '';
@@ -165,36 +201,34 @@
                             nombres.includes(busqueda) ||
                             dni.includes(busqueda);
 
-                        // 2. Filtrado por estado del semáforo
                         const puntaje = this.obtenerPuntaje(a);
-                        
                         let cumpleEstado = true;
-                        if (this.filtroEstado === 'completo') { 
+                        if (this.filtroEstado === 'completo') {
                             cumpleEstado = (puntaje === 5);
-                        } else if (this.filtroEstado === 'incompleto') { 
+                        } else if (this.filtroEstado === 'incompleto') {
                             cumpleEstado = (puntaje < 5);
                         }
 
-                        // Retorna true solo si cumple AMBAS condiciones
                         return cumpleTexto && cumpleEstado;
                     });
                 }
             },
             mounted() {
-                // Al cargar la pantalla, vamos a buscar los datos
                 this.cargarPadron();
             },
             methods: {
                 async cargarPadron() {
+                    this.cargando = true;
                     try {
-                        const resp = await fetch('../../controladores/admin_padron_controlador.php');
+                        // Enviamos el estado seleccionado en la URL (?estado=1 o ?estado=2)
+                        const resp = await fetch(`../../controladores/admin_padron_controlador.php?estado=${this.estadoListado}`);
                         const resultado = await resp.json();
 
                         if (resultado.status === 'success') {
                             this.afiliados = resultado.data;
                         } else {
-                            console.error("Error del servidor:", resultado.message);
-                            alert("Hubo un error al cargar el padrón.");
+                            console.error("Error:", resultado.message);
+                            alert("Error al cargar el padrón.");
                         }
                     } catch (error) {
                         console.error("Error de red:", error);
@@ -203,7 +237,6 @@
                     }
                 },
 
-                // Suma los valores (0 o 1) que nos manda el SQL para saber cuántos módulos están cargados
                 obtenerPuntaje(afiliado) {
                     return parseInt(afiliado.mod_fpago || 0) +
                         parseInt(afiliado.mod_identidad || 0) +
@@ -212,24 +245,20 @@
                         parseInt(afiliado.mod_laboral || 0);
                 },
 
-                // NUEVA FUNCIÓN: Módulo de Desafiliación con SweetAlert2
                 async desafiliarAfiliado(id_afiliado, nombreCompleto) {
-                    // 1. Lanzamos el modal pidiendo el motivo
-                    const { value: motivo } = await Swal.fire({
+                    const {
+                        value: motivo
+                    } = await Swal.fire({
                         title: 'Desafiliar Afiliado',
                         text: `Estás a punto de dar de baja a ${nombreCompleto}. Por favor, ingresa el motivo:`,
                         icon: 'warning',
                         input: 'textarea',
                         inputPlaceholder: 'Ej: Renuncia voluntaria, Falta de pago...',
-                        inputAttributes: {
-                            'aria-label': 'Escribe el motivo aquí'
-                        },
                         showCancelButton: true,
                         confirmButtonColor: '#d33',
                         cancelButtonColor: '#6c757d',
                         confirmButtonText: 'Sí, Desafiliar',
                         cancelButtonText: 'Cancelar',
-                        // Validación: No deja clickear "Sí" si está vacío
                         inputValidator: (value) => {
                             if (!value || value.trim() === '') {
                                 return '¡Necesitas escribir un motivo para continuar!';
@@ -237,10 +266,8 @@
                         }
                     });
 
-                    // 2. Si el operador escribió el motivo y le dio a "Sí"
                     if (motivo) {
                         try {
-                            // Mandamos los datos al controlador
                             const resp = await fetch('../../controladores/admin_padron_controlador.php', {
                                 method: 'POST',
                                 headers: {
@@ -252,25 +279,54 @@
                                     motivo: motivo.trim()
                                 })
                             });
-
                             const resultado = await resp.json();
-
-                            // 3. Evaluamos la respuesta del servidor
                             if (resultado.status === 'success') {
-                                Swal.fire(
-                                    '¡Desafiliado!',
-                                    'El afiliado fue dado de baja correctamente.',
-                                    'success'
-                                );
-                                
-                                // Recargamos la lista del padrón
-                                this.cargarPadron(); 
+                                Swal.fire('¡Desafiliado!', 'El afiliado fue dado de baja.', 'success');
+                                this.cargarPadron();
                             } else {
                                 Swal.fire('Error', resultado.message, 'error');
                             }
                         } catch (error) {
-                            console.error("Error al desafiliar:", error);
                             Swal.fire('Error', 'No se pudo conectar con el servidor.', 'error');
+                        }
+                    }
+                },
+
+                // NUEVO MÉTODO: Reafiliación reactiva
+                async reafiliarAfiliado(id_afiliado, nombreCompleto) {
+                    const confirmacion = await Swal.fire({
+                        title: '¿Reafiliar Afiliado?',
+                        text: `¿Estás seguro de que querés volver a dar de alta a ${nombreCompleto}?`,
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonColor: '#198754',
+                        cancelButtonColor: '#6c757d',
+                        confirmButtonText: 'Sí, reactivar alta',
+                        cancelButtonText: 'Cancelar'
+                    });
+
+                    if (confirmacion.isConfirmed) {
+                        try {
+                            const resp = await fetch('../../controladores/admin_padron_controlador.php', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({
+                                    accion: 'reafiliar',
+                                    id_afiliado: id_afiliado
+                                })
+                            });
+                            const resultado = await resp.json();
+
+                            if (resultado.status === 'success') {
+                                Swal.fire('¡Reafiliado!', resultado.message, 'success');
+                                this.cargarPadron(); // Recarga automáticamente removiéndolo de la lista de bajas
+                            } else {
+                                Swal.fire('Error', resultado.message, 'error');
+                            }
+                        } catch (error) {
+                            Swal.fire('Error', 'No se pudo procesar la solicitud.', 'error');
                         }
                     }
                 }
