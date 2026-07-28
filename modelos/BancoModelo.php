@@ -39,14 +39,31 @@ class BancoModelo
      * Obtiene los afiliados que cumplen las condiciones para débito automático
      * estado = 1 (Activo) e id_fpago = 1 (Débito)
      */
+    /**
+     * Obtiene los afiliados activos vinculados al método de cobro por Débito Automático (id_fpago = 1).
+     * 
+     * @return array Lista de afiliados con sus datos de cobro
+     */
     public function obtenerAfiliadosDebito()
     {
-        $sql = "SELECT id_afiliado, dni, apellidos, nombres, numero_cuenta 
-                FROM afiliados_maestra 
-                WHERE estado = 1 AND id_fpago = 1";
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        try {
+            $sql = "SELECT 
+                        am.id_afiliado, 
+                        am.dni, 
+                        am.apellidos, 
+                        am.nombres, 
+                        adc.numero_cuenta 
+                    FROM afiliados_maestra am
+                    INNER JOIN afiliados_datos_cobro adc ON am.id_afiliado = adc.id_afiliado
+                    WHERE am.id_estado = 2 
+                      AND adc.id_fpago = 1";
+
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log("Error en Banco_modelo::obtenerAfiliadosDebito: " . $e->getMessage());
+            return [];
+        }
     }
 }
-?>

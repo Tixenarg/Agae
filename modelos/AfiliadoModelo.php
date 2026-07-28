@@ -11,92 +11,170 @@ class AfiliadoModelo
         $this->db = $conexion->conectar();
     }
 
+    /**
+     * Obtiene el padrón filtrado por estado e incluye los indicadores del semáforo (6/6)
+     * y el nombre del medio de pago asignado.
+     * @param int $estado (1 = Solicitud, 2 = Afiliado, 3 = Desafiliado)
+     */
+    /**
+     * Obtiene el padrón filtrado por estado e incluye los indicadores del semáforo (6/6)
+     * con validación estricta de contenido real en cada módulo.
+     * @param int $estado (1 = Solicitud, 2 = Afiliado, 3 = Desafiliado)
+     */
+    /**
+     * Obtiene el padrón filtrado por estado e incluye los indicadores del semáforo (6/6)
+     * con validación estricta de contenido real en cada módulo.
+     * @param int $estado (1 = Solicitud, 2 = Afiliado, 3 = Desafiliado)
+     */
+    public function obtenerPadronConSemaforo(int $estado = 2)
+    {
+        try {
+            $sql = "SELECT 
+                        m.id_afiliado, 
+                        m.apellidos, 
+                        m.nombres, 
+                        m.dni, 
+                        m.telefono,
+                        m.email,
+                        m.id_estado,
+                        IFNULL(m.fecha_afiliacion, 'Sin fecha') AS fecha_afiliacion,
+                        c.id_fpago,
+                        IFNULL(fp.fpago_nombre, 'Sin asignar') AS forma_pago_nombre,
+                        
+                        -- Flags del semáforo con los nombres exactos de columnas reales (1 = Completo, 0 = Pendiente)
+                        -- 1. Forma de Pago (Requiere id_fpago asignado y, si es CBU BNA, exige exactamente 14 dígitos)
+                        IF(c.id_fpago IS NOT NULL AND (c.id_fpago != 1 OR (c.numero_cuenta IS NOT NULL AND CHAR_LENGTH(TRIM(c.numero_cuenta)) = 14)), 1, 0) AS mod_fpago,
+                        
+                        -- 2. Identidad (Exige CUIL, sexo, estado civil y fecha de nacimiento)
+                        IF(p.cuil IS NOT NULL AND TRIM(p.cuil) != '' AND p.sexo IS NOT NULL AND TRIM(p.sexo) != '' AND p.estado_civil IS NOT NULL AND TRIM(p.estado_civil) != '' AND p.fecha_nacimiento IS NOT NULL, 1, 0) AS mod_identidad,
+                        
+                        -- 3. Domicilio (Exige direccion y localidad con texto real)
+                        IF(d.direccion IS NOT NULL AND TRIM(d.direccion) != '' AND d.localidad IS NOT NULL AND TRIM(d.localidad) != '', 1, 0) AS mod_domicilio,
+                        
+                        -- 4. Educación (Exige nivel_estudio)
+                        IF(e.nivel_estudio IS NOT NULL AND TRIM(e.nivel_estudio) != '', 1, 0) AS mod_educacion,
+                        
+                        -- 5. Laboral (Exige legajo y org_trabaja)
+                        IF(l.legajo IS NOT NULL AND TRIM(l.legajo) != '' AND l.org_trabaja IS NOT NULL AND TRIM(l.org_trabaja) != '', 1, 0) AS mod_laboral
+
+                    FROM afiliados_maestra m
+                    LEFT JOIN afiliados_datos_cobro c ON m.id_afiliado = c.id_afiliado
+                    LEFT JOIN afiliado_forma_de_pago fp ON c.id_fpago = fp.id_fpago
+                    LEFT JOIN afiliados_datos_personales p ON m.id_afiliado = p.id_afiliado
+                    LEFT JOIN afiliados_domicilios d ON m.id_afiliado = d.id_afiliado
+                    LEFT JOIN afiliados_educacion e ON m.id_afiliado = e.id_afiliado
+                    LEFT JOIN afiliados_laborales l ON m.id_afiliado = l.id_afiliado
+                    WHERE m.id_estado = :estado
+                    ORDER BY m.apellidos ASC, m.nombres ASC";
+
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindValue(':estado', $estado, PDO::PARAM_INT);
+            $stmt->execute();
+
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log("Error en AfiliadoModelo::obtenerPadronConSemaforo -> " . $e->getMessage());
+            throw new Exception("Error MySQL: " . $e->getMessage());
+        }
+    }
 
     /**
-     * Obtiene el padrón de afiliados filtrado por estado, calculando el semáforo de integridad.
-     * @param int $estado Por defecto 1 (Activos). Pasar 2 para obtener los dados de baja.
+     * Obtiene el conteo general para las Tarjetas del Dashboard (KPIs)
      */
-    public function obtenerPadronConSemaforo($estado = 1)
+    public function obtenerEstadisticasPadron()
     {
-        $sql = "SELECT 
+        try {
+            $sql = "SELECT 
+                        COUNT(*) AS total_padron,
+                        SUM(IF(id_estado = 1, 1, 0)) AS total_solicitudes,
+                        SUM(IF(id_estado = 2, 1, 0)) AS total_activos,
+                        SUM(IF(id_estado = 3, 1, 0)) AS total_desafiliados
+                    FROM afiliados_maestra";
+
+            $stmt = $this->db->query($sql);
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log("Error en AfiliadoModelo::obtenerEstadisticasPadron -> " . $e->getMessage());
+            return [
+                "total_padron" => 0,
+                "total_solicitudes" => 0,
+                "total_activos" => 0,
+                "total_desafiliados" => 0
+            ];
+        }
+    }
+
+    /**
+     * Obtiene el catálogo de formas de pago para alimentar el filtro en la vista
+     */
+    public function obtenerFormasPago()
+    {
+        try {
+            $sql = "SELECT id_fpago, fpago_nombre FROM afiliado_forma_de_pago ORDER BY fpago_nombre ASC";
+            $stmt = $this->db->query($sql);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log("Error en AfiliadoModelo::obtenerFormasPago -> " . $e->getMessage());
+            return [];
+        }
+    }
+
+    /**
+     * Obtiene todos los datos del legajo para un afiliado específico
+     */
+    // BUSCAR LA CONSULTA SQL DEL LEGAJO Y REEMPLAZAR EL SELECT POR:
+    public function obtenerLegajoCompleto(int $id_afiliado)
+    {
+        try {
+            $sql = "SELECT 
                     m.id_afiliado, 
                     m.apellidos, 
                     m.nombres, 
                     m.dni, 
-                    m.`fecha_alta_padrón` AS fecha_alta,
+                    m.telefono, 
+                    m.email, 
+                    m.id_estado, 
+                    m.fecha_afiliacion,
+                    e_est.estado_nombre, -- <--- Traemos el nombre real del estado
                     
-                    -- Módulo 1: Forma de Pago
-                    (CASE 
-                        WHEN m.id_fpago = 1 AND m.numero_cuenta IS NOT NULL AND m.numero_cuenta != '' THEN 1 
-                        WHEN m.id_fpago IN (2, 3) THEN 1 
-                        ELSE 0 
-                    END) AS mod_fpago,
-
-                    -- Módulo 2: Identidad
-                    (CASE WHEN m.cuil IS NOT NULL AND m.cuil != '' 
-                           AND m.nacionalidad IS NOT NULL AND m.nacionalidad != '' 
-                           AND m.fecha_nacimiento IS NOT NULL THEN 1 ELSE 0 END) AS mod_identidad,
-                           
-                    -- Módulo 3: Domicilio
-                    (CASE WHEN d.domicilio IS NOT NULL AND d.domicilio != '' 
-                           AND d.localidad IS NOT NULL AND d.localidad != '' 
-                           AND d.telefono IS NOT NULL AND d.telefono != '' THEN 1 ELSE 0 END) AS mod_domicilio,
-                           
-                    -- Módulo 4: Educación
-                    (CASE WHEN e.nivel_estudio IS NOT NULL AND e.nivel_estudio != '' THEN 1 ELSE 0 END) AS mod_educacion,
+                    -- Datos de Cobro
+                    c.id_dato_cobro, c.id_fpago, c.numero_cuenta, c.acepto_pago,
                     
-                    -- Módulo 5: Información Laboral (Campos 100% correctos de afiliados_laborales)
-                    (CASE 
-                        WHEN l.legajo IS NOT NULL AND l.legajo != '' 
-                             AND l.org_liquida_haber IS NOT NULL AND l.org_liquida_haber != ''
-                             AND l.org_trabaja IS NOT NULL AND l.org_trabaja != ''
-                             AND l.domicilio_trabajo IS NOT NULL AND l.domicilio_trabajo != ''
-                             AND l.localidad_trabajo IS NOT NULL AND l.localidad_trabajo != '' THEN 1 
-                        ELSE 0 
-                    END) AS mod_laboral
-
-                FROM afiliados_maestra m
-                LEFT JOIN afiliados_domicilios d ON m.id_afiliado = d.id_afiliado
-                LEFT JOIN afiliados_educacion e ON m.id_afiliado = e.id_afiliado
-                LEFT JOIN afiliados_laborales l ON m.id_afiliado = l.id_afiliado
-                WHERE m.estado = :estado"; // Usamos un marcador de posición para inyectar el estado dinámicamente
-
-        $stmt = $this->db->prepare($sql);
-
-        // Vinculamos el parámetro en el execute asegurando la limpieza del dato contra SQL Injection
-        $stmt->execute([':estado' => $estado]);
-
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
-    /**
-     * Obtiene todos los datos del legajo (las 4 tablas) para un afiliado específico
-     */
-    public function obtenerLegajoCompleto($id_afiliado)
-    {
-        $sql = "SELECT 
-                    m.id_afiliado, m.dni, m.cuil, m.apellidos, m.nombres, m.nacionalidad, m.sexo, m.estado_civil, m.fecha_nacimiento,
-                    d.domicilio, d.localidad, d.codigo_postal, d.provincia, d.telefono, d.email,
+                    -- Datos Personales / Identidad
+                    p.cuil, p.nacionalidad, p.fecha_nacimiento, p.sexo, p.estado_civil,
+                    
+                    -- Domicilio
+                    d.calle, d.numero, d.piso, d.depto, d.localidad, d.codigo_postal,
+                    
+                    -- Educación
                     e.nivel_estudio, e.titulo,
-                    l.legajo, l.org_liquida_haber, l.org_trabaja, l.domicilio_trabajo, l.localidad_trabajo
+                    
+                    -- Laboral
+                    l.numero_legajo, l.organismo_liquidador, l.organismo_trabajo
                 FROM afiliados_maestra m
+                LEFT JOIN afiliado_estados e_est ON m.id_estado = e_est.id_estado
+                LEFT JOIN afiliados_datos_cobro c ON m.id_afiliado = c.id_afiliado
+                LEFT JOIN afiliados_datos_personales p ON m.id_afiliado = p.id_afiliado
                 LEFT JOIN afiliados_domicilios d ON m.id_afiliado = d.id_afiliado
                 LEFT JOIN afiliados_educacion e ON m.id_afiliado = e.id_afiliado
                 LEFT JOIN afiliados_laborales l ON m.id_afiliado = l.id_afiliado
                 WHERE m.id_afiliado = :id_afiliado";
 
-        $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':id_afiliado', $id_afiliado, PDO::PARAM_INT);
-        $stmt->execute();
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindValue(':id_afiliado', $id_afiliado, PDO::PARAM_INT);
+            $stmt->execute();
 
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log("Error en AfiliadoModelo::obtenerLegajoCompleto -> " . $e->getMessage());
+            return null;
+        }
     }
+
     // ==========================================================
     // MÓDULOS DE ACTUALIZACIÓN DE LEGAJO
     // ==========================================================
 
-    /**
-     * Módulo 1: Identidad (Actualiza tabla maestra)
-     */
     public function actualizarIdentidad($datos)
     {
         $sql = "UPDATE afiliados_maestra 
@@ -118,9 +196,6 @@ class AfiliadoModelo
         ]);
     }
 
-    /**
-     * Módulo 2: Domicilio (Inserta o Actualiza)
-     */
     public function actualizarDomicilio($datos)
     {
         $sql = "INSERT INTO afiliados_domicilios 
@@ -147,9 +222,6 @@ class AfiliadoModelo
         ]);
     }
 
-    /**
-     * Módulo 3: Educación (Inserta o Actualiza)
-     */
     public function actualizarEducacion($datos)
     {
         $sql = "INSERT INTO afiliados_educacion 
@@ -168,9 +240,6 @@ class AfiliadoModelo
         ]);
     }
 
-    /**
-     * Módulo 4: Laboral (Inserta o Actualiza)
-     */
     public function actualizarLaboral($datos)
     {
         $sql = "INSERT INTO afiliados_laborales 
@@ -196,67 +265,42 @@ class AfiliadoModelo
     }
 
     /**
-     * Da de baja a un afiliado (Cambia su estado y guarda el motivo en auditoría)
+     * Da de baja a un afiliado (Cambia su estado a 3 = Desafiliado)
      */
-    public function desafiliarAfiliado($id_afiliado, $motivo, $id_usuario_admin)
+    public function desafiliarAfiliado(int $id_afiliado, string $motivo, int $id_usuario)
     {
         try {
-            // Iniciamos una transacción: o se hace todo junto, o no se hace nada
-            $this->db->beginTransaction();
+            $sql = "UPDATE afiliados_maestra 
+                    SET id_estado = 3 
+                    WHERE id_afiliado = :id_afiliado";
 
-            // 1. Cambiamos el estado en la tabla maestra 
-            // ⚠️ ATENCIÓN: Revisá que tu columna se llame 'id_estado' y que '2' sea el ID de Baja
-            $sql1 = "UPDATE afiliados_maestra SET estado = 2 WHERE id_afiliado = :id_afiliado";
-            $stmt1 = $this->db->prepare($sql1);
-            $stmt1->execute([':id_afiliado' => $id_afiliado]);
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindValue(':id_afiliado', $id_afiliado, PDO::PARAM_INT);
 
-            // 2. Guardamos el motivo en nuestra nueva tabla de auditoría
-            $sql2 = "INSERT INTO afiliados_bajas (id_afiliado, id_usuario_admin, motivo) 
-                     VALUES (:id_afiliado, :id_usuario_admin, :motivo)";
-            $stmt2 = $this->db->prepare($sql2);
-            $stmt2->execute([
-                ':id_afiliado' => $id_afiliado,
-                ':id_usuario_admin' => $id_usuario_admin,
-                ':motivo' => $motivo
-            ]);
-
-            // Si todo salió bien, confirmamos los cambios en la base de datos
-            $this->db->commit();
-            return true;
-        } catch (Exception $e) {
-            // Si algo falló (ej: la tabla afiliados_bajas no existe), revertimos todo
-            $this->db->rollBack();
-            throw $e;
+            return $stmt->execute();
+        } catch (PDOException $e) {
+            error_log("Error en AfiliadoModelo::desafiliarAfiliado -> " . $e->getMessage());
+            return false;
         }
     }
 
     /**
-     * Vuelve a afiliar a un usuario dado de baja, registrando la auditoría
+     * Reactiva un afiliado (Cambia su estado a 2 = Afiliado Activo)
      */
-    public function reafiliarAfiliado($id_afiliado, $id_usuario_admin)
+    public function reafiliarAfiliado(int $id_afiliado, int $id_usuario)
     {
         try {
-            $this->db->beginTransaction();
+            $sql = "UPDATE afiliados_maestra 
+                    SET id_estado = 2 
+                    WHERE id_afiliado = :id_afiliado";
 
-            // 1. Restauramos el estado a Activo (1)
-            $sql1 = "UPDATE afiliados_maestra SET estado = 1 WHERE id_afiliado = :id_afiliado";
-            $stmt1 = $this->db->prepare($sql1);
-            $stmt1->execute([':id_afiliado' => $id_afiliado]);
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindValue(':id_afiliado', $id_afiliado, PDO::PARAM_INT);
 
-            // 2. Guardamos registro en la tabla de auditoría de re-altas
-            $sql2 = "INSERT INTO afiliados_reafiliaciones (id_afiliado, id_usuario_admin) 
-                     VALUES (:id_afiliado, :id_usuario_admin)";
-            $stmt2 = $this->db->prepare($sql2);
-            $stmt2->execute([
-                ':id_afiliado' => $id_afiliado,
-                ':id_usuario_admin' => $id_usuario_admin
-            ]);
-
-            $this->db->commit();
-            return true;
-        } catch (Exception $e) {
-            $this->db->rollBack();
-            throw $e;
+            return $stmt->execute();
+        } catch (PDOException $e) {
+            error_log("Error en AfiliadoModelo::reafiliarAfiliado -> " . $e->getMessage());
+            return false;
         }
     }
 }

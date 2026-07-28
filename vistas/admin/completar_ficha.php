@@ -111,7 +111,7 @@
                             <div class="row g-3 mb-4">
                                 <div class="col-md-6">
                                     <label class="form-label text-muted small mb-1">Nombre Completo</label>
-                                    <input type="text" class="form-control bg-light" :value="afiliado.apellidos + ', ' + afiliado.nombres" readonly style="text-transform: capitalize;">
+                                    <input type="text" class="form-control bg-light" :value="(afiliado.apellidos ? afiliado.apellidos + ', ' : '') + (afiliado.nombres || '')" readonly style="text-transform: capitalize;">
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label text-muted small mb-1">DNI</label>
@@ -173,10 +173,8 @@
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <script>
-        const {
-            createApp
-        } = Vue;
+<script>
+        const { createApp } = Vue;
 
         createApp({
             data() {
@@ -185,32 +183,32 @@
                     cargandoDatos: true,
                     guardando: false,
                     afiliado: {},
-                    formasPago: [], // Mapeará los registros provenientes de la BD
+                    formasPago: [],
                     form: {
-                        id_fpago: '', // Cambiado a ID numérico relacional
-                        numero_cuenta: '' // Caja de ahorro de 14 dígitos
+                        id_fpago: '',
+                        numero_cuenta: ''
                     }
                 }
             },
             mounted() {
-                // Captura dinámicamente el id_solicitud presente en la URL del navegador (?id_solicitud=X)
+                // Captura dinámicamente ?id_solicitud=X o ?id=X para mayor tolerancia
                 const urlParams = new URLSearchParams(window.location.search);
-                this.idSolicitud = urlParams.get('id_solicitud');
+                this.idSolicitud = urlParams.get('id_solicitud') || urlParams.get('id');
 
                 if (this.idSolicitud) {
                     this.buscarDatosAfiliado();
                 } else {
-                    Swal.fire('Error', 'Falta el identificador de la solicitud en la URL.', 'error');
+                    Swal.fire('Atención', 'Falta el identificador de la solicitud en la URL.', 'error');
                 }
             },
             watch: {
-                // Si el operador cambia de método de pago y no es BNA (ID 1), limpiamos el input para evitar enviar datos residuales
+                // Limpia la caja de ahorro si el operador selecciona un medio distinto a Débito BNA (ID 1)
                 'form.id_fpago'(nuevoValor) {
-                    if (nuevoValor !== 1) {
+                    if (parseInt(nuevoValor) !== 1) {
                         this.form.numero_cuenta = '';
                     }
                 },
-                // Sanitizador e indicador UX: solo permite el ingreso de números y corta estrictamente en 14
+                // Sanitizador e indicador UX: solo permite números y limita estrictamente a 14 dígitos
                 'form.numero_cuenta'(nuevoValor) {
                     let limpio = nuevoValor.replace(/\D/g, "");
                     if (limpio.length > 14) limpio = limpio.slice(0, 14);
@@ -222,52 +220,53 @@
                     try {
                         const res = await fetch(`../../controladores/admin_ficha_controlador.php?id_solicitud=${this.idSolicitud}`);
                         const result = await res.json();
+                        
                         if (result.status === 'success') {
                             this.afiliado = result.data;
-                            this.formasPago = result.formas_pago; // Obtenemos las filas reales de 'afiliado_forma_pago'
+                            this.formasPago = result.formas_pago;
                         } else {
-                            Swal.fire('Atención', result.message, 'warning');
+                            Swal.fire('Atención', result.message || 'No se encontró la solicitud.', 'warning');
                         }
                     } catch (e) {
-                        Swal.fire('Error', 'No se pudo establecer comunicación con el backend.', 'error');
+                        Swal.fire('Error de Conexión', 'No se pudo establecer comunicación con el backend.', 'error');
                     } finally {
                         this.cargandoDatos = false;
                     }
                 },
                 getIcono(id) {
-                    // Asigna dinámicamente un icono visual según el ID de pago de tu base de datos
-                    if (id === 1) return 'bi bi-bank'; // Débito Bco Nación
-                    if (id === 2) return 'bi bi-phone'; // Mercado Pago
-                    return 'bi bi-wallet2'; // Otros / Efectivo
+                    const idNum = parseInt(id);
+                    if (idNum === 1) return 'bi bi-bank';    // Débito Bco Nación
+                    if (idNum === 2) return 'bi bi-phone';   // Mercado Pago
+                    return 'bi bi-wallet2';                  // Otros / Efectivo
                 },
                 async guardarFicha() {
-                    // 1. Validamos llamando a la variable con su nombre correcto: id_fpago
+                    // 1. Validaciones previas con SweetAlert2
                     if (!this.form.id_fpago) {
-                        alert("Por favor, seleccioná una forma de pago antes de continuar.");
+                        Swal.fire('Atención', 'Por favor, seleccioná una forma de pago antes de continuar.', 'warning');
                         return;
                     }
 
-                    // 2. Obtenemos el ID de la solicitud desde la URL (ej: ?id_solicitud=2)
-                    const urlParams = new URLSearchParams(window.location.search);
-                    const idSolicitudUrl = urlParams.get('id_solicitud');
-
-                    if (!idSolicitudUrl) {
-                        alert("Error: No se encontró el ID de la solicitud.");
+                    if (parseInt(this.form.id_fpago) === 1 && this.form.numero_cuenta.length !== 14) {
+                        Swal.fire('Atención', 'Para el pago por Débito BNA se requieren exactamente 14 dígitos.', 'warning');
                         return;
                     }
 
-                    // 3. Armamos el paquete de datos para mandar al backend
+                    if (!this.idSolicitud) {
+                        Swal.fire('Error', 'No se encontró el ID de la solicitud en la petición.', 'error');
+                        return;
+                    }
+
+                    // 2. Normalización de payload JSON
                     const datosPost = {
-                        id_solicitud: parseInt(idSolicitudUrl),
-                        // Usamos la variable correcta también acá
+                        id_solicitud: parseInt(this.idSolicitud),
                         id_fpago: parseInt(this.form.id_fpago),
                         numero_cuenta: this.form.numero_cuenta
                     };
 
                     try {
-                        this.guardando = true; // Activamos el estado de carga visual en el botón
+                        this.guardando = true;
 
-                        // 4. Enviamos la orden al controlador
+                        // 3. Envío asíncrono al controlador de procesamiento de alta
                         const respuesta = await fetch('../../controladores/admin_procesar_alta_controlador.php', {
                             method: 'POST',
                             headers: {
@@ -282,11 +281,9 @@
                             Swal.fire({
                                 icon: 'success',
                                 title: '¡Afiliado Activo!',
-                                text: 'Ya es oficial y los módulos están listos.',
+                                text: 'El alta fue procesada exitosamente en todas las tablas.',
                                 confirmButtonColor: '#19248B'
                             }).then(() => {
-                                // Vuelve a la bandeja. Después acá pondremos la ruta al legajo.
-                                /* window.location.href = 'bandeja.php'; */
                                 window.location.href = 'legajo.php?id=' + resultado.id_afiliado;
                             });
                         } else {
@@ -295,9 +292,9 @@
 
                     } catch (error) {
                         console.error("Error en la conexión:", error);
-                        Swal.fire('Error de Conexión', 'Hubo un problema de red con el servidor.', 'error');
+                        Swal.fire('Error de Conexión', 'Hubo un problema de red al intentar procesar el alta.', 'error');
                     } finally {
-                        this.guardando = false; // Apagamos el estado de carga
+                        this.guardando = false;
                     }
                 }
             }

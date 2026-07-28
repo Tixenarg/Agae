@@ -1,51 +1,49 @@
 <?php
-header("Content-Type: application/json; charset=UTF-8");
-require_once __DIR__ . '/../modelos/Solicitud_modelo.php';
-$modelo = new SolicitudModelo();
+session_start();
+header('Content-Type: application/json; charset=utf-8');
 
-$metodo = $_SERVER['REQUEST_METHOD'];
+require_once '../modelos/Solicitud_modelo.php';
 
-if ($metodo === 'GET') {
-    $id = isset($_GET['id_solicitud']) ? (int)$_GET['id_solicitud'] : 0;
-    $afiliado = $modelo->obtenerPorId($id);
-    
-    if ($afiliado) {
-        // Traemos las formas de pago guardadas en la BD
-        $formasPago = $modelo->obtenerFormasPago();
-        
-        echo json_encode([
-            "status" => "success", 
-            "data" => $afiliado,
-            "formas_pago" => $formasPago
-        ]);
-    } else {
-        echo json_encode(["status" => "error", "message" => "No se encontró el postulante."]);
-    }
+// 1. Validar sesión
+if (!isset($_SESSION['id_usuario'])) {
+    echo json_encode(["status" => "error", "message" => "Sesión expirada o no autorizada."]);
     exit;
 }
 
-if ($metodo === 'POST') {
-    $data = json_decode(file_get_contents("php://input"), true);
+// 2. Aceptamos id_solicitud o id indistintamente
+$id = $_GET['id_solicitud'] ?? $_GET['id'] ?? null;
 
-    $id         = isset($data['id_solicitud']) ? (int)$data['id_solicitud'] : 0;
-    $id_fpago   = isset($data['id_fpago']) ? (int)$data['id_fpago'] : 0;
-    $num_cuenta = isset($data['numero_cuenta']) ? trim(strip_tags($data['numero_cuenta'])) : '';
-
-    if ($id <= 0 || $id_fpago <= 0) {
-        echo json_encode(["status" => "error", "message" => "Información incompleta."]);
-        exit;
-    }
-
-    // Si es ID 1 (Débito Banco Nación), validamos los 14 dígitos exactos
-    if ($id_fpago === 1 && strlen($num_cuenta) !== 14) {
-        echo json_encode(["status" => "error", "message" => "La cuenta de ahorro BNA debe contener 14 números obligatorios."]);
-        exit;
-    }
-
-    if ($modelo->aprobarYCrearAfiliado($id, $id_fpago, $num_cuenta)) {
-        echo json_encode(["status" => "success", "message" => "Afiliado registrado en el padrón definitivo."]);
-    } else {
-        echo json_encode(["status" => "error", "message" => "Error al procesar el alta transaccional."]);
-    }
+if (!$id) {
+    echo json_encode(["status" => "error", "message" => "No se recibió un ID de solicitud válido."]);
     exit;
 }
+
+$modelo = new Solicitud_modelo();
+
+// 3. Consulta de datos
+$resSolicitud = $modelo->obtenerPorId($id);
+$resFormas = $modelo->obtenerFormasPago();
+
+if (isset($resSolicitud['exito']) && !$resSolicitud['exito']) {
+    echo json_encode(["status" => "error", "message" => $resSolicitud['error'] ?? "Solicitud no encontrada"]);
+    exit;
+}
+
+// 4. Normalizamos los datos de forma de pago para que coincidan con la vista Vue
+$formasPago = [];
+$rawFormas = $resFormas['data'] ?? [];
+
+foreach ($rawFormas as $f) {
+    $formasPago[] = [
+        'id_fpago'     => $f['id_fpago'] ?? $f['id'] ?? null,
+        'fpago_nombre' => $f['fpago_nombre'] ?? $f['descripcion'] ?? ''
+    ];
+}
+
+// 5. Respuesta JSON con la estructura exacta que espera la vista
+echo json_encode([
+    "status"      => "success",
+    "data"        => $resSolicitud['data'] ?? $resSolicitud,
+    "formas_pago" => $formasPago
+]);
+exit;

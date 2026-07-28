@@ -15,27 +15,33 @@ $metodo = $_SERVER['REQUEST_METHOD'];
 // ====================================================================
 // A. LECTURA (GET) - Traer los datos para llenar el Acordeón
 // ====================================================================
+// ====================================================================
+// A. LECTURA (GET) - Traer los datos para llenar el Acordeón
+// ====================================================================
 if ($metodo === 'GET') {
     $id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
-    
+
     if ($id > 0) {
         $datos = $modelo->obtenerLegajoCompleto($id);
-        if ($datos) {
+
+        // Si no hay error de debug, devolvemos success
+        if ($datos && !isset($datos['error_debug'])) {
             echo json_encode(["status" => "success", "data" => $datos]);
         } else {
-            echo json_encode(["status" => "error", "message" => "No se encontró el legajo."]);
+            $msgError = $datos['error_debug'] ?? "No se encontró el legajo.";
+            echo json_encode(["status" => "error", "message" => $msgError]);
         }
     } else {
         echo json_encode(["status" => "error", "message" => "ID de afiliado inválido."]);
     }
-} 
+}
 // ====================================================================
 // B. ESCRITURA (POST) - Guardar por Módulos Independientes
 // ====================================================================
 elseif ($metodo === 'POST') {
     // Capturamos el JSON que envía Vue
     $input = json_decode(file_get_contents('php://input'), true);
-    
+
     $accion = $input['accion'] ?? '';
     $datos = $input['datos'] ?? [];
 
@@ -64,6 +70,9 @@ elseif ($metodo === 'POST') {
         case 'guardar_laboral':
             $resultado = $modelo->actualizarLaboral($datos);
             break;
+        case 'guardar_maestra':
+            $resultado = $modelo->actualizarMaestra($datos);
+            break;
         default:
             echo json_encode(["status" => "error", "message" => "Acción desconocida."]);
             exit;
@@ -74,11 +83,10 @@ elseif ($metodo === 'POST') {
     } else {
         echo json_encode(["status" => "error", "message" => "Ocurrió un error al guardar en la base de datos."]);
     }
-} 
+}
 // ====================================================================
 // C. MÉTODO NO PERMITIDO
 // ====================================================================
 else {
     echo json_encode(["status" => "error", "message" => "Método HTTP no permitido."]);
 }
-?>
