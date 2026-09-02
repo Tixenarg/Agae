@@ -1,0 +1,121 @@
+{
+    "id": "442648295-c3e8b7e4-6bd6-4e5f-bf38-0467d3ef25c3",
+    "items": [
+        {
+            "id": "6N26-MBL6-VNNQ",
+            "title": "Acceso \u00b7 Evento 6N 2026",
+            "description": "",
+            "category_id": "",
+            "quantity": 1,
+            "unit_price": 1000,
+            "currency_id": "ARS",
+            "map": {
+                "category_descriptor": "MercadoPago\\Resources\\Preference\\CategoryDescriptor"
+            }
+        }
+    ],
+    "payer": {
+        "name": "Cuarta",
+        "surname": "Prueba",
+        "email": "ivanmontano87@gmail.com",
+        "phone": {
+            "area_code": "",
+            "number": ""
+        },
+        "identification": {
+            "type": "",
+            "number": ""
+        },
+        "address": {
+            "zip_code": "",
+            "street_name": "",
+            "street_number": null
+        },
+        "date_created": null,
+        "last_purchase": null
+    },
+    "client_id": "6600006110951395",
+    "payment_methods": {
+        "default_payment_method_id": null,
+        "installments": null,
+        "default_installments": null,
+        "excluded_payment_methods": [
+            {
+                "id": ""
+            }
+        ],
+        "excluded_payment_types": [
+            {
+                "id": ""
+            }
+        ],
+        "default_card_id": null
+    },
+    "back_urls": {
+        "success": "",
+        "pending": "",
+        "failure": ""
+    },
+    "redirect_urls": {
+        "success": "",
+        "pending": "",
+        "failure": ""
+    },
+    "shipments": {
+        "default_shipping_method": null,
+        "receiver_address": {
+            "zip_code": "",
+            "street_name": "",
+            "street_number": null,
+            "neighborhood": null,
+            "floor": "",
+            "apartment": "",
+            "country_name": null,
+            "state_name": null,
+            "city_name": null
+        },
+        "map": {
+            "free_methods": "MercadoPago\\Resources\\Preference\\FreeMethod",
+            "receiver_address": "MercadoPago\\Resources\\Preference\\ReceiverAddress"
+        }
+    },
+    "notification_url": null,
+    "external_reference": "6N26-MBL6-VNNQ",
+    "expires": true,
+    "date_of_expiration": null,
+    "expiration_date_from": "2026-08-25T14:33:51.000-03:00",
+    "expiration_date_to": "2026-08-25T14:48:51.000-03:00",
+    "collector_id": 442648295,
+    "marketplace": "NONE",
+    "marketplace_fee": 0,
+    "additional_info": "",
+    "auto_return": "",
+    "operation_type": "regular_payment",
+    "processing_modes": null,
+    "binary_mode": false,
+    "metadata": [],
+    "init_point": "https:\/\/www.mercadopago.com.ar\/checkout\/v1\/redirect?pref_id=442648295-c3e8b7e4-6bd6-4e5f-bf38-0467d3ef25c3",
+    "sandbox_init_point": "https:\/\/sandbox.mercadopago.com.ar\/checkout\/v1\/redirect?pref_id=442648295-c3e8b7e4-6bd6-4e5f-bf38-0467d3ef25c3",
+    "date_created": "2026-08-25T13:33:52.404-04:00",
+    "coupon_code": null,
+    "coupon_labels": null,
+    "internal_metadata": null,
+    "site_id": "MLA",
+    "product_id": null,
+    "last_updated": null,
+    "total_amount": null,
+    "headers": null,
+    "created_source": null,
+    "created_by_app": null,
+    "map": {
+        "items": "MercadoPago\\Resources\\Preference\\Item",
+        "payer": "MercadoPago\\Resources\\Preference\\Payer",
+        "payment_methods": "MercadoPago\\Resources\\Preference\\PaymentMethods",
+        "back_urls": "MercadoPago\\Resources\\Preference\\BackUrls",
+        "redirect_urls": "MercadoPago\\Resources\\Preference\\RedirectUrls",
+        "shipments": "MercadoPago\\Resources\\Preference\\Shipments",
+        "differential_pricing": "MercadoPago\\Resources\\Common\\DifferentialPricing",
+        "taxes": "MercadoPago\\Resources\\Preference\\Tax",
+        "tracks": "MercadoPago\\Resources\\Preference\\Tracks"
+    }
+}

@@ -1,0 +1,3047 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Obtener accesos — Evento 6N 2026</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  >
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    :root {
+      --brand: #19248b;
+      --surface: #101119;
+      --surface-soft: #171824;
+      --surface-light: #1d1f2d;
+
+      --text: #f5f6ff;
+      --muted: #aeb3c7;
+      --muted-dark: #858b9f;
+
+      --border: rgba(255, 255, 255, 0.12);
+
+      --violet: #9a6bff;
+      --cyan: #3cf2ff;
+      --success: #55d98b;
+      --danger: #ff7272;
+    }
+
+    html,
+    body {
+      min-height: 100%;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Space Grotesk", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(
+          circle at 15% 20%,
+          rgba(154, 107, 255, 0.25),
+          transparent 35%
+        ),
+        radial-gradient(
+          circle at 80% 70%,
+          rgba(25, 36, 139, 0.35),
+          transparent 40%
+        ),
+        #090a11;
+    }
+
+    body.drawer-open {
+      overflow: hidden;
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    button {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* ======================================================
+       LANDING DE DEMOSTRACIÓN
+       ====================================================== */
+
+    .demo-page {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 32px;
+      text-align: center;
+    }
+
+    .demo-page h1 {
+      max-width: 900px;
+      margin: 0 0 18px;
+      font-family: "Montserrat", sans-serif;
+      font-size: clamp(2.2rem, 6vw, 5.5rem);
+      line-height: 0.98;
+      text-transform: uppercase;
+    }
+
+    .demo-page p {
+      max-width: 650px;
+      margin: 0 auto 32px;
+      color: var(--muted);
+      font-size: 1.1rem;
+    }
+
+    /* ======================================================
+       BOTONES
+       ====================================================== */
+
+    .primary-button {
+      min-height: 54px;
+      padding: 15px 28px;
+      border: 0;
+      border-radius: 14px;
+
+      color: #fff;
+      background:
+        linear-gradient(
+          135deg,
+          var(--brand),
+          #3544cc
+        );
+
+      box-shadow:
+        0 18px 50px rgba(25, 36, 139, 0.4);
+
+      font-family: "Montserrat", sans-serif;
+      font-weight: 800;
+
+      cursor: pointer;
+
+      transition:
+        transform 0.2s ease,
+        filter 0.2s ease,
+        opacity 0.2s ease;
+    }
+
+    .primary-button:hover:not(:disabled) {
+      transform: translateY(-2px);
+      filter: brightness(1.08);
+    }
+
+    .primary-button:disabled {
+      cursor: not-allowed;
+      opacity: 0.42;
+      box-shadow: none;
+    }
+
+    /* ======================================================
+       OVERLAY
+       ====================================================== */
+
+    .drawer-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+
+      display: flex;
+      align-items: flex-end;
+
+      background: rgba(3, 4, 9, 0.72);
+      backdrop-filter: blur(12px);
+
+      opacity: 0;
+      visibility: hidden;
+
+      transition:
+        opacity 0.35s ease,
+        visibility 0.35s ease;
+    }
+
+    .drawer-overlay.is-open {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    /* ======================================================
+       DRAWER
+       ====================================================== */
+
+    .event-drawer {
+      position: relative;
+
+      width: 100%;
+      height: 92vh;
+
+      display: grid;
+      grid-template-columns:
+        minmax(360px, 46%)
+        minmax(0, 54%);
+
+      overflow: hidden;
+
+      border: 1px solid var(--border);
+      border-bottom: 0;
+      border-radius: 28px 28px 0 0;
+
+      background: var(--surface);
+
+      box-shadow:
+        0 -30px 100px rgba(0, 0, 0, 0.5);
+
+      transform: translateY(102%);
+
+      transition:
+        transform 0.55s
+        cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .drawer-overlay.is-open .event-drawer {
+      transform: translateY(0);
+    }
+
+    /* ======================================================
+       PANEL VISUAL
+       ====================================================== */
+
+    .event-visual {
+      position: relative;
+
+      min-width: 0;
+      overflow: hidden;
+
+      background-color: #19248b;
+
+      background-image:
+        linear-gradient(
+          180deg,
+          rgba(8, 10, 30, 0.03) 0%,
+          rgba(8, 10, 30, 0.28) 45%,
+          rgba(8, 10, 30, 0.98) 100%
+        ),
+        url("assets/img/drawer-evento-desktop.webp"),
+        linear-gradient(
+          135deg,
+          #19248b,
+          #4e2f9d 45%,
+          #11152d
+        );
+
+      background-size: cover;
+      background-position: center;
+    }
+
+    .event-visual::after {
+      content: "";
+
+      position: absolute;
+      inset: 0;
+
+      background:
+        radial-gradient(
+          circle at 15% 20%,
+          rgba(60, 242, 255, 0.18),
+          transparent 28%
+        ),
+        radial-gradient(
+          circle at 85% 15%,
+          rgba(154, 107, 255, 0.3),
+          transparent 32%
+        );
+
+      pointer-events: none;
+    }
+
+    .event-visual-content {
+      position: absolute;
+      z-index: 1;
+
+      right: 0;
+      bottom: 0;
+      left: 0;
+
+      padding:
+        clamp(28px, 4vw, 64px);
+    }
+
+    .event-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+
+      margin-bottom: 18px;
+      padding: 8px 12px;
+
+      border:
+        1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 999px;
+
+      background:
+        rgba(5, 7, 20, 0.34);
+
+      backdrop-filter: blur(12px);
+
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .event-visual h2 {
+      max-width: 760px;
+
+      margin: 0 0 18px;
+
+      font-family: "Montserrat", sans-serif;
+      font-size:
+        clamp(2rem, 4vw, 4.8rem);
+      line-height: 1;
+      letter-spacing: -0.04em;
+      text-transform: uppercase;
+    }
+
+    .event-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 18px;
+
+      margin: 0;
+
+      color:
+        rgba(255, 255, 255, 0.82);
+
+      font-size: 1rem;
+    }
+
+    /* ======================================================
+       PANEL DE COMPRA
+       ====================================================== */
+
+    .purchase-panel {
+      position: relative;
+      z-index: 2;
+
+      min-width: 0;
+
+      display: flex;
+      flex-direction: column;
+
+      background:
+        radial-gradient(
+          circle at 100% 0%,
+          rgba(154, 107, 255, 0.1),
+          transparent 32%
+        ),
+        var(--surface);
+    }
+
+    /* ======================================================
+       HEADER
+       ====================================================== */
+
+    .purchase-header {
+      flex: 0 0 auto;
+
+      min-height: 74px;
+      padding:
+        16px clamp(22px, 4vw, 52px);
+
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      border-bottom:
+        1px solid var(--border);
+
+      background:
+        rgba(16, 17, 25, 0.9);
+
+      backdrop-filter: blur(15px);
+    }
+
+    .purchase-header strong {
+      font-family: "Montserrat", sans-serif;
+      font-size: 0.9rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .close-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+
+      padding: 10px;
+
+      border: 0;
+
+      color: var(--muted);
+      background: transparent;
+
+      cursor: pointer;
+    }
+
+    .close-button:hover {
+      color: #fff;
+    }
+
+    .close-icon {
+      position: relative;
+
+      width: 20px;
+      height: 20px;
+    }
+
+    .close-icon::before,
+    .close-icon::after {
+      content: "";
+
+      position: absolute;
+      top: 9px;
+      left: 1px;
+
+      width: 18px;
+      height: 2px;
+
+      border-radius: 2px;
+
+      background: currentColor;
+    }
+
+    .close-icon::before {
+      transform: rotate(45deg);
+    }
+
+    .close-icon::after {
+      transform: rotate(-45deg);
+    }
+
+    /* ======================================================
+       SCROLL
+       ====================================================== */
+
+    .purchase-scroll {
+      position: relative;
+      z-index: 2;
+
+      flex: 1 1 auto;
+
+      overflow-y: auto;
+      overscroll-behavior: contain;
+
+      scrollbar-width: thin;
+      scrollbar-color:
+        rgba(255, 255, 255, 0.22)
+        transparent;
+    }
+
+    .purchase-scroll::-webkit-scrollbar {
+      width: 7px;
+    }
+
+    .purchase-scroll::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .purchase-scroll::-webkit-scrollbar-thumb {
+      border-radius: 999px;
+      background:
+        rgba(255, 255, 255, 0.18);
+    }
+
+    .purchase-content {
+      position: relative;
+      z-index: 2;
+
+      width: min(100%, 820px);
+
+      margin: 0 auto;
+      padding:
+        30px
+        clamp(22px, 4vw, 52px)
+        150px;
+    }
+
+    .purchase-title {
+      margin: 0 0 10px;
+
+      font-family: "Montserrat", sans-serif;
+      font-size:
+        clamp(2rem, 3.2vw, 3.9rem);
+      line-height: 1;
+      letter-spacing: -0.04em;
+    }
+
+    .purchase-intro {
+      max-width: 660px;
+
+      margin: 0 0 30px;
+
+      color: var(--muted);
+
+      line-height: 1.6;
+    }
+
+    /* ======================================================
+       SECCIONES
+       ====================================================== */
+
+    .form-section {
+      position: relative;
+      z-index: 2;
+
+      padding: 26px 0;
+
+      border-top:
+        1px solid var(--border);
+    }
+
+    .form-section:first-of-type {
+      padding-top: 0;
+      border-top: 0;
+    }
+
+    .section-title {
+      margin: 0 0 18px;
+
+      font-family: "Montserrat", sans-serif;
+      font-size: 1.05rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    /* ======================================================
+       CANTIDAD
+       ====================================================== */
+
+    .quantity-card {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 22px;
+
+      padding: 18px 20px;
+
+      border:
+        1px solid var(--border);
+      border-radius: 18px;
+
+      background: var(--surface-soft);
+    }
+
+    .price-label {
+      margin-bottom: 5px;
+
+      color: var(--muted);
+
+      font-size: 0.84rem;
+    }
+
+    .unit-price {
+      font-family: "Montserrat", sans-serif;
+      font-size: 1.45rem;
+      font-weight: 800;
+    }
+
+    .quantity-control {
+      display: grid;
+      grid-template-columns:
+        46px 60px 46px;
+      align-items: center;
+
+      overflow: hidden;
+
+      border:
+        1px solid var(--border);
+      border-radius: 14px;
+
+      background: #0e0f17;
+    }
+
+    .quantity-control button {
+      width: 46px;
+      height: 46px;
+
+      border: 0;
+
+      color: #fff;
+      background: transparent;
+
+      font-size: 1.35rem;
+
+      cursor: pointer;
+    }
+
+    .quantity-control button:hover:not(:disabled) {
+      background:
+        rgba(255, 255, 255, 0.07);
+    }
+
+    .quantity-control button:disabled {
+      color: #555867;
+      cursor: not-allowed;
+    }
+
+    .quantity-number {
+      text-align: center;
+
+      font-family: "Montserrat", sans-serif;
+      font-size: 1.1rem;
+      font-weight: 800;
+    }
+
+    /* ======================================================
+       CAMPOS
+       ====================================================== */
+
+    .fields-grid {
+      display: grid;
+      grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .field {
+      position: relative;
+      z-index: 2;
+
+      min-width: 0;
+    }
+
+    .field.full {
+      grid-column: 1 / -1;
+    }
+
+    .field label {
+      display: block;
+
+      margin-bottom: 8px;
+
+      color: #e7e9f5;
+
+      font-size: 0.88rem;
+      font-weight: 600;
+    }
+
+    .field input,
+    .field select {
+      position: relative;
+      z-index: 2;
+
+      width: 100%;
+      min-height: 50px;
+
+      padding: 0 15px;
+
+      border:
+        1px solid var(--border);
+      border-radius: 12px;
+      outline: 0;
+
+      color: var(--text);
+      background: var(--surface-soft);
+
+      pointer-events: auto;
+
+      transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+    }
+
+    .field input:focus,
+    .field select:focus {
+      border-color: var(--violet);
+
+      box-shadow:
+        0 0 0 4px
+        rgba(154, 107, 255, 0.12);
+    }
+
+    .field input[readonly] {
+      color: #c5c8d5;
+      background: #13141d;
+    }
+
+    .field select {
+      appearance: none;
+
+      padding-right: 42px;
+
+      background-image:
+        linear-gradient(
+          45deg,
+          transparent 50%,
+          #aeb3c7 50%
+        ),
+        linear-gradient(
+          135deg,
+          #aeb3c7 50%,
+          transparent 50%
+        );
+
+      background-position:
+        calc(100% - 19px) 21px,
+        calc(100% - 14px) 21px;
+
+      background-size: 5px 5px;
+      background-repeat: no-repeat;
+    }
+
+    .field-note {
+      margin-top: 7px;
+
+      color: var(--muted-dark);
+
+      font-size: 0.78rem;
+      line-height: 1.4;
+    }
+
+    /* ======================================================
+       VALIDACIONES VISUALES
+       ====================================================== */
+
+    .field.is-invalid input,
+    .field.is-invalid select {
+      border-color: var(--danger);
+    }
+
+    .field-error {
+      display: none;
+
+      margin-top: 7px;
+
+      color: var(--danger);
+
+      font-size: 0.76rem;
+    }
+
+    .field.is-invalid .field-error {
+      display: block;
+    }
+
+    /* ======================================================
+       ACCESOS
+       ====================================================== */
+
+    .access-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .access-card {
+      overflow: hidden;
+
+      border:
+        1px solid var(--border);
+      border-radius: 16px;
+
+      background: var(--surface-soft);
+    }
+
+    .access-header {
+      width: 100%;
+
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 18px;
+
+      padding: 18px 20px;
+
+      border: 0;
+
+      color: var(--text);
+      background: transparent;
+
+      text-align: left;
+
+      cursor: pointer;
+    }
+
+    .access-header strong {
+      display: block;
+
+      font-family: "Montserrat", sans-serif;
+      font-size: 0.94rem;
+    }
+
+    .access-header small {
+      display: block;
+
+      margin-top: 4px;
+
+      color: var(--muted);
+
+      font-size: 0.8rem;
+    }
+
+    .access-chevron {
+      flex: 0 0 auto;
+
+      color: var(--muted);
+
+      font-size: 1.3rem;
+
+      transition:
+        transform 0.25s ease;
+    }
+
+    .access-card.is-open
+    .access-chevron {
+      transform: rotate(180deg);
+    }
+
+    .access-body {
+      display: none;
+
+      padding: 0 20px 20px;
+    }
+
+    .access-card.is-open
+    .access-body {
+      display: block;
+    }
+
+    .self-check,
+    .terms-check {
+      display: flex;
+      align-items: flex-start;
+      gap: 11px;
+
+      cursor: pointer;
+    }
+
+    .self-check {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin: 0;
+        cursor: pointer;
+    }
+
+    .self-check input,
+    .terms-check input {
+      flex: 0 0 auto;
+
+      width: 18px;
+      height: 18px;
+
+      margin-top: 2px;
+
+      accent-color: var(--violet);
+    }
+
+    .terms-check {
+      color: var(--muted);
+
+      line-height: 1.5;
+    }
+
+    .terms-check a {
+      color: #fff;
+    }
+
+    .self-check span,
+    .unnamed-check span {
+        font-weight: 200;
+        font-size: .95rem;
+        color: var(--text);
+    }
+
+    /* ======================================================
+       RESUMEN INFERIOR
+       ====================================================== */
+
+    .purchase-summary {
+      position: absolute;
+      z-index: 5;
+
+      right: 0;
+      bottom: 0;
+
+      width: 54%;
+
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 22px;
+      align-items: center;
+
+      padding:
+        18px clamp(22px, 4vw, 52px);
+
+      border-top:
+        1px solid var(--border);
+
+      background:
+        rgba(16, 17, 25, 0.96);
+
+      backdrop-filter: blur(18px);
+    }
+
+    .summary-values {
+        display: flex;
+        align-items: center;
+        gap: 40px;
+        height: 100%;
+    }
+
+    .summary-divider{
+    width:1px;
+    height:56px;
+    background:var(--border);
+    }
+
+    .summary-item{
+        display:flex;
+        flex-direction:column;
+        justify-content:center;
+    }
+
+    .summary-item small {
+      display: block;
+
+      margin-bottom: 4px;
+
+      color: var(--muted);
+    }
+
+    .summary-item strong {
+      font-family: "Montserrat", sans-serif;
+      font-size: 1.22rem;
+    }
+
+    .summary-item.total strong {
+      font-size: 1.65rem;
+    }
+
+    .summary-action {
+      min-width: 240px;
+    }
+
+    .summary-action .primary-button {
+      width: 100%;
+    }
+
+    .secure-note {
+      display: block;
+
+      margin-top: 7px;
+
+      color: #7f8599;
+
+      font-size: 0.7rem;
+      text-align: center;
+    }
+
+    /* ======================================================
+    ACCESO SIN NOMBRE
+    ====================================================== */
+
+    .access-options {
+        display: flex;
+        align-items: center;
+        gap: 28px;
+        flex-wrap: wrap;
+        margin-bottom: 18px;
+    }
+
+    .unnamed-check {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin: 0;
+        cursor: pointer;
+    }
+
+    .unnamed-check input {
+    flex: 0 0 auto;
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    accent-color: var(--violet);
+    }
+
+    .unnamed-help {
+    display: none;
+    margin: -3px 0 18px 29px;
+    color: var(--muted-dark);
+    font-size: 0.79rem;
+    line-height: 1.45;
+    }
+
+    .access-card.is-unnamed .unnamed-help {
+    display: block;
+    }
+
+    .access-card.is-unnamed .access-person-fields {
+    opacity: 0.45;
+    pointer-events: none;
+    }
+
+    /* ======================================================
+    OVERLAY DE CONFIRMACIÓN
+    ====================================================== */
+
+    .confirmation-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1200;
+
+    display: grid;
+    place-items: center;
+
+    padding: 24px;
+
+    background: rgba(3, 4, 9, 0.78);
+    backdrop-filter: blur(15px);
+
+    opacity: 0;
+    visibility: hidden;
+
+    transition:
+        opacity 0.25s ease,
+        visibility 0.25s ease;
+    }
+
+    .confirmation-overlay.is-open {
+    opacity: 1;
+    visibility: visible;
+    }
+
+    .confirmation-card {
+    width: min(100%, 620px);
+    max-height: min(820px, calc(100dvh - 48px));
+
+    overflow-y: auto;
+
+    padding: clamp(24px, 4vw, 40px);
+
+    border: 1px solid var(--border);
+    border-radius: 24px;
+
+    background:
+        radial-gradient(
+        circle at 100% 0%,
+        rgba(154, 107, 255, 0.13),
+        transparent 34%
+        ),
+        #11121b;
+
+    box-shadow:
+        0 30px 100px rgba(0, 0, 0, 0.58);
+
+    transform: translateY(18px) scale(0.98);
+
+    transition:
+        transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .confirmation-overlay.is-open .confirmation-card {
+    transform: translateY(0) scale(1);
+    }
+
+    .confirmation-eyebrow {
+    display: block;
+    margin-bottom: 10px;
+
+    color: var(--violet);
+
+    font-size: 0.76rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    }
+
+    .confirmation-title {
+    margin: 0 0 10px;
+
+    font-family: "Montserrat", sans-serif;
+    font-size: clamp(1.9rem, 5vw, 3rem);
+    line-height: 1;
+    letter-spacing: -0.04em;
+    }
+
+    .confirmation-description {
+    margin: 0 0 28px;
+
+    color: var(--muted);
+    line-height: 1.55;
+    }
+
+    .confirmation-section {
+    padding: 22px 0;
+
+    border-top: 1px solid var(--border);
+    }
+
+    .confirmation-section-title {
+    margin: 0 0 14px;
+
+    color: var(--muted);
+
+    font-size: 0.76rem;
+    font-weight: 700;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    }
+
+    .confirmation-buyer {
+    margin: 0;
+
+    font-family: "Montserrat", sans-serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    }
+
+    .confirmation-email {
+    margin: 5px 0 0;
+    color: var(--muted);
+    }
+
+    .confirmation-access-list {
+    display: grid;
+    gap: 10px;
+
+    margin: 0;
+    padding: 0;
+
+    list-style: none;
+    }
+
+    .confirmation-access-list li {
+    display: flex;
+    justify-content: space-between;
+    gap: 18px;
+
+    padding: 13px 15px;
+
+    border: 1px solid var(--border);
+    border-radius: 12px;
+
+    background: rgba(255, 255, 255, 0.035);
+    }
+
+    .confirmation-access-list span:first-child {
+    color: var(--muted);
+    font-size: 0.82rem;
+    font-weight: 700;
+    }
+
+    .confirmation-access-list strong {
+    text-align: right;
+    }
+
+    .confirmation-pricing {
+    display: grid;
+    gap: 10px;
+    }
+
+    .confirmation-price-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+
+    color: var(--muted);
+    }
+
+    .confirmation-price-row strong {
+    color: var(--text);
+    }
+
+    .confirmation-price-row.total {
+    margin-top: 5px;
+    padding-top: 15px;
+
+    border-top: 1px solid var(--border);
+
+    font-family: "Montserrat", sans-serif;
+    font-size: 1.25rem;
+    }
+
+    .confirmation-price-row.total strong {
+    font-size: 1.55rem;
+    }
+
+    .installments-box {
+    margin-top: 24px;
+    padding: 24px 20px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid rgba(154, 107, 255, 0.38);
+    border-radius: 16px;
+
+    background:
+        linear-gradient(
+        135deg,
+        rgba(154, 107, 255, 0.12),
+        rgba(25, 36, 139, 0.12)
+        );
+
+    text-align: center;
+    }
+
+    .installments-icon {
+    display: block;
+    margin-bottom: 10px;
+
+    font-size: 1.35rem;
+    line-height: 1;
+    }
+
+    .installments-box strong {
+    display: block;
+    margin: 0 0 5px;
+
+    color: var(--muted);
+
+    font-family: "Montserrat", sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    }
+
+    .installments-big {
+    display: block;
+
+    color: var(--text) !important;
+
+    font-family: "Montserrat", sans-serif;
+    font-size: clamp(1.35rem, 3vw, 1.75rem) !important;
+    font-weight: 900;
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    }
+
+    .confirmation-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 24px;
+
+    margin-top: 24px;
+    padding: 22px 0;
+
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    }
+
+    .confirmation-total small {
+    color: var(--muted);
+
+    font-size: 0.95rem;
+    }
+
+    .confirmation-total strong {
+    color: var(--text);
+
+    font-family: "Montserrat", sans-serif;
+    font-size: clamp(1.8rem, 5vw, 2.7rem);
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: -0.04em;
+    }
+
+    .delivery-note {
+    margin: 18px 0 0;
+    color: var(--muted);
+    font-size: 0.84rem;
+    line-height: 1.55;
+    text-align: center;
+    }
+
+    .confirmation-actions {
+    display: grid;
+    grid-template-columns: 1fr 1.35fr;
+    gap: 12px;
+
+    margin-top: 28px;
+    }
+
+    .secondary-button {
+    min-height: 54px;
+    padding: 14px 20px;
+
+    border: 1px solid var(--border);
+    border-radius: 14px;
+
+    color: var(--text);
+    background: rgba(255, 255, 255, 0.035);
+
+    font-family: "Montserrat", sans-serif;
+    font-weight: 700;
+
+    cursor: pointer;
+    }
+
+    .secondary-button:hover {
+    background: rgba(255, 255, 255, 0.075);
+    }
+
+    @media (max-width: 620px) {
+    .confirmation-overlay {
+        align-items: end;
+        padding: 0;
+    }
+
+    .confirmation-card {
+        width: 100%;
+        max-height: 92dvh;
+
+        padding: 26px 18px
+        calc(22px + env(safe-area-inset-bottom));
+
+        border-right: 0;
+        border-bottom: 0;
+        border-left: 0;
+        border-radius: 24px 24px 0 0;
+    }
+
+    .confirmation-actions {
+        grid-template-columns: 1fr;
+    }
+
+    .access-options {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+    }
+
+    /* ======================================================
+       MOBILE Y TABLET
+       ====================================================== */
+
+    @media (max-width: 960px) {
+      .event-drawer {
+        height: 100dvh;
+
+        display: block;
+        overflow-y: auto;
+
+        border-radius: 0;
+      }
+
+      .event-visual {
+        min-height: 54vh;
+
+        background-image:
+          linear-gradient(
+            180deg,
+            rgba(8, 10, 30, 0.03) 0%,
+            rgba(8, 10, 30, 0.25) 38%,
+            rgba(8, 10, 30, 0.98) 100%
+          ),
+          url("assets/img/drawer-evento-mobile.webp"),
+          linear-gradient(
+            135deg,
+            #19248b,
+            #4e2f9d 45%,
+            #11152d
+          );
+      }
+
+      .purchase-panel {
+        min-height: 100vh;
+      }
+
+      .purchase-header {
+        position: sticky;
+        top: 0;
+        z-index: 6;
+      }
+
+      .purchase-scroll {
+        overflow: visible;
+      }
+
+      .purchase-content {
+        padding-bottom: 190px;
+      }
+
+      .purchase-summary {
+        position: fixed;
+
+        width: 100%;
+
+        grid-template-columns: 1fr;
+        gap: 13px;
+      }
+
+      .summary-values {
+        justify-content: space-between;
+      }
+    }
+
+    @media (max-width: 620px) {
+      .demo-page {
+        padding: 20px;
+      }
+
+      .event-visual {
+        min-height: 48vh;
+      }
+
+      .event-visual-content {
+        padding: 26px 20px;
+      }
+
+      .event-visual h2 {
+        font-size:
+          clamp(2rem, 10vw, 3.3rem);
+      }
+
+      .event-meta {
+        font-size: 0.9rem;
+      }
+
+      .purchase-header {
+        min-height: 64px;
+        padding: 13px 18px;
+      }
+
+      .purchase-content {
+        padding:
+          28px 18px 210px;
+      }
+
+      .purchase-title {
+        font-size: 2.2rem;
+      }
+
+      .purchase-intro {
+        font-size: 0.94rem;
+      }
+
+      .form-section {
+        padding: 24px 0;
+      }
+
+      .fields-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .field.full {
+        grid-column: auto;
+      }
+
+      .quantity-card {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .quantity-control {
+        width: 100%;
+
+        grid-template-columns:
+          52px 1fr 52px;
+      }
+
+      .quantity-control button {
+        width: 52px;
+      }
+
+      .purchase-summary {
+        padding:
+          14px 18px
+          calc(
+            14px +
+            env(safe-area-inset-bottom)
+          );
+      }
+
+      .summary-item strong {
+        font-size: 1rem;
+      }
+
+      .summary-item.total strong {
+        font-size: 1.35rem;
+      }
+
+      .summary-action {
+        min-width: 0;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .event-drawer,
+      .drawer-overlay {
+        transition: none;
+      }
+    }
+
+    /* Corrección del scroll interno del panel de compra */
+
+    .purchase-panel {
+    height: 100%;
+    min-height: 0;
+    overflow: hidden;
+    }
+
+    .purchase-scroll {
+    flex: 1 1 0;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    }
+
+    .purchase-content {
+    min-height: min-content;
+    }
+
+    .order-message {
+  display: none;
+
+  margin-top: 20px;
+  padding: 14px 16px;
+
+  border: 1px solid var(--border);
+  border-radius: 12px;
+
+  font-size: 0.86rem;
+  line-height: 1.5;
+    }
+
+    .order-message.is-visible {
+    display: block;
+    }
+
+    .order-message.is-error {
+    color: #ffd5d5;
+    border-color: rgba(255, 114, 114, 0.38);
+    background: rgba(255, 114, 114, 0.1);
+    }
+
+    .order-message.is-success {
+    color: #d9ffe8;
+    border-color: rgba(85, 217, 139, 0.38);
+    background: rgba(85, 217, 139, 0.1);
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="demo-page">
+    <div>
+      <h1>
+        El evento más grande de la abogacía
+      </h1>
+
+      <p>
+        Esta pantalla simula la landing actual.
+        El drawer se integrará después sobre
+        el sitio real del evento.
+      </p>
+
+      <button
+        class="primary-button"
+        id="openDrawer"
+        type="button"
+      >
+        Obtener accesos
+      </button>
+    </div>
+  </main>
+
+  <div
+    class="drawer-overlay"
+    id="drawerOverlay"
+    aria-hidden="true"
+  >
+
+    <section
+      class="event-drawer"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="purchaseTitle"
+    >
+
+      <aside class="event-visual">
+
+        <div class="event-visual-content">
+
+          <span class="event-eyebrow">
+            Evento exclusivo · AGAE
+          </span>
+
+          <h2>
+            EL EVENTO DE LA ABOGACÍA
+          </h2>
+
+          <p class="event-meta">
+            <span>6 de noviembre de 2026</span>
+            <span>20:30 h</span>
+            <span>Palacio Alsina</span>
+          </p>
+
+        </div>
+
+      </aside>
+
+      <div class="purchase-panel">
+
+        <header class="purchase-header">
+
+          <strong>
+            6N26 · Palacio Alsina
+          </strong>
+
+          <button
+            class="close-button"
+            id="closeDrawer"
+            type="button"
+          >
+            Cerrar
+
+            <span
+              class="close-icon"
+              aria-hidden="true"
+            ></span>
+          </button>
+
+        </header>
+
+        <div class="purchase-scroll">
+
+          <div class="purchase-content">
+
+            <h1
+              class="purchase-title"
+              id="purchaseTitle"
+            >
+              Obtener accesos
+            </h1>
+
+            <p class="purchase-intro">
+              Elegí la cantidad, completá los
+              datos y continuá al pago.
+              Todos los accesos serán enviados
+              al email del comprador.
+            </p>
+
+            <section class="form-section">
+
+              <h3 class="section-title">
+                Accesos
+              </h3>
+
+              <div class="quantity-card">
+
+                <div>
+                  <div class="price-label">
+                    Valor por acceso
+                  </div>
+
+                  <div class="unit-price">
+                    $65.000
+                  </div>
+                </div>
+
+                <div class="quantity-control">
+
+                  <button
+                    type="button"
+                    id="decreaseQuantity"
+                    aria-label="Restar acceso"
+                  >
+                    −
+                  </button>
+
+                  <div
+                    class="quantity-number"
+                    id="quantityNumber"
+                  >
+                    1
+                  </div>
+
+                  <button
+                    type="button"
+                    id="increaseQuantity"
+                    aria-label="Agregar acceso"
+                  >
+                    +
+                  </button>
+
+                </div>
+
+              </div>
+
+            </section>
+
+            <section class="form-section">
+
+              <h3 class="section-title">
+                Comprador
+              </h3>
+
+              <div class="fields-grid">
+
+                <div class="field">
+                  <label for="buyerName">
+                    Nombre
+                  </label>
+
+                  <input
+                    id="buyerName"
+                    type="text"
+                    autocomplete="given-name"
+                  >
+
+                  <div class="field-error">
+                    Ingresá tu nombre.
+                  </div>
+                </div>
+
+                <div class="field">
+                  <label for="buyerLastName">
+                    Apellido
+                  </label>
+
+                  <input
+                    id="buyerLastName"
+                    type="text"
+                    autocomplete="family-name"
+                  >
+
+                  <div class="field-error">
+                    Ingresá tu apellido.
+                  </div>
+                </div>
+
+                <div class="field">
+                  <label for="buyerDni">
+                    DNI
+                  </label>
+
+                  <input
+                    id="buyerDni"
+                    type="text"
+                    inputmode="numeric"
+                    autocomplete="off"
+                  >
+
+                  <div class="field-note">
+                    Se utilizará para identificar
+                    la compra ante un inconveniente.
+                  </div>
+
+                  <div class="field-error">
+                    Ingresá un DNI válido.
+                  </div>
+                </div>
+
+                <div class="field">
+                  <label for="buyerPhone">
+                    Teléfono
+                  </label>
+
+                  <input
+                    id="buyerPhone"
+                    type="tel"
+                    autocomplete="tel"
+                  >
+
+                  <div class="field-error">
+                    Ingresá un teléfono válido.
+                  </div>
+                </div>
+
+                <div class="field">
+                  <label for="buyerEmail">
+                    Email
+                  </label>
+
+                  <input
+                    id="buyerEmail"
+                    type="email"
+                    autocomplete="email"
+                  >
+
+                  <div class="field-note">
+                    Allí recibirás los e-tickets.
+                  </div>
+
+                  <div class="field-error">
+                    Ingresá un email válido.
+                  </div>
+                </div>
+
+                <div class="field">
+                  <label for="professionalField">
+                    Ámbito profesional
+                  </label>
+
+                  <select id="professionalField">
+
+                    <option value="">Seleccionar</option>
+
+                    <option value="1">Administración pública</option>
+                    <option value="2">Poder Judicial</option>
+                    <option value="3">Ejercicio independiente / estudio jurídico</option>
+                    <option value="4">Empresa privada</option>
+                    <option value="5">Ámbito académico</option>
+                    <option value="6">Estudiante</option>
+                    <option value="7">Otro</option>
+
+                  </select>
+
+                  <div class="field-error">
+                    Seleccioná tu ámbito profesional.
+                  </div>
+                </div>
+
+              </div>
+
+            </section>
+
+            <section class="form-section">
+
+              <h3 class="section-title">
+                Personas asistentes
+              </h3>
+
+              <div
+                class="access-list"
+                id="accessList"
+              ></div>
+
+            </section>
+
+            <section class="form-section">
+
+              <label class="terms-check">
+
+                <input
+                  type="checkbox"
+                  id="termsCheckbox"
+                >
+
+                <span>
+                  Declaro que los datos ingresados
+                  son correctos y acepto los
+                  <a href="#">
+                    Términos y Condiciones
+                  </a>
+                  y la
+                  <a href="#">
+                    Política de Privacidad
+                  </a>.
+                </span>
+
+              </label>
+
+            </section>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <footer class="purchase-summary">
+
+        <div class="summary-values">
+
+          <div class="summary-item">
+            <small>Accesos</small>
+
+            <strong id="summaryQuantity">
+              1
+            </strong>
+          </div>
+
+            <div class="summary-divider"></div>
+
+          <div class="summary-item total">
+            <small>Total</small>
+
+            <strong id="summaryTotal">
+              $65.000
+            </strong>
+          </div>
+
+        </div>
+
+        <div class="summary-action">
+
+          <button
+            class="primary-button"
+            id="continueButton"
+            type="button"
+            disabled
+          >
+            Continuar al pago
+          </button>
+
+          <small class="secure-note">
+            Pago procesado de forma segura
+            por Mercado Pago
+          </small>
+
+        </div>
+
+      </footer>
+
+    </section>
+
+  </div>
+
+<div
+    class="confirmation-overlay"
+    id="confirmationOverlay"
+    aria-hidden="true"
+>
+    <section
+        class="confirmation-card"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="confirmationTitle"
+    >
+
+        <span class="confirmation-eyebrow">
+            Confirmación
+        </span>
+
+        <h2
+            class="confirmation-title"
+            id="confirmationTitle"
+        >
+            Revisá tu compra
+        </h2>
+
+        <p class="confirmation-description">
+            Verificá la información antes de continuar al pago.
+        </p>
+
+        <!-- COMPRADOR -->
+
+        <div class="confirmation-section">
+
+            <h3 class="confirmation-section-title">
+                Comprador
+            </h3>
+
+            <p
+                class="confirmation-buyer"
+                id="confirmationBuyer"
+            ></p>
+
+            <p
+                class="confirmation-email"
+                id="confirmationEmail"
+            ></p>
+
+        </div>
+
+        <!-- ACCESOS -->
+
+        <div class="confirmation-section">
+
+            <h3 class="confirmation-section-title">
+                Accesos
+            </h3>
+
+            <ul
+                class="confirmation-access-list"
+                id="confirmationAccessList"
+            ></ul>
+
+        </div>
+
+        <!-- BENEFICIO -->
+
+        <div class="installments-box">
+
+            <span class="installments-icon">
+                💳
+            </span>
+
+            <strong>
+                PAGÁ EN HASTA
+            </strong>
+
+            <span class="installments-big">
+                3 CUOTAS<br>
+                SIN INTERÉS
+            </span>
+
+        </div>
+
+        <!-- TOTAL -->
+
+        <div class="confirmation-total">
+
+            <small>
+                Total a pagar
+            </small>
+
+            <strong
+                id="confirmationTotal"
+            >
+                $65.000
+            </strong>
+
+        </div>
+
+        <!-- ENTREGA -->
+
+        <p class="delivery-note">
+            Los accesos serán enviados automáticamente al email del comprador como archivos PDF individuales.
+        </p>
+
+        <div
+            class="order-message"
+            id="orderMessage"
+            role="status"
+            aria-live="polite"
+        ></div>
+        <!-- BOTONES -->
+
+        <div class="confirmation-actions">
+
+            <button
+                class="secondary-button"
+                id="editPurchaseButton"
+                type="button"
+            >
+                Volver a editar
+            </button>
+
+            <button
+                class="primary-button"
+                id="payButton"
+                type="button"
+            >
+                Continuar al pago
+            </button>
+
+        </div>
+
+    </section>
+
+</div>
+
+  <script>
+  const unitPrice = 65000;
+  const maximumQuantity = 10;
+
+  let quantity = 1;
+
+  const body = document.body;
+
+  const overlay =
+    document.getElementById("drawerOverlay");
+
+  const openButton =
+    document.getElementById("openDrawer");
+
+  const closeButton =
+    document.getElementById("closeDrawer");
+
+  const decreaseButton =
+    document.getElementById("decreaseQuantity");
+
+  const increaseButton =
+    document.getElementById("increaseQuantity");
+
+  const quantityNumber =
+    document.getElementById("quantityNumber");
+
+  const summaryQuantity =
+    document.getElementById("summaryQuantity");
+
+  const summaryTotal =
+    document.getElementById("summaryTotal");
+
+  const accessList =
+    document.getElementById("accessList");
+
+  const termsCheckbox =
+    document.getElementById("termsCheckbox");
+
+  const continueButton =
+    document.getElementById("continueButton");
+
+  const buyerName =
+    document.getElementById("buyerName");
+
+  const buyerLastName =
+    document.getElementById("buyerLastName");
+
+  const buyerDni =
+    document.getElementById("buyerDni");
+
+  const buyerPhone =
+    document.getElementById("buyerPhone");
+
+  const buyerEmail =
+    document.getElementById("buyerEmail");
+
+  const professionalField =
+    document.getElementById("professionalField");
+
+  const confirmationOverlay =
+    document.getElementById("confirmationOverlay");
+
+  const confirmationBuyer =
+    document.getElementById("confirmationBuyer");
+
+  const confirmationEmail =
+    document.getElementById("confirmationEmail");
+
+  const confirmationAccessList =
+    document.getElementById("confirmationAccessList");
+
+  const confirmationTotal =
+    document.getElementById("confirmationTotal");
+
+  const editPurchaseButton =
+    document.getElementById("editPurchaseButton");
+
+  const payButton =
+    document.getElementById("payButton");
+
+    const orderMessage =
+    document.getElementById("orderMessage");
+
+    let createdOrder = null;    
+
+  function formatPrice(value) {
+    return new Intl.NumberFormat(
+      "es-AR",
+      {
+        style: "currency",
+        currency: "ARS",
+        maximumFractionDigits: 0
+      }
+    ).format(value);
+  }
+
+  function openDrawer() {
+    overlay.classList.add("is-open");
+    overlay.setAttribute("aria-hidden", "false");
+    body.classList.add("drawer-open");
+  }
+
+  function closeDrawer() {
+    overlay.classList.remove("is-open");
+    overlay.setAttribute("aria-hidden", "true");
+    body.classList.remove("drawer-open");
+  }
+
+  function accessTemplate(number) {
+    const selfOption = number === 1
+      ? `
+        <label class="self-check">
+          <input
+            type="checkbox"
+            class="self-checkbox"
+          >
+
+          <span>
+            Este acceso es para mí
+          </span>
+        </label>
+      `
+      : "";
+
+    return `
+      <article
+        class="access-card ${number === 1 ? "is-open" : ""}"
+        data-access="${number}"
+      >
+        <button
+          class="access-header"
+          type="button"
+        >
+          <span>
+            <strong>
+              ACCESO ${number}
+            </strong>
+
+            <small class="access-status">
+              Falta completar
+            </small>
+          </span>
+
+          <span class="access-chevron">
+            ⌄
+          </span>
+        </button>
+
+        <div class="access-body">
+          <div class="access-options">
+            ${selfOption}
+
+            <label class="unnamed-check">
+              <input
+                type="checkbox"
+                class="unnamed-checkbox"
+              >
+
+              <span>
+                Emitir este acceso sin nombre
+              </span>
+            </label>
+          </div>
+
+          <p class="unnamed-help">
+            El acceso será emitido sin nombre.
+            El QR será válido igualmente para ingresar al evento.
+          </p>
+
+          <div class="fields-grid access-person-fields">
+            <div class="field">
+              <label>
+                Nombre
+              </label>
+
+              <input
+                class="access-name"
+                type="text"
+                autocomplete="off"
+              >
+            </div>
+
+            <div class="field">
+              <label>
+                Apellido
+              </label>
+
+              <input
+                class="access-last-name"
+                type="text"
+                autocomplete="off"
+              >
+            </div>
+          </div>
+        </div>
+      </article>
+    `;
+  }
+
+  function getExistingAccessValues() {
+    return [
+      ...accessList.querySelectorAll(".access-card")
+    ].map(card => ({
+      name:
+        card.querySelector(".access-name").value,
+
+      lastName:
+        card.querySelector(".access-last-name").value,
+
+      self:
+        card.querySelector(".self-checkbox")
+          ?.checked ?? false,
+
+      unnamed:
+        card.querySelector(".unnamed-checkbox")
+          .checked
+    }));
+  }
+
+  function renderAccesses() {
+    const existingValues =
+      getExistingAccessValues();
+
+    accessList.innerHTML = "";
+
+    for (
+      let number = 1;
+      number <= quantity;
+      number += 1
+    ) {
+      accessList.insertAdjacentHTML(
+        "beforeend",
+        accessTemplate(number)
+      );
+
+      const card =
+        accessList.lastElementChild;
+
+      const previous =
+        existingValues[number - 1];
+
+      if (!previous) {
+        continue;
+      }
+
+      const nameInput =
+        card.querySelector(".access-name");
+
+      const lastNameInput =
+        card.querySelector(".access-last-name");
+
+      const selfCheckbox =
+        card.querySelector(".self-checkbox");
+
+      const unnamedCheckbox =
+        card.querySelector(".unnamed-checkbox");
+
+      if (previous.unnamed) {
+        unnamedCheckbox.checked = true;
+        card.classList.add("is-unnamed");
+
+        nameInput.value = "";
+        lastNameInput.value = "";
+
+        nameInput.disabled = true;
+        lastNameInput.disabled = true;
+      } else if (
+        number === 1 &&
+        previous.self &&
+        selfCheckbox
+      ) {
+        selfCheckbox.checked = true;
+
+        nameInput.value =
+          buyerName.value;
+
+        lastNameInput.value =
+          buyerLastName.value;
+
+        nameInput.readOnly = true;
+        lastNameInput.readOnly = true;
+      } else {
+        nameInput.value =
+          previous.name;
+
+        lastNameInput.value =
+          previous.lastName;
+      }
+    }
+
+    bindAccessEvents();
+    updateAccessStatuses();
+    updateContinueState();
+  }
+
+  function bindAccessEvents() {
+    accessList
+      .querySelectorAll(".access-card")
+      .forEach(card => {
+        const header =
+          card.querySelector(".access-header");
+
+        const nameInput =
+          card.querySelector(".access-name");
+
+        const lastNameInput =
+          card.querySelector(
+            ".access-last-name"
+          );
+
+        const selfCheckbox =
+          card.querySelector(
+            ".self-checkbox"
+          );
+
+        const unnamedCheckbox =
+          card.querySelector(
+            ".unnamed-checkbox"
+          );
+
+        header.addEventListener(
+          "click",
+          () => {
+            card.classList.toggle("is-open");
+          }
+        );
+
+        nameInput.addEventListener(
+          "input",
+          handleAccessUpdate
+        );
+
+        lastNameInput.addEventListener(
+          "input",
+          handleAccessUpdate
+        );
+
+        if (selfCheckbox) {
+          selfCheckbox.addEventListener(
+            "change",
+            () => {
+              if (selfCheckbox.checked) {
+                unnamedCheckbox.checked = false;
+                card.classList.remove("is-unnamed");
+
+                nameInput.disabled = false;
+                lastNameInput.disabled = false;
+
+                nameInput.value =
+                  buyerName.value;
+
+                lastNameInput.value =
+                  buyerLastName.value;
+
+                nameInput.readOnly = true;
+                lastNameInput.readOnly = true;
+              } else {
+                nameInput.readOnly = false;
+                lastNameInput.readOnly = false;
+
+                nameInput.value = "";
+                lastNameInput.value = "";
+              }
+
+              handleAccessUpdate();
+            }
+          );
+        }
+
+        unnamedCheckbox.addEventListener(
+          "change",
+          () => {
+            if (unnamedCheckbox.checked) {
+              if (selfCheckbox) {
+                selfCheckbox.checked = false;
+              }
+
+              card.classList.add("is-unnamed");
+
+              nameInput.value = "";
+              lastNameInput.value = "";
+
+              nameInput.readOnly = false;
+              lastNameInput.readOnly = false;
+
+              nameInput.disabled = true;
+              lastNameInput.disabled = true;
+            } else {
+              card.classList.remove("is-unnamed");
+
+              nameInput.disabled = false;
+              lastNameInput.disabled = false;
+            }
+
+            handleAccessUpdate();
+          }
+        );
+      });
+  }
+
+  function handleAccessUpdate() {
+    updateAccessStatuses();
+    updateContinueState();
+  }
+
+  function updateAccessStatuses() {
+    accessList
+      .querySelectorAll(".access-card")
+      .forEach(card => {
+        const status =
+          card.querySelector(".access-status");
+
+        const unnamed =
+          card.querySelector(".unnamed-checkbox")
+            .checked;
+
+        const name =
+          card.querySelector(".access-name")
+            .value
+            .trim();
+
+        const lastName =
+          card.querySelector(".access-last-name")
+            .value
+            .trim();
+
+        if (unnamed) {
+          status.textContent =
+            "Acceso sin nombre";
+
+          status.style.color =
+            "var(--success)";
+
+          return;
+        }
+
+        if (name && lastName) {
+          status.textContent =
+            `${name} ${lastName}`;
+
+          status.style.color =
+            "var(--success)";
+        } else {
+          status.textContent =
+            "Falta completar";
+
+          status.style.color = "";
+        }
+      });
+  }
+
+  function updateSummary() {
+    quantityNumber.textContent =
+      quantity;
+
+    summaryQuantity.textContent =
+      quantity;
+
+    summaryTotal.textContent =
+      formatPrice(
+        quantity * unitPrice
+      );
+
+    decreaseButton.disabled =
+      quantity <= 1;
+
+    increaseButton.disabled =
+      quantity >= maximumQuantity;
+
+    renderAccesses();
+  }
+
+  function isBuyerComplete() {
+    const emailPattern =
+      /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    const normalizedDni =
+      buyerDni.value.replace(/\D/g, "");
+
+    return (
+      buyerName.value.trim() !== "" &&
+      buyerLastName.value.trim() !== "" &&
+      normalizedDni.length >= 7 &&
+      buyerPhone.value.trim() !== "" &&
+      emailPattern.test(
+        buyerEmail.value.trim()
+      ) &&
+      professionalField.value !== ""
+    );
+  }
+
+  function areAccessesComplete() {
+    return [
+      ...accessList.querySelectorAll(
+        ".access-card"
+      )
+    ].every(card => {
+      const unnamed =
+        card.querySelector(
+          ".unnamed-checkbox"
+        ).checked;
+
+      if (unnamed) {
+        return true;
+      }
+
+      const name =
+        card.querySelector(
+          ".access-name"
+        ).value.trim();
+
+      const lastName =
+        card.querySelector(
+          ".access-last-name"
+        ).value.trim();
+
+      return (
+        name !== "" &&
+        lastName !== ""
+      );
+    });
+  }
+
+  function updateContinueState() {
+    continueButton.disabled = !(
+      isBuyerComplete() &&
+      areAccessesComplete() &&
+      termsCheckbox.checked
+    );
+  }
+
+  function updateSelfAccess() {
+    const firstCard =
+      accessList.querySelector(
+        ".access-card"
+      );
+
+    if (!firstCard) {
+      return;
+    }
+
+    const selfCheckbox =
+      firstCard.querySelector(
+        ".self-checkbox"
+      );
+
+    if (!selfCheckbox?.checked) {
+      return;
+    }
+
+    firstCard.querySelector(
+      ".access-name"
+    ).value = buyerName.value;
+
+    firstCard.querySelector(
+      ".access-last-name"
+    ).value = buyerLastName.value;
+
+    updateAccessStatuses();
+  }
+
+  function getAccessSummary() {
+    return [
+      ...accessList.querySelectorAll(
+        ".access-card"
+      )
+    ].map((card, index) => {
+      const unnamed =
+        card.querySelector(
+          ".unnamed-checkbox"
+        ).checked;
+
+      if (unnamed) {
+        return {
+          number: index + 1,
+          label: "Acceso sin nombre"
+        };
+      }
+
+      const name =
+        card.querySelector(
+          ".access-name"
+        ).value.trim();
+
+      const lastName =
+        card.querySelector(
+          ".access-last-name"
+        ).value.trim();
+
+      return {
+        number: index + 1,
+        label: `${name} ${lastName}`
+      };
+    });
+  }
+
+  function openConfirmation() {
+    confirmationBuyer.textContent =
+      `${buyerName.value.trim()} ${buyerLastName.value.trim()}`;
+
+    confirmationEmail.textContent =
+      buyerEmail.value.trim();
+
+    confirmationTotal.textContent =
+      formatPrice(
+        quantity * unitPrice
+      );
+
+    confirmationAccessList.innerHTML = "";
+
+    getAccessSummary().forEach(access => {
+      confirmationAccessList.insertAdjacentHTML(
+        "beforeend",
+        `
+          <li>
+            <span>
+              ACCESO ${access.number}
+            </span>
+
+            <strong>
+              ${escapeHtml(access.label)}
+            </strong>
+          </li>
+        `
+      );
+    });
+
+    confirmationOverlay.classList.add(
+      "is-open"
+    );
+
+    confirmationOverlay.setAttribute(
+      "aria-hidden",
+      "false"
+    );
+  }
+
+  function closeConfirmation() {
+    confirmationOverlay.classList.remove(
+      "is-open"
+    );
+
+    confirmationOverlay.setAttribute(
+      "aria-hidden",
+      "true"
+    );
+  }
+
+  function escapeHtml(value) {
+    const element =
+      document.createElement("div");
+
+    element.textContent = value;
+
+    return element.innerHTML;
+  }
+
+  buyerName.addEventListener(
+    "input",
+    () => {
+      updateSelfAccess();
+      updateContinueState();
+    }
+  );
+
+  buyerLastName.addEventListener(
+    "input",
+    () => {
+      updateSelfAccess();
+      updateContinueState();
+    }
+  );
+
+  [
+    buyerDni,
+    buyerPhone,
+    buyerEmail
+  ].forEach(input => {
+    input.addEventListener(
+      "input",
+      updateContinueState
+    );
+  });
+
+  professionalField.addEventListener(
+    "change",
+    updateContinueState
+  );
+
+  termsCheckbox.addEventListener(
+    "change",
+    updateContinueState
+  );
+
+  decreaseButton.addEventListener(
+    "click",
+    () => {
+      if (quantity > 1) {
+        quantity -= 1;
+        updateSummary();
+      }
+    }
+  );
+
+  increaseButton.addEventListener(
+    "click",
+    () => {
+      if (quantity < maximumQuantity) {
+        quantity += 1;
+        updateSummary();
+      }
+    }
+  );
+
+  openButton.addEventListener(
+    "click",
+    openDrawer
+  );
+
+  closeButton.addEventListener(
+    "click",
+    closeDrawer
+  );
+
+  overlay.addEventListener(
+    "click",
+    event => {
+      if (event.target === overlay) {
+        closeDrawer();
+      }
+    }
+  );
+
+  continueButton.addEventListener(
+    "click",
+    openConfirmation
+  );
+
+    editPurchaseButton.addEventListener(
+    "click",
+    () => {
+        clearOrderMessage();
+        closeConfirmation();
+    }
+    );
+
+  confirmationOverlay.addEventListener(
+    "click",
+    event => {
+      if (
+        event.target ===
+        confirmationOverlay
+      ) {
+        closeConfirmation();
+      }
+    }
+  );
+
+    payButton.addEventListener(
+    "click",
+    createOrder
+    );
+
+  function buildOrderPayload() {
+  const accesses = [
+    ...accessList.querySelectorAll(
+      ".access-card"
+    )
+  ].map(card => {
+    const unnamed =
+      card.querySelector(
+        ".unnamed-checkbox"
+      ).checked;
+
+    return {
+      sin_nombre: unnamed,
+
+      nombre: unnamed
+        ? null
+        : card.querySelector(
+            ".access-name"
+          ).value.trim(),
+
+      apellido: unnamed
+        ? null
+        : card.querySelector(
+            ".access-last-name"
+          ).value.trim()
+    };
+  });
+
+  return {
+    comprador: {
+      nombre:
+        buyerName.value.trim(),
+
+      apellido:
+        buyerLastName.value.trim(),
+
+      dni:
+        buyerDni.value.replace(
+          /\D/g,
+          ""
+        ),
+
+      email:
+        buyerEmail.value.trim(),
+
+      telefono:
+        buyerPhone.value.trim(),
+
+      ambito_profesional_id:
+        Number(
+          professionalField.value
+        )
+    },
+
+    accesos: accesses,
+
+    acepto_terminos:
+      termsCheckbox.checked,
+
+    acepto_privacidad:
+      termsCheckbox.checked
+  };
+}
+
+function showOrderMessage(
+  message,
+  type
+) {
+  orderMessage.textContent = message;
+
+  orderMessage.className =
+    `order-message is-visible is-${type}`;
+}
+
+function clearOrderMessage() {
+  orderMessage.textContent = "";
+  orderMessage.className =
+    "order-message";
+}
+
+async function createCheckout(order) {
+  const response = await fetch(
+    "api/crear-pago.php",
+    {
+      method: "POST",
+
+      headers: {
+        "Content-Type":
+          "application/json",
+
+        "Accept":
+          "application/json"
+      },
+
+      body: JSON.stringify({
+        codigo_orden:
+          order.codigo_orden,
+
+        checkout_token:
+          order.checkout_token
+      })
+    }
+  );
+
+  const result =
+    await response.json();
+
+  if (
+    !response.ok
+    || result.ok !== true
+  ) {
+    throw new Error(
+      result.mensaje
+      || "No se pudo preparar el pago."
+    );
+  }
+
+  window.location.assign(
+    result.pago.checkout_url
+  );
+}
+
+async function createOrder() {
+  clearOrderMessage();
+
+  payButton.disabled = true;
+  editPurchaseButton.disabled = true;
+
+  payButton.textContent =
+    createdOrder === null
+      ? "Creando orden…"
+      : "Preparando pago…";
+
+  try {
+    if (createdOrder === null) {
+      const response = await fetch(
+        "api/crear-orden.php",
+        {
+          method: "POST",
+
+          headers: {
+            "Content-Type":
+              "application/json",
+
+            "Accept":
+              "application/json"
+          },
+
+          body: JSON.stringify(
+            buildOrderPayload()
+          )
+        }
+      );
+
+      const result =
+        await response.json();
+
+      if (
+        !response.ok
+        || result.ok !== true
+      ) {
+        throw new Error(
+          result.mensaje
+          || "No se pudo crear la orden."
+        );
+      }
+
+      createdOrder =
+        result.orden;
+    }
+
+    payButton.textContent =
+      "Abriendo Mercado Pago…";
+
+    await createCheckout(
+      createdOrder
+    );
+  } catch (error) {
+    payButton.disabled = false;
+
+    /*
+     * Si la orden ya existe, el botón permite
+     * reintentar Mercado Pago sin crear otra.
+     */
+    payButton.textContent =
+      createdOrder === null
+        ? "Continuar al pago"
+        : "Reintentar pago";
+
+    editPurchaseButton.disabled =
+      createdOrder !== null;
+
+    showOrderMessage(
+      error instanceof Error
+        ? error.message
+        : "No se pudo iniciar el pago.",
+      "error"
+    );
+  }
+}
+
+function formatReservationTime(
+  dateValue
+) {
+  const date =
+    new Date(dateValue);
+
+  return new Intl.DateTimeFormat(
+    "es-AR",
+    {
+      hour: "2-digit",
+      minute: "2-digit"
+    }
+  ).format(date);
+}
+
+  document.addEventListener(
+    "keydown",
+    event => {
+      if (event.key !== "Escape") {
+        return;
+      }
+
+      if (
+        confirmationOverlay.classList
+          .contains("is-open")
+      ) {
+        closeConfirmation();
+        return;
+      }
+
+      if (
+        overlay.classList.contains(
+          "is-open"
+        )
+      ) {
+        closeDrawer();
+      }
+    }
+  );
+
+  updateSummary();
+</script>   
+
+</body>
+</html>
