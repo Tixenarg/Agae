@@ -155,6 +155,22 @@ final class ProcesadorEmailService
                     $emailId
                 );
 
+            try {
+                $this->accesos
+                    ->marcarEmailEnviadoPorOrden(
+                        $ordenId
+                    );
+            } catch (Throwable $exception) {
+                error_log(
+                    sprintf(
+                        '[email-sync] Email %d enviado, pero no se pudo actualizar email_enviado_en de la orden %d: %s',
+                        $emailId,
+                        $ordenId,
+                        $exception->getMessage()
+                    )
+                );
+            }
+
         } catch (Throwable $exception) {
             $intentos =
                 (int) $email['intentos']

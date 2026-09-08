@@ -497,4 +497,43 @@ final class OrdenRepository
 
         return $orden ?: null;
     }
+
+    public function obtenerDetalle(
+    int $id
+): ?array {
+
+    $sql = "
+        SELECT
+            o.*,
+
+            c.nombre,
+            c.apellido,
+            c.email,
+            c.telefono,
+
+            e.nombre AS evento_nombre
+
+        FROM ordenes o
+
+        INNER JOIN compradores c
+            ON c.id = o.comprador_id
+
+        INNER JOIN eventos e
+            ON e.id = o.evento_id
+
+        WHERE o.id = :id
+
+        LIMIT 1
+    ";
+
+    $stmt = $this->pdo->prepare($sql);
+
+    $stmt->execute([
+        'id' => $id
+    ]);
+
+    $orden = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    return $orden ?: null;
+}
 }

@@ -1,0 +1,66 @@
+{
+    "recibido_en": "2026-08-03T13:14:05-03:00",
+    "query": [],
+    "headers": {
+        "x-signature": null,
+        "x-request-id": null,
+        "content-type": null
+    },
+    "body_raw": "",
+    "body_json": null
+}
+--------------------------------------------------------------------------------
+{
+    "recibido_en": "2026-08-03T13:17:01-03:00",
+    "query": {
+        "data_id": "1122334455",
+        "type": "payment"
+    },
+    "headers": {
+        "x-signature": "ts=1785773821,v1=aa0b15a70807d7a828f2f887a05ac5beb5a2f823af3472833284f06d7d116783",
+        "x-request-id": "3d800ea8-9e4a-480d-bd82-ff0dcf30cbf1",
+        "content-type": "application/json"
+    },
+    "body_raw": "{\"action\":\"payment.updated\",\"api_version\":\"v1\",\"data\":{\"id\":\"1122334455\"},\"date_created\":\"2021-11-01T02:02:02Z\",\"id\":\"123456\",\"live_mode\":false,\"type\":\"payment\",\"user_id\":442648295}",
+    "body_json": {
+        "action": "payment.updated",
+        "api_version": "v1",
+        "data": {
+            "id": "1122334455"
+        },
+        "date_created": "2021-11-01T02:02:02Z",
+        "id": "123456",
+        "live_mode": false,
+        "type": "payment",
+        "user_id": 442648295
+    }
+}
+--------------------------------------------------------------------------------
+{
+    "recibido_en": "2026-08-03T15:20:36-03:00",
+    "query": {
+        "data_id": "111122223333",
+        "type": "payment"
+    },
+    "headers": {
+        "x-signature": "ts=1785781235,v1=210f7c0ea83270ce3c11cdc0afa5213db64770f7044bf643f10eaec1d297edae",
+        "x-request-id": "8c9436e9-0ab8-4747-80da-88fd39c09d6c",
+        "content-type": "application/json"
+    },
+    "body_raw": "{\"action\":\"payment.updated\",\"api_version\":\"v1\",\"data\":{\"id\":\"111122223333\"},\"date_created\":\"2021-11-01T02:02:02Z\",\"id\":\"123456\",\"live_mode\":false,\"type\":\"payment\",\"user_id\":442648295}",
+    "body_json": {
+        "action": "payment.updated",
+        "api_version": "v1",
+        "data": {
+            "id": "111122223333"
+        },
+        "date_created": "2021-11-01T02:02:02Z",
+        "id": "123456",
+        "live_mode": false,
+        "type": "payment",
+        "user_id": 442648295
+    },
+    "payment_id": 111122223333,
+    "payment": null
+}
+--------------------------------------------------------------------------------

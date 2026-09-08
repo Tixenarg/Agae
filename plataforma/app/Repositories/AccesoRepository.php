@@ -126,18 +126,27 @@ final class AccesoRepository
     ): array {
         $sql = '
             SELECT
-                id,
-                orden_id,
-                codigo,
-                estado,
-                ruta_pdf,
-                pdf_generado_en
+                a.id,
+                a.orden_id,
+                a.codigo,
+                a.nombre,
+                a.apellido,
+                a.estado,
+                a.email_enviado_en,
+                a.utilizado_en,
+                a.ruta_pdf,
+                a.pdf_generado_en,
 
-            FROM accesos
+                ta.nombre AS tipo_acceso_nombre
 
-            WHERE orden_id = :orden_id
+            FROM accesos a
 
-            ORDER BY numero_en_orden ASC
+            INNER JOIN tipos_acceso ta
+                ON ta.id = a.tipo_acceso_id
+
+            WHERE a.orden_id = :orden_id
+
+            ORDER BY a.numero_en_orden ASC
         ';
 
         $statement =
@@ -150,4 +159,83 @@ final class AccesoRepository
 
         return $statement->fetchAll();
     }
+
+    public function obtenerPorId(
+    int $accesoId
+): ?array {
+
+    $sql = '
+        SELECT
+            a.id,
+            a.orden_id,
+            a.tipo_acceso_id,
+            a.codigo,
+            a.numero_en_orden,
+            a.nombre,
+            a.apellido,
+            a.email_individual,
+            a.dni_individual,
+            a.estado,
+            a.ruta_pdf,
+            a.pdf_generado_en,
+            a.email_enviado_en,
+            a.utilizado_en,
+            a.anulado_en,
+            a.motivo_anulacion,
+            a.creado_en,
+
+            ta.nombre AS tipo_acceso_nombre,
+            ta.codigo AS tipo_acceso_codigo,
+
+            o.codigo AS orden_codigo,
+            o.estado AS orden_estado,
+            o.evento_id,
+
+            e.nombre AS evento_nombre
+
+        FROM accesos a
+
+        INNER JOIN tipos_acceso ta
+            ON ta.id = a.tipo_acceso_id
+
+        INNER JOIN ordenes o
+            ON o.id = a.orden_id
+
+        INNER JOIN eventos e
+            ON e.id = o.evento_id
+
+        WHERE a.id = :acceso_id
+
+        LIMIT 1
+    ';
+
+    $statement =
+        $this->pdo->prepare($sql);
+
+    $statement->execute([
+        'acceso_id' => $accesoId,
+    ]);
+
+    $acceso =
+        $statement->fetch();
+
+    return $acceso ?: null;
+}
+
+public function marcarEmailEnviadoPorOrden(
+    int $ordenId
+): void {
+    $sql = '
+        UPDATE accesos
+        SET email_enviado_en = CURRENT_TIMESTAMP
+        WHERE orden_id = :orden_id
+    ';
+
+    $statement =
+        $this->pdo->prepare($sql);
+
+    $statement->execute([
+        'orden_id' => $ordenId,
+    ]);
+}
 }

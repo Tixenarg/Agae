@@ -815,8 +815,8 @@ body {
     // Año
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // Countdown al 28/11/2025 20:30 (-03:00)
-    const target = new Date('2025-11-28T20:30:00-03:00').getTime();
+    // Countdown al 06/11/2026 20:30 (-03:00)
+    const target = new Date('2026-11-06T20:30:00-03:00').getTime();
     const el = id => document.getElementById(id);
     function tick() {
       const d = Math.max(0, target - Date.now());

@@ -259,4 +259,164 @@ public function marcarFallido(
                 : 0,
     ]);
 }
+
+public function obtenerPorOrden(
+    int $ordenId
+): array {
+
+    $sql = '
+        SELECT
+            id,
+            destinatario,
+            asunto,
+            estado,
+            enviado_en,
+            creado_en
+        FROM emails
+        WHERE orden_id = :orden_id
+        ORDER BY creado_en ASC
+    ';
+
+    $statement =
+        $this->pdo->prepare($sql);
+
+    $statement->execute([
+        'orden_id' => $ordenId,
+    ]);
+
+    return $statement->fetchAll();
+}
+
+public function obtenerListado(): array
+{
+    $sql = '
+        SELECT
+            e.id,
+            e.destinatario,
+            e.asunto,
+            e.plantilla,
+            e.estado,
+            e.intentos,
+            e.max_intentos,
+            e.enviado_en,
+            e.programado_para,
+            o.codigo AS orden_codigo
+        FROM emails e
+        LEFT JOIN ordenes o
+            ON o.id = e.orden_id
+        ORDER BY
+            COALESCE(
+                e.enviado_en,
+                e.programado_para,
+                e.creado_en
+            ) DESC
+    ';
+
+    return $this->pdo
+        ->query($sql)
+        ->fetchAll();
+}
+
+public function obtenerPorId(
+    int $emailId
+): ?array {
+    $sql = '
+        SELECT
+            e.id,
+            e.orden_id,
+            e.acceso_id,
+            e.tipo,
+            e.destinatario,
+            e.asunto,
+            e.plantilla,
+            e.datos_plantilla,
+            e.estado,
+            e.intentos,
+            e.max_intentos,
+            e.ultimo_error,
+            e.programado_para,
+            e.enviado_en,
+            e.creado_en,
+            e.actualizado_en,
+
+            o.codigo AS orden_codigo,
+            o.estado AS orden_estado
+
+        FROM emails e
+
+        LEFT JOIN ordenes o
+            ON o.id = e.orden_id
+
+        WHERE e.id = :email_id
+
+        LIMIT 1
+    ';
+
+    $statement =
+        $this->pdo->prepare($sql);
+
+    $statement->execute([
+        'email_id' => $emailId,
+    ]);
+
+    $email =
+        $statement->fetch();
+
+    return $email ?: null;
+}
+
+public function reencolarDesdeId(
+    int $emailId
+): int {
+    $sql = '
+        INSERT INTO emails (
+            orden_id,
+            acceso_id,
+            tipo,
+            destinatario,
+            asunto,
+            plantilla,
+            datos_plantilla,
+            estado,
+            intentos,
+            max_intentos,
+            ultimo_error,
+            programado_para
+        )
+
+        SELECT
+            orden_id,
+            acceso_id,
+            tipo,
+            destinatario,
+            asunto,
+            plantilla,
+            datos_plantilla,
+            "pendiente",
+            0,
+            max_intentos,
+            NULL,
+            CURRENT_TIMESTAMP
+
+        FROM emails
+
+        WHERE id = :email_id
+    ';
+
+    $statement =
+        $this->pdo->prepare($sql);
+
+    $statement->execute([
+        'email_id' => $emailId,
+    ]);
+
+    if ($statement->rowCount() !== 1) {
+        throw new \RuntimeException(
+            'No se pudo reencolar el email.'
+        );
+    }
+
+    return (int) $this->pdo
+        ->lastInsertId();
+}
 }
