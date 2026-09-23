@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>El Evento Más Grande de la Abogacía — AGAE 2026</title>
+  <meta name="description" content="Una vez por año, toda la Abogacía se encuentra. 6 de noviembre de 2026, 20:30 h, Palacio Alsina, CABA." />
+  <meta name="theme-color" content="#090b18" />
+  <link rel="icon" href="assets/favicon.png" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root{
+      --brand:#19248B;
+      --brand-2:#474fff;
+      --violet:#a776ff;
+      --cyan:#59e6ff;
+      --ink:#070812;
+      --paper:#0b0e1e;
+      --text:#f6f7ff;
+      --muted:#aeb7d5;
+      --line:rgba(255,255,255,.13);
+      --glass:rgba(255,255,255,.055);
+      --nav-h:78px;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth;scroll-padding-top:calc(var(--nav-h) + 16px)}
+    body{
+      margin:0;
+      color:var(--text);
+      background:
+        radial-gradient(900px 650px at 15% 10%, rgba(71,79,255,.16), transparent 65%),
+        radial-gradient(800px 600px at 88% 30%, rgba(167,118,255,.12), transparent 65%),
+        linear-gradient(180deg,#090b18 0%,#070812 100%);
+      font-family:"Space Grotesk",system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      overflow-x:hidden;
+    }
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      z-index:-1;
+      background-image:
+        linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);
+      background-size:52px 52px;
+      mask-image:linear-gradient(to bottom,rgba(0,0,0,.65),transparent 78%);
+    }
+    a{text-decoration:none}
+    img{max-width:100%;display:block}
+    section{position:relative;padding:110px 0;border-top:1px solid rgba(255,255,255,.055)}
+    .container-narrow{max-width:1160px}
+    .eyebrow{
+      display:inline-flex;align-items:center;gap:.55rem;
+      font-size:.78rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;
+      color:#dfe3ff;
+    }
+    .eyebrow::before{content:"";width:34px;height:1px;background:linear-gradient(90deg,var(--violet),var(--cyan))}
+    .section-title{
+      margin:.85rem 0 1rem;
+      max-width:880px;
+      font:900 clamp(2rem,5vw,4rem)/.98 "Montserrat",sans-serif;
+      letter-spacing:-.045em;
+      text-transform:uppercase;
+    }
+    .section-lead{max-width:760px;color:var(--muted);font-size:clamp(1.05rem,1.5vw,1.25rem);line-height:1.7}
+    .subtle{color:var(--muted)}
+    /* NAV */
+    .navbar{
+      min-height:var(--nav-h);
+      background:rgba(7,8,18,.78)!important;
+      border-bottom:1px solid var(--line);
+      backdrop-filter:blur(18px);
+      -webkit-backdrop-filter:blur(18px);
+      z-index:1030;
+    }
+    .navbar-brand img{height:54px;width:auto}
+    .nav-link{color:#eef0ff!important;font-size:.92rem;font-weight:600;opacity:.78}
+    .nav-link:hover{opacity:1}
+    .navbar-toggler{border-color:var(--line)}
+    .btn-brand,.btn-outline-light{
+      border-radius:999px;
+      padding:.8rem 1.2rem;
+      font-weight:800;
+      transition:.2s ease;
+    }
+    .btn-brand{
+      color:#fff;
+      border:1px solid rgba(255,255,255,.11);
+      background:linear-gradient(110deg,var(--brand),#343ed8 55%,#6141b9);
+      box-shadow:0 14px 38px rgba(25,36,139,.28);
+    }
+    .btn-brand:hover{color:#fff;transform:translateY(-2px);filter:brightness(1.08)}
+    .btn-ghost{
+      color:#fff;border:1px solid var(--line);background:rgba(255,255,255,.04);
+      border-radius:999px;padding:.8rem 1.2rem;font-weight:800;
+    }
+    .btn-ghost:hover{color:#fff;background:rgba(255,255,255,.09)}
+    /* HERO */
+    .hero{
+      position:relative;
+      min-height:100svh;
+      display:flex;
+      align-items:flex-end;
+      overflow:hidden;
+      padding:calc(var(--nav-h) + 54px) 0 62px;
+    }
+    .hero-video{
+      position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+      opacity:.48;filter:saturate(.9) contrast(1.08) brightness(.72);
+      z-index:-3;
+    }
+    .hero::before{
+      content:"";position:absolute;inset:0;z-index:-2;
+      background:
+        linear-gradient(180deg,rgba(5,6,16,.18) 0%,rgba(7,8,18,.38) 42%,#070812 100%),
+        radial-gradient(900px 600px at 15% 35%,rgba(25,36,139,.52),transparent 65%);
+    }
+    .hero::after{
+      content:"";position:absolute;inset:auto -15% -45% auto;width:80vw;height:80vw;border-radius:50%;z-index:-1;
+      background:radial-gradient(circle,rgba(167,118,255,.18),transparent 66%);filter:blur(40px);
+    }
+    .hero-meta{display:flex;flex-wrap:wrap;gap:.55rem;margin-bottom:1.4rem}
+    .meta-chip{
+      display:inline-flex;align-items:center;gap:.55rem;
+      padding:.58rem .82rem;border:1px solid var(--line);border-radius:999px;
+      color:#f5f6ff;background:rgba(8,10,25,.42);backdrop-filter:blur(10px);font-size:.9rem;
+    }
+    .hero-kicker{
+      margin-bottom:1.15rem;
+      font-size:.78rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:#d8dcff;
+    }
+    .hero-title{
+      max-width:1120px;
+      margin:0;
+      font:900 clamp(2.8rem,8.6vw,8.2rem)/.84 "Montserrat",sans-serif;
+      letter-spacing:-.065em;
+      text-transform:uppercase;
+    }
+    .hero-title .line-muted{
+      color:transparent;
+      -webkit-text-stroke:1px rgba(255,255,255,.42);
+    }
+    .hero-title .accent{
+      background:linear-gradient(92deg,#fff 5%,#d4d9ff 42%,#83eaff 75%,#c69cff 100%);
+      -webkit-background-clip:text;background-clip:text;color:transparent;
+    }
+    .hero-bottom{
+      margin-top:2rem;
+      display:grid;
+      grid-template-columns:minmax(0,1fr) auto;
+      align-items:end;
+      gap:2rem;
+    }
+    .hero-copy{max-width:690px;font-size:clamp(1.08rem,1.6vw,1.35rem);line-height:1.55;color:#e0e4f7}
+    .hero-actions{display:flex;gap:.7rem;flex-wrap:wrap}
+    /* countdown */
+    .countdown-wrap{margin-top:2.3rem;border-top:1px solid var(--line);padding-top:1.25rem}
+    .countdown{display:grid;grid-template-columns:repeat(4,minmax(90px,1fr));max-width:620px}
+    .countdown .unit{padding:.3rem 1rem .3rem 0;border-right:1px solid var(--line)}
+    .countdown .unit:last-child{border-right:0;padding-left:1rem}
+    .countdown .unit:not(:first-child){padding-left:1rem}
+    .countdown .num{font:800 clamp(1.7rem,4vw,3.5rem)/1 "Montserrat",sans-serif}
+    .countdown .label{margin-top:.25rem;color:var(--muted);font-size:.72rem;letter-spacing:.15em;text-transform:uppercase}
+    /* MARQUEE */
+    .marquee{overflow:hidden;border-block:1px solid var(--line);background:rgba(255,255,255,.022)}
+    .marquee-track{display:flex;width:max-content;animation:marquee 28s linear infinite}
+    .marquee-item{padding:15px 28px;font:700 .78rem/1 "Montserrat",sans-serif;letter-spacing:.15em;text-transform:uppercase;color:#dfe3ff}
+    .marquee-item i{font-size:.35rem;vertical-align:middle;margin:0 1.4rem;color:var(--cyan)}
+    @keyframes marquee{to{transform:translateX(-50%)}}
+    /* MANIFESTO */
+    .manifesto{padding:120px 0}
+    .manifesto-copy{
+      max-width:1000px;
+      font:700 clamp(2rem,4.7vw,4.6rem)/1.08 "Montserrat",sans-serif;
+      letter-spacing:-.04em;
+    }
+    .manifesto-copy span{color:var(--muted)}
+    .manifesto-foot{margin-top:2.2rem;display:grid;grid-template-columns:1fr 1fr;gap:2rem;color:var(--muted);line-height:1.75}
+    /* cards */
+    .glass-card{
+      height:100%;padding:28px;border:1px solid var(--line);border-radius:24px;
+      background:linear-gradient(155deg,rgba(255,255,255,.07),rgba(255,255,255,.025));
+      box-shadow:inset 0 1px rgba(255,255,255,.04);
+      transition:.25s ease;
+    }
+    .glass-card:hover{transform:translateY(-4px);border-color:rgba(167,118,255,.35)}
+    .icon-box{
+      width:46px;height:46px;border-radius:14px;display:grid;place-items:center;margin-bottom:1.5rem;
+      background:linear-gradient(145deg,rgba(71,79,255,.25),rgba(89,230,255,.08));border:1px solid rgba(255,255,255,.1)
+    }
+    .glass-card h3,.glass-card h4{font-family:"Montserrat",sans-serif;font-weight:800}
+    /* BIG NUMBER / EXPERIENCE */
+    .feature-number{font:900 4.5rem/1 "Montserrat",sans-serif;color:rgba(255,255,255,.085);letter-spacing:-.06em}
+    .experience-card{position:relative;overflow:hidden;min-height:260px}
+    .experience-card::after{
+      content:"";position:absolute;right:-80px;bottom:-100px;width:230px;height:230px;border-radius:50%;
+      background:radial-gradient(circle,rgba(89,230,255,.12),transparent 68%);pointer-events:none;
+    }
+    /* VENUE */
+    .venue-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:1.2rem}
+    .venue-visual{
+      min-height:560px;border-radius:28px;overflow:hidden;border:1px solid var(--line);position:relative;
+      background:url('assets/img/alsina.png') center/cover no-repeat;
+    }
+    .venue-visual::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 30%,rgba(6,7,17,.88) 100%)}
+    .venue-caption{position:absolute;left:28px;right:28px;bottom:26px;z-index:1}
+    .venue-side{display:grid;gap:1.2rem}
+    .info-row{display:flex;gap:1rem;align-items:flex-start}
+    .info-row i{width:24px;margin-top:.25rem;color:var(--cyan)}
+    /* ACCESS */
+    .access-shell{
+      position:relative;overflow:hidden;
+      padding:clamp(28px,5vw,58px);
+      border:1px solid rgba(255,255,255,.15);border-radius:32px;
+      background:
+        radial-gradient(650px 400px at 90% 10%,rgba(89,230,255,.11),transparent 65%),
+        radial-gradient(650px 450px at 0% 100%,rgba(167,118,255,.18),transparent 62%),
+        linear-gradient(145deg,rgba(25,36,139,.25),rgba(255,255,255,.035));
+    }
+    .access-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:2.5rem;align-items:center}
+    .access-price{font:900 clamp(3rem,7vw,6.8rem)/.9 "Montserrat",sans-serif;letter-spacing:-.07em;margin:.4rem 0}
+    .access-price small{font-size:.22em;letter-spacing:.04em;color:var(--muted);vertical-align:top;margin-left:.2rem}
+    .access-note{max-width:580px;color:var(--muted);line-height:1.65}
+    .digital-pass{
+      margin-left:auto;max-width:360px;padding:22px;border-radius:26px;
+      background:#f5f7ff;color:#11152b;box-shadow:0 35px 80px rgba(0,0,0,.28);transform:rotate(2deg);
+    }
+    .digital-pass-top{display:flex;justify-content:space-between;gap:1rem;align-items:flex-start}
+    .digital-pass .brand{font:900 1rem/1 "Montserrat",sans-serif;color:var(--brand)}
+    .digital-pass .date{font-weight:800;text-transform:uppercase}
+    .qr-demo{
+      width:132px;aspect-ratio:1;margin:28px auto 16px;border-radius:16px;
+      background:
+        linear-gradient(90deg,#111 12%,transparent 12% 22%,#111 22% 34%,transparent 34% 48%,#111 48% 62%,transparent 62% 72%,#111 72%),
+        linear-gradient(#111 11%,transparent 11% 24%,#111 24% 38%,transparent 38% 48%,#111 48% 63%,transparent 63% 78%,#111 78%);
+      background-size:28px 31px;mix-blend-mode:multiply;border:10px solid #fff;outline:1px solid #dfe3ee;
+    }
+    .pass-code{text-align:center;font:700 .72rem/1.4 monospace;letter-spacing:.12em;color:#62687a}
+    .pass-label{text-align:center;font-size:.8rem;color:#62687a;margin-top:6px}
+    .access-list{list-style:none;padding:0;margin:1.6rem 0 2rem;display:grid;gap:.75rem}
+    .access-list li{display:flex;gap:.7rem;color:#e6e9fa}.access-list i{color:var(--cyan);margin-top:.25rem}
+    /* FAQ */
+    .accordion-item{background:transparent;border:0;border-bottom:1px solid var(--line);border-radius:0!important}
+    .accordion-button{padding:1.35rem 0;background:transparent!important;color:#fff!important;font-weight:700;box-shadow:none!important}
+    .accordion-button:not(.collapsed){color:#fff!important}
+    .accordion-button::after{filter:invert(1);opacity:.8}
+    .accordion-body{padding:0 0 1.4rem;color:var(--muted);max-width:850px}
+    footer{border-top:1px solid var(--line);padding:34px 0 42px;color:var(--muted)}
+    .socials a{color:#fff;opacity:.72}.socials a:hover{opacity:1}
+    @media (max-width:991.98px){
+      :root{--nav-h:70px}
+      section{padding:88px 0}
+      .navbar-collapse{padding:1rem 0 1.4rem}
+      .hero{min-height:auto;padding-top:calc(var(--nav-h) + 100px)}
+      .hero-bottom,.venue-grid,.access-grid{grid-template-columns:1fr}
+      .hero-actions{justify-content:flex-start}
+      .venue-visual{min-height:430px}
+      .digital-pass{margin:1rem auto 0}
+    }
+    @media (max-width:575.98px){
+      section{padding:72px 0}
+      .navbar-brand img{height:46px}
+      .hero{padding-bottom:42px}
+      .hero-title{font-size:clamp(2.75rem,16vw,4.7rem)}
+      .hero-meta{gap:.4rem}.meta-chip{font-size:.78rem;padding:.5rem .68rem}
+      .hero-bottom{gap:1.2rem}
+      .hero-actions .btn{width:100%}
+      .countdown{grid-template-columns:repeat(4,1fr)}
+      .countdown .unit{padding:.2rem .55rem!important}
+      .countdown .num{font-size:1.7rem}
+      .countdown .label{font-size:.58rem;letter-spacing:.08em}
+      .manifesto-foot{grid-template-columns:1fr;gap:1rem}
+      .venue-visual{min-height:360px}
+      .access-shell{border-radius:24px}
+      .digital-pass{transform:none}
+    }
+    @media (prefers-reduced-motion:reduce){
+      html{scroll-behavior:auto}
+      .marquee-track{animation:none}
+      *{transition:none!important}
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+    <div class="container container-narrow">
+      <a class="navbar-brand" href="#home" aria-label="AGAE">
+        <img src="assets/img/agae.png" alt="AGAE" />
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Abrir navegación">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-1">
+          <li class="nav-item"><a class="nav-link" href="#evento">El evento</a></li>
+          <li class="nav-item"><a class="nav-link" href="#experiencia">La experiencia</a></li>
+          <li class="nav-item"><a class="nav-link" href="#venue">Palacio Alsina</a></li>
+          <li class="nav-item"><a class="nav-link" href="#faq">FAQ</a></li>
+          <li class="nav-item ms-lg-2"><a class="btn btn-brand btn-sm js-buy" href="#accesos"><i class="fa-solid fa-ticket me-2"></i>Comprar acceso</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <header id="home" class="hero">
+    <video class="hero-video" id="heroVideo" autoplay muted loop playsinline webkit-playsinline preload="metadata">
+      <source src="assets/video/hero.mp4" type="video/mp4" />
+    </video>
+    <div class="container container-narrow">
+      <div class="hero-meta">
+        <span class="meta-chip"><i class="fa-regular fa-calendar"></i> 06 NOV 2026</span>
+        <span class="meta-chip"><i class="fa-regular fa-clock"></i> 20:30 H</span>
+        <span class="meta-chip"><i class="fa-solid fa-location-dot"></i> PALACIO ALSINA · CABA</span>
+      </div>
+      <div class="hero-kicker">AGAE presenta</div>
+      <h1 class="hero-title">
+        <span class="line-muted">El evento</span><br>
+        <span class="accent">más grande</span><br>
+        de la Abogacía
+      </h1>
+      <div class="hero-bottom">
+        <div>
+          <p class="hero-copy mb-0"><strong>Una vez por año, toda LA ABOGACÍA se encuentra.</strong> Una noche para reunir profesionales, referentes, instituciones y nuevas generaciones en uno de los escenarios más emblemáticos de Buenos Aires.</p>
+          <div class="countdown-wrap">
+            <div class="countdown" id="countdown">
+              <div class="unit"><div class="num" id="cd-days">--</div><div class="label">días</div></div>
+              <div class="unit"><div class="num" id="cd-hours">--</div><div class="label">horas</div></div>
+              <div class="unit"><div class="num" id="cd-mins">--</div><div class="label">min</div></div>
+              <div class="unit"><div class="num" id="cd-secs">--</div><div class="label">seg</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="hero-actions">
+          <a href="#accesos" class="btn btn-brand btn-lg js-buy"><i class="fa-solid fa-ticket me-2"></i>Conseguir accesos</a>
+          <a href="#venue" class="btn btn-ghost btn-lg"><i class="fa-solid fa-location-dot me-2"></i>Ver ubicación</a>
+        </div>
+      </div>
+    </div>
+  </header>
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee-track">
+      <div class="marquee-item">06.11.2026 <i class="fa-solid fa-circle"></i> PALACIO ALSINA <i class="fa-solid fa-circle"></i> MÚSICA <i class="fa-solid fa-circle"></i> GASTRONOMÍA <i class="fa-solid fa-circle"></i> BARRA LIBRE <i class="fa-solid fa-circle"></i> SHOW EN VIVO <i class="fa-solid fa-circle"></i> TODA LA ABOGACÍA <i class="fa-solid fa-circle"></i></div>
+      <div class="marquee-item">06.11.2026 <i class="fa-solid fa-circle"></i> PALACIO ALSINA <i class="fa-solid fa-circle"></i> MÚSICA <i class="fa-solid fa-circle"></i> ENCUENTROS <i class="fa-solid fa-circle"></i> GASTRONOMÍA <i class="fa-solid fa-circle"></i> EXPERIENCIA <i class="fa-solid fa-circle"></i> TODA LA ABOGACÍA <i class="fa-solid fa-circle"></i></div>
+    </div>
+  </div>
+  <section id="evento" class="manifesto">
+    <div class="container container-narrow">
+      <div class="eyebrow">Una cita que ya es tradición</div>
+      <div class="manifesto-copy mt-4">
+        No es solamente una noche. <span>Es el momento del año en el que distintas generaciones, ámbitos y miradas de la profesión comparten un mismo lugar.</span>
+      </div>
+      <div class="manifesto-foot">
+        <p class="mb-0">AGAE vuelve al Palacio Alsina con una nueva edición de su encuentro anual, ampliando la convocatoria a la Abogacía en toda su diversidad: sector público, sector privado, ejercicio independiente, academia e instituciones.</p>
+        <p class="mb-0">Una experiencia pensada para encontrarnos fuera de la rutina, fortalecer vínculos y celebrar una profesión que atraviesa todos los ámbitos de la vida pública y privada.</p>
+      </div>
+    </div>
+  </section>
+  <section id="experiencia">
+    <div class="container container-narrow">
+      <div class="eyebrow">La experiencia</div>
+      <h2 class="section-title">Una noche pensada para vivirla de principio a fin.</h2>
+      <p class="section-lead mb-5">El Palacio Alsina vuelve a transformarse para recibir a la comunidad jurídica con una puesta integral de música, visuales, gastronomía, encuentros y producción.</p>
+      <div class="row g-4">
+        <div class="col-md-6 col-lg-4">
+          <article class="glass-card experience-card">
+            <div class="feature-number">01</div>
+            <div class="icon-box"><i class="fa-solid fa-people-group"></i></div>
+            <h3 class="h5">Toda la Abogacía</h3>
+            <p class="subtle mb-0">Profesionales del sector público y privado, independientes, referentes institucionales, académicos y nuevas generaciones en un mismo encuentro.</p>
+          </article>
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <article class="glass-card experience-card">
+            <div class="feature-number">02</div>
+            <div class="icon-box"><i class="fa-solid fa-music"></i></div>
+            <h3 class="h5">Música & puesta visual</h3>
+            <p class="subtle mb-0">DJ, iluminación, pantallas y una producción visual pensada para acompañar cada momento de la noche.</p>
+          </article>
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <article class="glass-card experience-card">
+            <div class="feature-number">03</div>
+            <div class="icon-box"><i class="fa-solid fa-champagne-glasses"></i></div>
+            <h3 class="h5">Gastronomía & barras</h3>
+            <p class="subtle mb-0">La propuesta gastronómica y de bebidas de esta edición será anunciada próximamente.</p>
+          </article>
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <article class="glass-card experience-card">
+            <div class="feature-number">04</div>
+            <div class="icon-box"><i class="fa-solid fa-trophy"></i></div>
+            <h3 class="h5">Reconocimientos</h3>
+            <p class="subtle mb-0">Un espacio para destacar trayectorias, aportes y protagonistas de la comunidad jurídica.</p>
+          </article>
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <article class="glass-card experience-card">
+            <div class="feature-number">05</div>
+            <div class="icon-box"><i class="fa-solid fa-shield-heart"></i></div>
+            <h3 class="h5">Producción integral</h3>
+            <p class="subtle mb-0">Control de accesos, seguridad, asistencia y operación coordinada durante toda la jornada.</p>
+          </article>
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <article class="glass-card experience-card">
+            <div class="feature-number">06</div>
+            <div class="icon-box"><i class="fa-solid fa-bolt"></i></div>
+            <h3 class="h5">Una edición renovada</h3>
+            <p class="subtle mb-0">Accesos digitales, ingreso con QR y una experiencia más simple desde la compra hasta la acreditación.</p>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section id="venue">
+    <div class="container container-narrow">
+      <div class="eyebrow">El escenario</div>
+      <h2 class="section-title">Volvemos al mítico Palacio Alsina.</h2>
+      <p class="section-lead mb-5">Historia, escala y tecnología en uno de los espacios más emblemáticos del centro porteño.</p>
+      <div class="venue-grid">
+        <div class="venue-visual">
+          <div class="venue-caption">
+            <div class="eyebrow mb-2">Palacio Alsina</div>
+            <h3 class="h2 fw-bold mb-1">Alsina 940, CABA</h3>
+            <p class="mb-0 text-white-50">Viernes 6 de noviembre · Apertura 20:30 h</p>
+          </div>
+        </div>
+        <div class="venue-side">
+          <div class="glass-card">
+            <div class="info-row">
+              <i class="fa-solid fa-location-dot"></i>
+              <div><h4 class="h6 mb-1">Ubicación</h4><p class="subtle mb-0">Alsina 940, Ciudad Autónoma de Buenos Aires. A metros de Av. 9 de Julio y con múltiples opciones de transporte público.</p></div>
+            </div>
+          </div>
+          <div class="glass-card">
+            <div class="info-row">
+              <i class="fa-solid fa-car"></i>
+              <div><h4 class="h6 mb-1">Estacionamiento</h4><p class="subtle mb-0">A pocos metros del Palacio hay estacionamientos privados con funcionamiento 24 h.</p></div>
+            </div>
+          </div>
+          <div class="glass-card">
+            <div class="info-row">
+              <i class="fa-solid fa-shirt"></i>
+              <div><h4 class="h6 mb-1">Dress code</h4><p class="subtle mb-0">Elegante / cocktail. Derecho de admisión y permanencia.</p></div>
+            </div>
+          </div>
+          <div class="glass-card">
+            <div class="info-row">
+              <i class="fa-solid fa-clock"></i>
+              <div><h4 class="h6 mb-1">Ingreso</h4><p class="subtle mb-0">La apertura será a las 20:30 h. Recomendamos llegar con anticipación y tener preparado el acceso digital.</p></div>
+            </div>
+          </div>
+          <a class="btn btn-ghost text-center" href="https://www.google.com/maps/search/?api=1&query=Palacio+Alsina+Alsina+940+CABA" target="_blank" rel="noopener"><i class="fa-solid fa-route me-2"></i>Cómo llegar</a>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section id="accesos">
+    <div class="container container-narrow">
+      <div class="access-shell">
+        <div class="access-grid">
+          <div>
+            <div class="eyebrow">Acceso general</div>
+            <h2 class="section-title mb-3">Tu acceso ahora es 100% digital.</h2>
+            <div class="access-price">$65.000 <small>ARS</small></div>
+            <p class="access-note">Comprás online, recibís tu acceso electrónico y el día del evento ingresás presentando el QR desde tu celular. Sin retiro de entradas físicas.</p>
+            <ul class="access-list">
+              <li><i class="fa-solid fa-circle-check"></i><span>Acceso individual al evento.</span></li>
+              <li><i class="fa-solid fa-circle-check"></i><span>Entrega electrónica por email.</span></li>
+              <li><i class="fa-solid fa-circle-check"></i><span>QR único para validación en el ingreso.</span></li>
+              <li><i class="fa-solid fa-circle-check"></i><span>Compra de uno o más accesos desde la plataforma.</span></li>
+            </ul>
+            <a class="btn btn-brand btn-lg js-buy" href="#accesos"><i class="fa-solid fa-bolt me-2"></i>Comprar acceso</a>
+          </div>
+          <div class="digital-pass" aria-label="Ejemplo visual de acceso digital">
+            <div class="digital-pass-top">
+              <div>
+                <div class="brand">AGAE 2026</div>
+                <small>EL EVENTO MÁS GRANDE<br>DE LA ABOGACÍA</small>
+              </div>
+              <div class="date text-end">06 NOV<br><small>20:30 H</small></div>
+            </div>
+            <div class="qr-demo" aria-hidden="true"></div>
+            <div class="pass-code">6N26-XXXX-XXXX-A1</div>
+            <div class="pass-label">Acceso digital · QR personal</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section id="faq">
+    <div class="container container-narrow">
+      <div class="eyebrow">Información útil</div>
+      <h2 class="section-title">Preguntas frecuentes.</h2>
+      <div class="accordion mt-4" id="faqAcc">
+        <div class="accordion-item">
+          <h3 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">¿Cómo recibo mi acceso?</button></h3>
+          <div id="faq1" class="accordion-collapse collapse" data-bs-parent="#faqAcc"><div class="accordion-body">Una vez acreditado el pago, recibirás por email tu acceso electrónico con un código QR único. No necesitás retirar una entrada física.</div></div>
+        </div>
+        <div class="accordion-item">
+          <h3 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">¿Cómo ingreso el día del evento?</button></h3>
+          <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAcc"><div class="accordion-body">Presentá el QR de tu acceso desde el celular. El código será validado en el control de ingreso y podrá utilizarse una sola vez.</div></div>
+        </div>
+        <div class="accordion-item">
+          <h3 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">¿Puedo comprar más de un acceso?</button></h3>
+          <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAcc"><div class="accordion-body">Sí. La plataforma permite adquirir múltiples accesos e identificar a las personas que asistirán con cada uno.</div></div>
+        </div>
+        <div class="accordion-item">
+          <h3 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">¿Es un evento exclusivo para abogados del Estado?</button></h3>
+          <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAcc"><div class="accordion-body">No. La convocatoria reúne a profesionales de la Abogacía del sector público y privado, independientes, académicos, referentes institucionales e invitados vinculados con la profesión.</div></div>
+        </div>
+        <div class="accordion-item">
+          <h3 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq5">¿Qué incluye la propuesta gastronómica?</button></h3>
+          <div id="faq5" class="accordion-collapse collapse" data-bs-parent="#faqAcc"><div class="accordion-body">La propuesta gastronómica y de barras de la edición 2026 será informada próximamente en esta misma página y en los canales oficiales de AGAE.</div></div>
+        </div>
+        <div class="accordion-item">
+          <h3 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq6">¿Qué hago si no encuentro el email con mi acceso?</button></h3>
+          <div id="faq6" class="accordion-collapse collapse" data-bs-parent="#faqAcc"><div class="accordion-body">La plataforma contará con una opción para recuperar tus accesos utilizando el email informado al momento de la compra.</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <footer>
+    <div class="container container-narrow d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
+      <div class="small text-center text-md-start"><span id="year"></span> AGAE — Asociación Gremial de la Abogacía del Estado</div>
+      <div class="socials d-flex align-items-center gap-3">
+        <a href="https://www.instagram.com/agaeok" target="_blank" rel="noopener" aria-label="Instagram AGAE"><i class="fa-brands fa-instagram"></i></a>
+        <a href="https://x.com/agaeok" target="_blank" rel="noopener" aria-label="X AGAE"><i class="fa-brands fa-x-twitter"></i></a>
+      </div>
+    </div>
+  </footer>
+  <script>
+    // ==========================================================
+    // INTEGRACIÓN CHECKOUT
+    // Pegá acá la URL de inicio de tu plataforma de pagos.
+    // Ejemplo: const CHECKOUT_URL = '/eventos/checkout.php';
+    // Mientras quede vacío, los botones llevan a la sección Accesos.
+    // ==========================================================
+    const CHECKOUT_URL = '';
+    document.querySelectorAll('.js-buy').forEach(btn => {
+      if (CHECKOUT_URL) btn.setAttribute('href', CHECKOUT_URL);
+    });
+    // Año footer
+    document.getElementById('year').textContent = new Date().getFullYear();
+    // Countdown: 06/11/2026 20:30 Argentina (-03:00)
+    const target = new Date('2026-11-06T20:30:00-03:00').getTime();
+    const el = id => document.getElementById(id);
+    function tick(){
+      const diff = Math.max(0, target - Date.now());
+      const days = Math.floor(diff / 86400000);
+      const hours = Math.floor((diff % 86400000) / 3600000);
+      const mins = Math.floor((diff % 3600000) / 60000);
+      const secs = Math.floor((diff % 60000) / 1000);
+      el('cd-days').textContent = String(days).padStart(2,'0');
+      el('cd-hours').textContent = String(hours).padStart(2,'0');
+      el('cd-mins').textContent = String(mins).padStart(2,'0');
+      el('cd-secs').textContent = String(secs).padStart(2,'0');
+    }
+    tick();
+    setInterval(tick,1000);
+    // Autoplay tolerante a iOS / Android
+    const heroVideo = document.getElementById('heroVideo');
+    if (heroVideo) {
+      heroVideo.muted = true;
+      heroVideo.playsInline = true;
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        heroVideo.removeAttribute('autoplay');
+        heroVideo.pause();
+      } else {
+        heroVideo.play().catch(() => {
+          document.addEventListener('touchstart', () => heroVideo.play().catch(()=>{}), { once:true });
+        });
+      }
+    }
+    // Cierra navbar mobile al navegar
+    document.querySelectorAll('#mainNav .nav-link, #mainNav .btn').forEach(link => {
+      link.addEventListener('click', () => {
+        const nav = document.getElementById('mainNav');
+        if (nav.classList.contains('show')) {
+          bootstrap.Collapse.getOrCreateInstance(nav).hide();
+        }
+      });
+    });
+  </script>
+</body>
+</html>

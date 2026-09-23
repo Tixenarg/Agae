@@ -5,17 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>AGAE — Evento Exclusivo Día de la Abogacía del Estado</title>
   <link rel="icon" href="assets/favicon.png" />
-
   <!-- Bootstrap -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
   <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
   <!-- Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
-
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet"/>
-
   <style>
 /* ===== Reset & Base ===== */
 *{box-sizing:border-box}
@@ -24,7 +20,6 @@
   --violet:#9a6bff; --cyan:#3cf2ff; --pink:#ff36a3;
   --glass: rgba(255,255,255,.06); --border: rgba(255,255,255,.18);
 }
-
 /* ===== Fondo global animado ===== */
 html,body{
   height:100%;
@@ -45,7 +40,6 @@ html,body{
   0% {background-position:0% 50%}
   100% {background-position:100% 50%}
 }
-
 /* ===== Navbar ===== */
 .navbar{
   background:linear-gradient(180deg, rgba(11,13,35,.85), rgba(11,13,35,.55));
@@ -55,7 +49,6 @@ html,body{
 .navbar-brand{font-weight:900;letter-spacing:.4px;text-transform:uppercase}
 .nav-link{color:#eaf0ff !important;opacity:.9}
 .nav-link:hover{opacity:1}
-
 /* ===== Utils ===== */
 .container-narrow{max-width:1100px}
 .btn-brand{
@@ -94,7 +87,6 @@ html,body{
   transform:translateY(-4px);
   border-color:rgba(154,107,255,.45);
 }
-
 /* ===== HERO ===== */
 .hero{
   position:relative;min-height:100dvh;
@@ -131,7 +123,6 @@ html,body{
   filter:blur(40px);z-index:0;pointer-events:none;mix-blend-mode:screen;
 }
 .neon-ring--2{background:radial-gradient(closest-side,rgba(60,242,255,.22),rgba(0,0,0,0) 70%)}
-
 /* ===== Countdown ===== */
 .countdown{display:flex;gap:.75rem;flex-wrap:wrap;width:100%}
 .countdown .unit{
@@ -142,7 +133,6 @@ html,body{
 }
 .countdown .num{font-size:clamp(2rem,7vw,6rem);font-weight:900;color:#fff}
 .countdown .label{font-size:.9rem;letter-spacing:.12em;text-transform:uppercase;color:#cfd6ff}
-
 /* Mobile tweaks */
 @media(max-width:575.98px){
   .countdown{flex-direction:column;gap:.5rem}
@@ -150,7 +140,6 @@ html,body{
   .hero{overflow:visible}
   .container.container-narrow{padding-inline:clamp(12px,4vw,20px)}
 }
-
 /* ===== Marquee ===== */
 .marquee{
   white-space:nowrap;overflow:hidden;border-block:1px dashed rgba(255,255,255,.15);
@@ -163,7 +152,6 @@ html,body{
   font-size:clamp(.8rem,1.2vw,.95rem);
 }
 @keyframes slide{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-
 /* ===== Ticket ===== */
 .ticket-physical{
   position:relative;
@@ -179,7 +167,6 @@ html,body{
   box-shadow:0 60px 100px rgba(154,107,255,.25),0 10px 40px rgba(25,36,139,.4);
 }
 @media(max-width:992px){.ticket-physical{grid-template-columns:1fr}}
-
 .ticket-main{
   background:#f8f9ff;color:#11152b;border:1px solid #e2e6ff;
   border-right:none;border-radius:20px 0 0 20px;
@@ -195,7 +182,6 @@ html,body{
   .ticket-stub{border-radius:0 0 20px 20px;border-left:1px solid #e2e6ff}
   .ticket-main{border-radius:20px 20px 0 0;border-right:1px solid #e2e6ff}
 }
-
 /* === Perforado refinado === */
 .ticket-main::before,
 .ticket-main::after,
@@ -224,10 +210,8 @@ html,body{
   opacity:.5;
 }
 @media(max-width:992px){.perforation{display:none}}
-
 /* ===== Footer ===== */
 footer{background:#0a0b14;border-top:1px solid var(--border)}
-
 /* === ESPACIADO GLOBAL ENTRE SECCIONES === */
 section {
   position: relative;
@@ -235,26 +219,22 @@ section {
   background: transparent !important;
   padding-block: clamp(80px, 10vh, 120px); /* márgenes adaptables */
 }
-
 /* En pantallas grandes (más de 1200px) un poquito más aire */
 @media (min-width: 1200px) {
   section {
     padding-block: 140px;
   }
 }
-
 /* En mobile mantenemos proporción para que no quede excesivo */
 @media (max-width: 576px) {
   section {
     padding-block: 90px;
   }
 }
-
 /* El hero no se ve afectado */
 .hero {
   padding-block: 0;
 }
-
 /* === SEPARADOR SUAVE VISUAL ENTRE SECCIONES === */
 section:not(:last-child)::after {
   content: "";
@@ -271,14 +251,12 @@ section:not(:last-child)::after {
   );
   opacity: 0.3;
 }
-
 /* Ajustar posición del contenido del hero en mobile */
 @media (max-width: 576px) {
   .hero .container-narrow {
     padding-top: 60px !important; /* lo baja visualmente */
   }
 }
-
 /* ===== Video global de fondo ===== */
 .bg-global {
   position: fixed;
@@ -292,19 +270,16 @@ section:not(:last-child)::after {
   z-index: 0;
   pointer-events: none;
 }
-
 /* Todo el contenido por encima */
 body, header, section, footer, .navbar {
   position: relative;
   z-index: 1;
   background: transparent !important;
 }
-
 /* Fallback por si el video no carga */
 body {
   background: linear-gradient(180deg, #0b0f2a 0%, #0a0b14 100%);
 }
-
 /* ===== NAVBAR FIJA Y ESTABLE EN MOBILE ===== */
 .navbar {
   position: fixed !important;
@@ -317,19 +292,16 @@ body {
   transform: translateZ(0); /* evita flicker en iOS */
   backface-visibility: hidden;
 }
-
 /* Evita saltos por el viewport dinámico (iOS Safari) */
 body {
   padding-top: 70px; /* altura de la navbar */
 }
-
 /* En pantallas pequeñas, ajustamos la altura del padding */
 @media (max-width: 576px) {
   body {
     padding-top: 66px;
   }
 }
-
 /* Safari iOS bugfix: asegura que el header no se "mueva" */
 @supports (-webkit-touch-callout: none) {
   .navbar {
@@ -338,7 +310,6 @@ body {
     top: 0;
   }
 }
-
 /* ===== NAVBAR BRAND RESPONSIVE ===== */
 .navbar-brand img {
   height: 60px;
@@ -346,7 +317,6 @@ body {
   transition: height 0.25s ease;
   display: block;
 }
-
 /* Ajuste automático en pantallas pequeñas */
 @media (max-width: 576px) {
   .navbar-brand img {
@@ -355,14 +325,12 @@ body {
     object-fit: contain;
   }
 }
-
 /* Para pantallas intermedias */
 @media (min-width: 577px) and (max-width: 992px) {
   .navbar-brand img {
     height: 54px;
   }
 }
-
 /* Evita que el texto de la marca o los márgenes lo desalineen */
 .navbar-brand {
   display: flex;
@@ -371,14 +339,12 @@ body {
   padding-top: 4px;
   padding-bottom: 4px;
 }
-
 /* Asegura que los videos de fondo no bloqueen clics ni la navbar */
 .bg-global,
 .bg-video {
   pointer-events: none !important;
   z-index: 0 !important;
 }
-
 /* Y que la navbar y los menús estén siempre arriba */
 .navbar,
 .offcanvas,
@@ -388,30 +354,25 @@ body {
   position: relative;
   z-index: 9999 !important;
 }
-
 /* ===== Neon gradient title ===== */
 .hero-title.neon {
   --c1:#cbe3ff;        /* azul claro */
   --c2:#ffffff;        /* lila */
   --c3:#6cf7ff;        /* cian */
   --int: .65;          /* intensidad del glow (0.20–0.55) */
-
   position: relative;
   color: transparent;
   background: linear-gradient(90deg, var(--c1), var(--c2), var(--c3), var(--c1));
   background-size: 200% 100%;
   -webkit-background-clip: text;
           background-clip: text;
-
   /* halo suave alrededor del texto */
   text-shadow:
     0 0 6px  rgba(255,255,255, calc(var(--int)*.9)),
     0 0 14px rgba(154,107,255, calc(var(--int)*.8)),
     0 0 28px rgba(60,242,255,  calc(var(--int)*.7));
-
   animation: neonShift 9s linear infinite;
 }
-
 /* capa extra de glow (más “neón”) sin duplicar el HTML visible */
 .hero-title.neon::after {
   content: attr(data-text);
@@ -424,32 +385,26 @@ body {
     0 0 72px rgba(60,242,255,  .15);
   pointer-events: none;
 }
-
 /* Animación del gradiente */
 @keyframes neonShift {
   from { background-position: 0% 50%; }
   to   { background-position: 200% 50%; }
 }
-
 /* Ajustes mobile: glow un poco más suave */
 @media (max-width: 576px){
   .hero-title.neon { --int: .28; }
 }
-
 /* Respeta usuarios con reduce-motion */
 @media (prefers-reduced-motion: reduce){
   .hero-title.neon { animation: none; background-position: 50% 50%; }
 }
-
 </style>
 </head>
 <body>
-
   <!-- VIDEO DE FONDO GLOBAL -->
   <video id="bgVideo" class="bg-global" autoplay muted loop playsinline webkit-playsinline preload="auto">
     <source src="assets/video/alsina5.mp4" type="video/mp4">
   </video>
-
   <!-- NAV -->
   <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
     <div class="container">
@@ -471,7 +426,6 @@ body {
       </div>
     </div>
   </nav>
-
   <!-- HERO -->
   <header id="home" class="hero text-white">
     <video class="bg-video" id="heroVideo" autoplay muted playsinline webkit-playsinline loop preload="metadata">
@@ -480,67 +434,54 @@ body {
     <div class="hero-overlay"></div>
     <div class="neon-ring" style="top:-10vh; left:-10vw;"></div>
     <div class="neon-ring neon-ring--2" style="bottom:-20vh; right:-10vw;"></div>
-
     <div class="container container-narrow position-relative" style="z-index:1; padding-bottom:60px;">
       <div class="d-flex flex-wrap gap-2 mb-3">
         <span class="chip"><i class="fa-regular fa-calendar"></i> 28 Nov · 20:30</span>
         <span class="chip"><i class="fa-solid fa-location-dot"></i> Palacio Alsina — Alsina 940, CABA</span>
         <span class="chip"><i class="fa-solid fa-star"></i> Evento exclusivo</span>
       </div>
-
         <h1 class="hero-title neon"
             data-text="EVENTO DEL DÍA DE LA ABOGACÍA DEL ESTADO">
           EVENTO DEL DÍA DE LA ABOGACÍA DEL ESTADO
         </h1>
-
       <p class="lead subtle2 mb-4">¡Volvimos al mítico Palacio Alsina! No te pierdas el evento más grande de la abogacía pública.</p>
-
       <div class="countdown mb-4" id="countdown">
         <div class="unit"><div class="num" id="cd-days">--</div><div class="label">días</div></div>
         <div class="unit"><div class="num" id="cd-hours">--</div><div class="label">horas</div></div>
         <div class="unit"><div class="num" id="cd-mins">--</div><div class="label">min</div></div>
         <div class="unit"><div class="num" id="cd-secs">--</div><div class="label">seg</div></div>
       </div>
-
       <div class="d-flex flex-wrap gap-2">
         <a href="#tickets" class="btn btn-brand btn-lg"><i class="fa-solid fa-ticket me-2"></i>Conseguir entradas</a>
         <a href="#venue" class="btn btn-ghost btn-lg"><i class="fa-solid fa-location-dot me-2"></i>Cómo llegar</a>
       </div>
     </div>
   </header>
-
   <!-- STRIP -->
   <div class="marquee">
     <span>Catering exclusivo • Barra de tragos • DJs • Grandes Invitados • Seguridad & Control •</span>
     <span>Catering exclusivo • Barra de tragos • DJs • Grandes Invitados • Seguridad & Control •</span>
   </div>
-
-
   <!-- ¿QUÉ ES EL EVENTO? -->
   <section id="sobre" class="sec-heroic text-light">
     <div class="container container-narrow">
       <h2 class="section-title mb-4 text-start">¿Qué es?</h2>
-
       <div class="content-text">
         <p class="lead mb-3">
           El <strong>Encuentro Anual de la Abogacía del Estado</strong> es mucho más que una cita institucional: Es un punto de convergencia para las principales figuras de la <strong>abogacía pública</strong>.
         </p>
-
         <p class="mb-3">
           Cada año, convoca a <strong>funcionarios, abogados y referentes académicos</strong> en un entorno de diálogo donde se fortalecen los lazos y se proyectan nuevas perspectivas para el futuro de la profesión y del Estado.
         </p>
-
         <p class="mb-3">
           En el marco imponente del <strong>Palacio Alsina</strong>, la noche combina historia, elegancia y tecnología para ofrecer una experiencia única, la del encuentro más importante del año para la abogacía del Estado y de relevancia para todos aquellos vinculados con el derecho.
         </p>
-
         <p class="mb-0">
           Este encuentro representa una ocasión para <strong>reafirmar el compromiso con el servicio jurídico del Estado</strong> y reconocer a quienes contribuyen, desde distintos espacios, al fortalecimiento de las instituciones y la gestión pública.
         </p>
       </div>
     </div>
   </section>
-
   <!-- ¿QUÉ INCLUYE? -->
   <section id="incluye" class="sec-deep">
     <div class="container container-narrow">
@@ -555,12 +496,10 @@ body {
       </div>
     </div>
   </section>
-
   <!-- GASTRONOMÍA -->
   <section id="gastronomia" class="sec-blue">
     <div class="container container-narrow">
       <h2 class="section-title mb-4">Gastronomía & Barra</h2>
-
     <div class="row g-4">
       <div class="col-lg-6">
         <div class="card-glass p-4 h-100">
@@ -584,7 +523,6 @@ body {
           <p class="small subtle">¡Y muchas más combinaciones!</p>
         </div>
       </div>
-
       <div class="col-lg-6">
         <div class="card-glass p-4 h-100">
           <h5 class="mb-1">Postres & Opciones</h5>
@@ -608,7 +546,6 @@ body {
           </ul>
         </div>
       </div>
-
       <div class="col-lg-6">
         <div class="card-glass p-4 h-100">
           <h5 class="mb-1">Bebidas — Sin Alcohol</h5>
@@ -633,7 +570,6 @@ body {
     <p class="small subtle mt-3 mb-0">* Menú sujeto a disponibilidad y logística del evento.</p>
     </div>
   </section>
-
   <!-- SEDE -->
   <section id="venue" class="sec-deep">
     <div class="container container-narrow">
@@ -658,12 +594,10 @@ body {
       </div>
     </div>
   </section>
-
   <!-- PREGUNTAS FRECUENTES -->
   <section id="faq" class="sec-blue">
     <div class="container container-narrow">
       <h2 class="section-title mb-5">Preguntas frecuentes</h2>
-
       <div class="accordion" id="faqAcc">
         <!-- 1 -->
         <div class="accordion-item bg-transparent text-light mb-3" style="border:1px solid var(--border); border-radius:12px; overflow:hidden;">
@@ -678,7 +612,6 @@ body {
             </div>
           </div>
         </div>
-
         <!-- 2 -->
         <div class="accordion-item bg-transparent text-light mb-3" style="border:1px solid var(--border); border-radius:12px; overflow:hidden;">
           <h2 class="accordion-header" id="faq2h">
@@ -692,7 +625,6 @@ body {
             </div>
           </div>
         </div>
-
         <!-- 3 -->
         <div class="accordion-item bg-transparent text-light mb-3" style="border:1px solid var(--border); border-radius:12px; overflow:hidden;">
           <h2 class="accordion-header" id="faq3h">
@@ -707,7 +639,6 @@ body {
             </div>
           </div>
         </div>
-
         <!-- 4 -->
         <div class="accordion-item bg-transparent text-light mb-3" style="border:1px solid var(--border); border-radius:12px; overflow:hidden;">
           <h2 class="accordion-header" id="faq4h">
@@ -721,7 +652,6 @@ body {
             </div>
           </div>
         </div>
-
         <!-- 5 -->
         <div class="accordion-item bg-transparent text-light" style="border:1px solid var(--border); border-radius:12px; overflow:hidden;">
           <h2 class="accordion-header" id="faq5h">
@@ -738,35 +668,29 @@ body {
       </div>
     </div>
   </section>
-
  <!-- ENTRADAS & ACCESO -->
   <section id="tickets" class="sec-blue">
     <div class="container container-narrow">
       <h2 class="section-title mb-4">Entradas & Acceso</h2>
-
       <div class="ticket-physical">
         <!-- Cuerpo -->
         <div class="ticket-main">
           <div class="tk-header mb-3">
             <span class="pill"><i class="fa-solid fa-ticket"></i> Venta anticipada $40.000</span>
           </div>
-
           <h3 class="tk-title mb-1">EVENTO EXCLUSIVO DÍA DE LA ABOGACÍA<br>DEL ESTADO</h3>
           <p class="tk-sub">Una noche para reencontrarnos en el histórico <strong>Palacio Alsina</strong>.</p>
-
           <ul class="tk-list mb-4">
             <li><i class="fa-solid fa-building-columns"></i> Disponibles en la <strong>oficina de la Asociación gremial.</strong></li>
             <li><i class="fa-solid fa-users"></i> A través de los <strong>referentes de cada organismo público.</strong></li>
             <li><i class="fa-solid fa-scale-balanced"></i> Para <strong>abogadas y abogados</strong> del Estado, del ámbito privado o independientes.</li>
           </ul>
-
           <div class="tk-cta">
             <a class="btn btn-success" href="https://wa.me/5491171333588" target="_blank" rel="noopener">
               <i class="fa-brands fa-whatsapp me-2"></i>Adquirí tus entradas
             </a>
           </div>
         </div>
-
         <!-- Talón -->
         <aside class="ticket-stub">
           <div class="stub-date">
@@ -778,25 +702,20 @@ body {
             <div class="stub-line"><i class="fa-solid fa-location-dot"></i> Palacio Alsina</div>
             <div class="stub-small">Alsina 940, CABA</div>
           </div>
-
           <img class="stub-img" src="assets/img/alsina.png" alt="Palacio Alsina" loading="lazy">
-
           <div class="stub-code">AGAE-2011-2025</div>
         </aside>
-
         <!-- Línea troquel -->
         <div class="perforation" aria-hidden="true"></div>
       </div>
     </div>
   </section>
-
   <!-- FOOTER -->
   <footer class="py-4">
     <div class="container d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
       <div class="small text-center text-md-start">
         <span id="year"></span> AGAE — Asociación Gremial de la Abogacía del Estado
       </div>
-
       <div class="d-flex align-items-center gap-3">
         <a href="https://www.instagram.com/agaeok" target="_blank" aria-label="Instagram AGAE" class="text-light fs-5">
           <i class="fa-brands fa-instagram"></i>
@@ -810,11 +729,9 @@ body {
       </div>
     </div>
   </footer>
-
   <script>
     // Año
     document.getElementById('year').textContent = new Date().getFullYear();
-
     // Countdown al 06/11/2026 20:30 (-03:00)
     const target = new Date('2026-11-06T20:30:00-03:00').getTime();
     const el = id => document.getElementById(id);
@@ -830,7 +747,6 @@ body {
       el('cd-secs').textContent = String(secs).padStart(2,'0');
     }
     tick(); setInterval(tick, 1000);
-
     // Respeta "prefers-reduced-motion" y evita autoplay en iOS si corresponde
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       const v = document.getElementById('heroVideo');
@@ -840,17 +756,14 @@ body {
       const v = document.getElementById('heroVideo');
       if (v && v.paused) v.play().catch(()=>{});
     }, { once:true });
-
     document.addEventListener('DOMContentLoaded', () => {
       const v = document.getElementById('heroVideo');
-
       if (v) {
         // Forzar reproducción silenciosa en iOS / Android
         v.muted = true;
         v.playsInline = true;
         v.setAttribute('playsinline', '');
         v.setAttribute('webkit-playsinline', '');
-
         // Intentar reproducir al cargar
         const tryPlay = () => {
           v.play().catch(() => {
@@ -862,13 +775,11 @@ body {
       }
     });
   </script>
-
 <script>
 document.addEventListener("DOMContentLoaded", () => {
   const navbar = document.querySelector(".navbar-collapse");
   const toggler = document.querySelector(".navbar-toggler");
   const links = document.querySelectorAll(".navbar-nav .nav-link, .navbar .btn-brand");
-
   const smoothScrollTo = (target) => {
     if (!target || !target.startsWith("#")) return;
     const el = document.querySelector(target);
@@ -880,18 +791,14 @@ document.addEventListener("DOMContentLoaded", () => {
       }, 60);
     });
   };
-
   links.forEach(link => {
     link.addEventListener("click", e => {
       const href = link.getAttribute("href");
       const bsCollapse = bootstrap.Collapse.getInstance(navbar);
-
       if (navbar.classList.contains("show")) {
         e.preventDefault();
-
         // Cierra el menú primero
         if (bsCollapse) bsCollapse.hide();
-
         // Escucha el evento cuando termina de cerrarse (más confiable que timeout)
         const onHidden = () => {
           navbar.removeEventListener("hidden.bs.collapse", onHidden);
@@ -907,7 +814,6 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   });
-
   // Cierra el menú al tocar fuera
   document.addEventListener("click", e => {
     if (
@@ -921,8 +827,5 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 </script>
-
-
-
 </body>
 </html>

@@ -1,0 +1,1550 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+
+  <title>El Evento Más Grande de la Abogacía — AGAE 2026</title>
+  <meta name="description" content="Una vez por año, toda la Abogacía se encuentra. 6 de noviembre de 2026, 20:30 h, Palacio Alsina, CABA." />
+  <meta name="theme-color" content="#070812" />
+
+  <meta property="og:title" content="El Evento Más Grande de la Abogacía — AGAE 2026" />
+  <meta property="og:description" content="Una vez por año, toda la Abogacía se encuentra. 06.11.26 · Palacio Alsina." />
+  <meta property="og:type" content="website" />
+
+  <link rel="icon" href="assets/favicon.png" />
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    :root{
+      --brand:#19248B;
+      --brand-2:#474fff;
+      --violet:#a776ff;
+      --cyan:#59e6ff;
+      --ink:#070812;
+      --paper:#0b0e1e;
+      --text:#f6f7ff;
+      --muted:#aeb7d5;
+      --line:rgba(255,255,255,.13);
+      --glass:rgba(255,255,255,.055);
+      --nav-h:68px;
+      --safe-bottom:env(safe-area-inset-bottom,0px);
+    }
+
+    *{box-sizing:border-box}
+    html{
+      scroll-behavior:smooth;
+      scroll-padding-top:calc(var(--nav-h) + 14px);
+    }
+    body{
+      margin:0;
+      color:var(--text);
+      background:
+        radial-gradient(700px 500px at 10% 10%,rgba(71,79,255,.13),transparent 68%),
+        radial-gradient(650px 500px at 92% 32%,rgba(167,118,255,.09),transparent 68%),
+        linear-gradient(180deg,#090b18 0%,#070812 100%);
+      font-family:"Space Grotesk",system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      overflow-x:hidden;
+      padding-bottom:calc(72px + var(--safe-bottom));
+    }
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      z-index:-1;
+      background-image:
+        linear-gradient(rgba(255,255,255,.016) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(255,255,255,.016) 1px,transparent 1px);
+      background-size:44px 44px;
+      mask-image:linear-gradient(to bottom,rgba(0,0,0,.55),transparent 76%);
+    }
+
+    a{text-decoration:none}
+    img{max-width:100%;display:block}
+    video{display:block}
+
+    section{
+      position:relative;
+      padding:72px 0;
+      border-top:1px solid rgba(255,255,255,.05);
+    }
+
+    .container-narrow{
+      width:min(100% - 32px,1160px);
+      margin-inline:auto;
+    }
+
+    .eyebrow{
+      display:inline-flex;
+      align-items:center;
+      gap:.55rem;
+      font-size:.72rem;
+      font-weight:800;
+      letter-spacing:.17em;
+      text-transform:uppercase;
+      color:#dfe3ff;
+    }
+    .eyebrow::before{
+      content:"";
+      width:28px;
+      height:1px;
+      background:linear-gradient(90deg,var(--violet),var(--cyan));
+    }
+
+    .section-title{
+      margin:.8rem 0 1rem;
+      max-width:920px;
+      font:900 clamp(2rem,10vw,3.4rem)/.98 "Montserrat",sans-serif;
+      letter-spacing:-.045em;
+      text-transform:uppercase;
+    }
+
+    .section-lead{
+      max-width:760px;
+      color:var(--muted);
+      font-size:1.05rem;
+      line-height:1.68;
+    }
+
+    .subtle{color:var(--muted)}
+
+    /* NAV */
+    .navbar{
+      min-height:var(--nav-h);
+      background:rgba(7,8,18,.78)!important;
+      border-bottom:1px solid var(--line);
+      backdrop-filter:blur(18px);
+      -webkit-backdrop-filter:blur(18px);
+      z-index:1030;
+    }
+    .navbar .container-narrow{width:min(100% - 24px,1160px)}
+    .navbar-brand img{height:44px;width:auto}
+    .nav-link{color:#eef0ff!important;font-size:.94rem;font-weight:650;opacity:.82}
+    .nav-link:hover{opacity:1}
+    .navbar-toggler{border-color:var(--line)}
+    .navbar-collapse{padding:1rem 0 1.25rem}
+
+    .btn-brand,.btn-ghost{
+      min-height:48px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      border-radius:999px;
+      padding:.82rem 1.18rem;
+      font-weight:800;
+      transition:.2s ease;
+    }
+    .btn-brand{
+      color:#fff;
+      border:1px solid rgba(255,255,255,.11);
+      background:linear-gradient(110deg,var(--brand),#343ed8 55%,#6141b9);
+      box-shadow:0 14px 38px rgba(25,36,139,.28);
+    }
+    .btn-brand:hover{color:#fff;filter:brightness(1.08);transform:translateY(-1px)}
+    .btn-ghost{
+      color:#fff;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.045);
+    }
+    .btn-ghost:hover{color:#fff;background:rgba(255,255,255,.09)}
+
+    /* HERO - MOBILE FIRST */
+    .hero{
+      position:relative;
+      min-height:100svh;
+      display:flex;
+      align-items:flex-end;
+      overflow:hidden;
+      padding:calc(var(--nav-h) + 34px) 0 34px;
+    }
+    .hero-video{
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      object-position:center;
+      z-index:-4;
+      filter:saturate(.95) contrast(1.08) brightness(.68);
+    }
+    .hero::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      z-index:-3;
+      background:
+        linear-gradient(180deg,rgba(4,5,14,.12) 0%,rgba(5,6,16,.28) 28%,rgba(7,8,18,.72) 72%,#070812 100%),
+        radial-gradient(520px 520px at 15% 35%,rgba(25,36,139,.38),transparent 70%);
+    }
+    .hero::after{
+      content:"";
+      position:absolute;
+      inset:auto -35% -30% auto;
+      width:95vw;
+      height:95vw;
+      border-radius:50%;
+      z-index:-2;
+      background:radial-gradient(circle,rgba(167,118,255,.18),transparent 67%);
+      filter:blur(36px);
+    }
+
+    .hero-meta{
+      display:flex;
+      flex-wrap:wrap;
+      gap:.4rem;
+      margin-bottom:1rem;
+    }
+    .meta-chip{
+      display:inline-flex;
+      align-items:center;
+      gap:.42rem;
+      padding:.5rem .68rem;
+      border:1px solid var(--line);
+      border-radius:999px;
+      color:#f5f6ff;
+      background:rgba(8,10,25,.42);
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
+      font-size:.76rem;
+      white-space:nowrap;
+    }
+
+    .hero-kicker{
+      margin-bottom:.85rem;
+      font-size:.72rem;
+      font-weight:800;
+      letter-spacing:.19em;
+      text-transform:uppercase;
+      color:#e0e4ff;
+    }
+    .hero-title{
+      max-width:950px;
+      margin:0;
+      font:900 clamp(2.8rem,15vw,4.8rem)/.86 "Montserrat",sans-serif;
+      letter-spacing:-.065em;
+      text-transform:uppercase;
+    }
+    .hero-title .line-muted{
+      color:transparent;
+      -webkit-text-stroke:1px rgba(255,255,255,.48);
+    }
+    .hero-title .accent{
+      background:linear-gradient(92deg,#fff 5%,#d4d9ff 42%,#83eaff 75%,#c69cff 100%);
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+    }
+    .hero-copy{
+      max-width:660px;
+      margin:1.2rem 0 0;
+      font-size:1.03rem;
+      line-height:1.55;
+      color:#e5e8f8;
+    }
+    .hero-actions{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:.65rem;
+      margin-top:1.3rem;
+    }
+    .hero-actions .btn{width:100%}
+
+    .hero-countdown-simple{
+      width:100%;
+      margin-top:3.5rem;
+      padding-top:2.5rem;
+
+      border-top:1px solid rgba(255,255,255,.12);
+
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+
+      text-align:center;
+    }
+
+    .countdown-kicker{
+      margin-bottom:.55rem;
+
+      font:700 .7rem/1 "Montserrat",sans-serif;
+      letter-spacing:.22em;
+      text-transform:uppercase;
+
+      color:rgba(255,255,255,.5);
+    }
+
+    .countdown-days{
+      display:flex;
+      align-items:baseline;
+      justify-content:center;
+      gap:.7rem;
+    }
+
+    .countdown-days span{
+      font:900 clamp(3.5rem,7vw,6.5rem)/.85 "Montserrat",sans-serif;
+      letter-spacing:-.07em;
+
+      color:#fff;
+    }
+
+    .countdown-days small{
+      font:700 clamp(.8rem,1vw,1rem)/1 "Montserrat",sans-serif;
+
+      letter-spacing:.13em;
+      text-transform:uppercase;
+
+      color:rgba(255,255,255,.55);
+    }
+
+    @media (max-width:575.98px){
+
+      .hero-countdown-simple{
+        margin-top:2.7rem;
+        padding-top:2rem;
+      }
+
+      .countdown-days span{
+        font-size:4rem;
+      }
+
+    }
+
+/* ==========================================================
+   FOMO
+========================================================== */
+
+.fomo-section{
+  position:relative;
+  min-height:78svh;
+  display:flex;
+  align-items:flex-end;
+  overflow:hidden;
+  padding:0;
+  border:0;
+}
+
+.fomo-image{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center;
+}
+
+.fomo-overlay{
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(7,8,18,.12) 0%,
+      rgba(7,8,18,.25) 35%,
+      rgba(7,8,18,.92) 100%
+    );
+}
+
+.fomo-content{
+  position:relative;
+  z-index:2;
+
+  width:100%;
+  max-width:1160px;
+
+  margin:0 auto;
+  padding:0 24px 56px;
+}
+
+.fomo-content p{
+  margin:0 0 14px;
+
+  font:700 1rem/1.2 "Montserrat",sans-serif;
+  letter-spacing:.18em;
+
+  color:rgba(255,255,255,.68);
+}
+
+.fomo-content h2{
+  max-width:900px;
+  margin:0;
+
+  font:900 clamp(3.4rem,13vw,9rem)/.84 "Montserrat",sans-serif;
+  letter-spacing:-.065em;
+
+  color:#fff;
+}
+
+
+/* Desktop */
+
+@media (min-width:768px){
+
+  .fomo-section{
+    min-height:88vh;
+  }
+
+  .fomo-content{
+    padding:0 32px 80px;
+  }
+
+}
+
+    /* MARQUEE */
+.marquee{
+  width:100%;
+  overflow:hidden;
+  border-block:1px solid var(--line);
+  background:rgba(255,255,255,.022);
+}
+
+.marquee-track{
+  display:flex;
+  width:max-content;
+  animation:marquee-scroll 30s linear infinite;
+  will-change:transform;
+}
+
+.marquee-group{
+  display:flex;
+  align-items:center;
+  flex-shrink:0;
+  white-space:nowrap;
+}
+
+.marquee-group span{
+  padding:15px 28px;
+  font:700 .78rem/1 "Montserrat",sans-serif;
+  letter-spacing:.15em;
+  text-transform:uppercase;
+  color:#dfe3ff;
+}
+
+.marquee-group i{
+  flex-shrink:0;
+  font-size:.35rem;
+  color:var(--cyan);
+}
+
+@keyframes marquee-scroll{
+  from{
+    transform:translate3d(0,0,0);
+  }
+
+  to{
+    transform:translate3d(-50%,0,0);
+  }
+}
+
+@media (max-width:575.98px){
+  .marquee-group span{
+    padding:14px 20px;
+    font-size:.7rem;
+    letter-spacing:.13em;
+  }
+}
+
+@media (prefers-reduced-motion:reduce){
+  .marquee-track{
+    animation:none;
+  }
+}
+
+    /* MANIFESTO */
+    .manifesto-copy{
+      max-width:1000px;
+      margin-top:1rem;
+      font:750 clamp(2rem,9vw,3.5rem)/1.08 "Montserrat",sans-serif;
+      letter-spacing:-.04em;
+    }
+    .manifesto-copy span{color:var(--muted)}
+    .manifesto-foot{
+      margin-top:1.7rem;
+      display:grid;
+      grid-template-columns:1fr;
+      gap:1rem;
+      color:var(--muted);
+      line-height:1.72;
+    }
+
+    /* IMAGES / STORY */
+    .photo-break{
+      padding:0;
+      border-top:0;
+    }
+    .photo-break-inner{
+      position:relative;
+      min-height:72svh;
+      overflow:hidden;
+    }
+    .photo-break picture,.photo-break img{
+      width:100%;
+      height:100%;
+    }
+    .photo-break img{
+      position:absolute;
+      inset:0;
+      object-fit:cover;
+      object-position:center;
+    }
+    .photo-break::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:linear-gradient(180deg,rgba(7,8,18,.2),rgba(7,8,18,.05) 44%,rgba(7,8,18,.8));
+      pointer-events:none;
+    }
+    .photo-break-copy{
+      position:absolute;
+      left:16px;
+      right:16px;
+      bottom:24px;
+      z-index:2;
+      max-width:920px;
+      margin-inline:auto;
+    }
+    .photo-break-copy h2{
+      margin:0;
+      font:900 clamp(2rem,11vw,4.6rem)/.92 "Montserrat",sans-serif;
+      letter-spacing:-.055em;
+      text-transform:uppercase;
+      text-shadow:0 8px 40px rgba(0,0,0,.45);
+    }
+
+    .story-grid{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:16px;
+      margin-top:2.2rem;
+    }
+    .story-card{
+      position:relative;
+      overflow:hidden;
+      border:1px solid var(--line);
+      border-radius:22px;
+      background:#0d1022;
+      min-height:400px;
+    }
+    .story-card.tall{min-height:520px}
+    .story-card img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      position:absolute;
+      inset:0;
+      transition:transform .6s ease;
+    }
+    .story-card::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:linear-gradient(180deg,transparent 46%,rgba(5,6,14,.62) 100%);
+    }
+    .story-card:hover img{transform:scale(1.025)}
+
+/* ==========================================================
+   EXPERIENCIA
+========================================================== */
+
+.experience-section{
+  overflow:hidden;
+}
+
+.experience-section .section-lead{
+  margin-bottom:2.5rem;
+}
+
+.experience-section .section-lead strong{
+  color:#fff;
+  font-weight:700;
+}
+
+
+/* GRID MOBILE FIRST */
+
+.experience-features{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:16px;
+}
+
+
+/* CARD */
+
+.experience-feature{
+  position:relative;
+  min-height:440px;
+
+  overflow:hidden;
+  border-radius:24px;
+  border:1px solid var(--line);
+
+  background:#0a0b14;
+  isolation:isolate;
+}
+
+
+/* FOTO */
+
+.experience-feature > img{
+  position:absolute;
+  inset:0;
+
+  width:100%;
+  height:100%;
+
+  object-fit:cover;
+  object-position:center;
+
+  /* En mobile la dejamos a color */
+  filter:grayscale(0);
+  transform:scale(1.01);
+
+  transition:
+    filter .7s ease,
+    transform .8s cubic-bezier(.2,.7,.2,1);
+}
+
+
+/* OVERLAY */
+
+.experience-feature-overlay{
+  position:absolute;
+  inset:0;
+  z-index:1;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(5,6,16,.18) 0%,
+      rgba(5,6,16,.28) 35%,
+      rgba(5,6,16,.92) 100%
+    );
+
+  transition:background .5s ease;
+}
+
+
+/* CONTENIDO */
+
+.experience-feature-content{
+  position:absolute;
+  inset:0;
+  z-index:2;
+
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-end;
+
+  padding:28px;
+}
+
+
+.experience-feature-icon{
+  width:48px;
+  height:48px;
+
+  display:grid;
+  place-items:center;
+
+  margin-bottom:auto;
+
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,.16);
+
+  background:rgba(9,11,28,.55);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+
+  color:#fff;
+  font-size:1.1rem;
+}
+
+
+.experience-feature-number{
+  margin-bottom:.5rem;
+
+  font:700 .72rem/1 "Montserrat",sans-serif;
+  letter-spacing:.18em;
+
+  color:var(--cyan);
+}
+
+
+.experience-feature h3{
+  margin:0 0 .7rem;
+
+  font:800 clamp(1.55rem,6vw,2.2rem)/1
+    "Montserrat",sans-serif;
+
+  letter-spacing:-.035em;
+  color:#fff;
+}
+
+
+.experience-feature p{
+  max-width:430px;
+
+  margin:0;
+
+  color:rgba(255,255,255,.78);
+  font-size:.98rem;
+  line-height:1.55;
+}
+
+
+/* ==========================================================
+   DESKTOP / DISPOSITIVOS CON HOVER
+========================================================== */
+
+@media (hover:hover) and (pointer:fine){
+
+  .experience-feature > img{
+    filter:grayscale(1) brightness(.8);
+  }
+
+  .experience-feature:hover > img{
+    filter:grayscale(0) brightness(1);
+    transform:scale(1.055);
+  }
+
+  .experience-feature:hover .experience-feature-overlay{
+    background:
+      linear-gradient(
+        180deg,
+        rgba(5,6,16,.08) 0%,
+        rgba(5,6,16,.20) 35%,
+        rgba(5,6,16,.88) 100%
+      );
+  }
+
+}
+
+
+/* TABLET */
+
+@media (min-width:768px){
+
+  .experience-features{
+    grid-template-columns:repeat(3,1fr);
+    gap:18px;
+  }
+
+  .experience-feature{
+    min-height:520px;
+  }
+
+}
+
+
+/* DESKTOP */
+
+@media (min-width:1200px){
+
+  .experience-feature{
+    min-height:570px;
+  }
+
+  .experience-feature-content{
+    padding:34px;
+  }
+
+}
+
+    /* VENUE */
+    .venue-grid{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:16px;
+      margin-top:2rem;
+    }
+    .venue-visual{
+      min-height:520px;
+      border-radius:24px;
+      overflow:hidden;
+      border:1px solid var(--line);
+      position:relative;
+      background:#0c0f21;
+    }
+    .venue-visual picture,.venue-visual img{width:100%;height:100%}
+    .venue-visual img{position:absolute;inset:0;object-fit:cover;object-position:center}
+    .venue-visual::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:linear-gradient(180deg,transparent 28%,rgba(6,7,17,.88) 100%);
+    }
+    .venue-caption{position:absolute;left:22px;right:22px;bottom:22px;z-index:1}
+    .venue-side{display:grid;gap:12px}
+    .info-row{display:flex;gap:.9rem;align-items:flex-start}
+    .info-row i{width:22px;margin-top:.18rem;color:var(--cyan)}
+
+    /* ACCESS */
+    .access-shell{
+      position:relative;
+      overflow:hidden;
+      padding:26px 20px;
+      border:1px solid rgba(255,255,255,.15);
+      border-radius:24px;
+      background:
+        radial-gradient(650px 400px at 90% 10%,rgba(89,230,255,.1),transparent 65%),
+        radial-gradient(650px 450px at 0% 100%,rgba(167,118,255,.16),transparent 62%),
+        linear-gradient(145deg,rgba(25,36,139,.22),rgba(255,255,255,.035));
+    }
+    .access-grid{display:grid;grid-template-columns:1fr;gap:2rem;align-items:center}
+    .access-price{
+      font:900 clamp(3rem,15vw,5rem)/.9 "Montserrat",sans-serif;
+      letter-spacing:-.07em;
+      margin:.45rem 0 .8rem;
+    }
+    .access-price small{
+      font-size:.21em;
+      letter-spacing:.04em;
+      color:var(--muted);
+      vertical-align:top;
+      margin-left:.15rem;
+    }
+    .access-note{max-width:580px;color:var(--muted);line-height:1.65}
+    .access-list{list-style:none;padding:0;margin:1.4rem 0 1.7rem;display:grid;gap:.72rem}
+    .access-list li{display:flex;gap:.68rem;color:#e6e9fa}
+    .access-list i{color:var(--cyan);margin-top:.25rem}
+    .access-shell .btn{width:100%}
+
+    .digital-pass{
+      margin:0 auto;
+      width:min(100%,350px);
+      padding:20px;
+      border-radius:24px;
+      background:#f5f7ff;
+      color:#11152b;
+      box-shadow:0 35px 80px rgba(0,0,0,.28);
+    }
+    .digital-pass-top{display:flex;justify-content:space-between;gap:1rem;align-items:flex-start}
+    .digital-pass .brand{font:900 1rem/1 "Montserrat",sans-serif;color:var(--brand)}
+    .digital-pass .date{font-weight:800;text-transform:uppercase}
+    .qr-demo{
+      width:128px;
+      aspect-ratio:1;
+      margin:26px auto 14px;
+      border-radius:14px;
+      background:
+        linear-gradient(90deg,#111 12%,transparent 12% 22%,#111 22% 34%,transparent 34% 48%,#111 48% 62%,transparent 62% 72%,#111 72%),
+        linear-gradient(#111 11%,transparent 11% 24%,#111 24% 38%,transparent 38% 48%,#111 48% 63%,transparent 63% 78%,#111 78%);
+      background-size:28px 31px;
+      mix-blend-mode:multiply;
+      border:10px solid #fff;
+      outline:1px solid #dfe3ee;
+    }
+    .pass-code{text-align:center;font:700 .72rem/1.4 monospace;letter-spacing:.12em;color:#62687a}
+    .pass-label{text-align:center;font-size:.8rem;color:#62687a;margin-top:6px}
+
+    .payment-installments{
+  display:inline-flex;
+  align-items:center;
+  gap:.65rem;
+
+  margin:.7rem 0 1.4rem;
+  padding:.7rem 1rem;
+
+  border:1px solid rgba(89,230,255,.22);
+  border-radius:999px;
+
+  background:rgba(89,230,255,.07);
+  color:#eefcff;
+
+  font-size:.92rem;
+  line-height:1.2;
+}
+
+.payment-installments i{
+  color:var(--cyan);
+  font-size:1rem;
+}
+
+.payment-installments strong{
+  color:#fff;
+  font-weight:800;
+}
+
+@media (max-width:575.98px){
+  .payment-installments{
+    width:100%;
+    justify-content:center;
+    border-radius:14px;
+    padding:.85rem 1rem;
+    text-align:center;
+  }
+}
+
+    /* FAQ */
+    .accordion-item{background:transparent;border:0;border-bottom:1px solid var(--line);border-radius:0!important}
+    .accordion-button{
+      padding:1.2rem 0;
+      background:transparent!important;
+      color:#fff!important;
+      font-weight:700;
+      box-shadow:none!important;
+    }
+    .accordion-button:not(.collapsed){color:#fff!important}
+    .accordion-button::after{filter:invert(1);opacity:.8}
+    .accordion-body{padding:0 0 1.3rem;color:var(--muted);max-width:850px}
+
+    /* FINAL CTA */
+    .final-cta{
+      position:relative;
+      min-height:78svh;
+      padding:0;
+      overflow:hidden;
+      border-top:0;
+      display:flex;
+      align-items:flex-end;
+    }
+    .final-cta picture,.final-cta img{width:100%;height:100%}
+    .final-cta img{position:absolute;inset:0;object-fit:cover;object-position:center}
+    .final-cta::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      z-index:1;
+      background:linear-gradient(180deg,rgba(7,8,18,.16) 0%,rgba(7,8,18,.32) 38%,rgba(7,8,18,.94) 100%);
+    }
+    .final-cta-content{
+      position:relative;
+      z-index:2;
+      width:min(100% - 32px,1160px);
+      margin:0 auto;
+      padding:54px 0 44px;
+    }
+    .final-cta h2{
+      max-width:920px;
+      margin:.7rem 0 1rem;
+      font:900 clamp(2.3rem,11vw,5rem)/.92 "Montserrat",sans-serif;
+      letter-spacing:-.055em;
+      text-transform:uppercase;
+    }
+    .final-cta .btn{width:100%;margin-top:.8rem}
+
+    footer{border-top:1px solid var(--line);padding:30px 0 96px;color:var(--muted)}
+    .socials a{color:#fff;opacity:.72}.socials a:hover{opacity:1}
+
+    /* MOBILE BUY BAR */
+    .mobile-buybar{
+      position:fixed;
+      left:10px;
+      right:10px;
+      bottom:calc(10px + var(--safe-bottom));
+      z-index:1045;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      padding:8px 8px 8px 14px;
+      border:1px solid rgba(255,255,255,.16);
+      border-radius:18px;
+      background:rgba(7,8,18,.88);
+      box-shadow:0 18px 60px rgba(0,0,0,.45);
+      backdrop-filter:blur(18px);
+      -webkit-backdrop-filter:blur(18px);
+    }
+    .mobile-buybar-copy{min-width:0;flex:1}
+    .mobile-buybar-copy strong{display:block;font:800 .86rem/1.15 "Montserrat",sans-serif}
+    .mobile-buybar-copy span{display:block;margin-top:2px;color:var(--muted);font-size:.76rem}
+    .mobile-buybar .btn{min-height:44px;padding:.68rem .95rem;white-space:nowrap;font-size:.86rem}
+
+    /* TABLET + DESKTOP */
+    @media (min-width:768px){
+      :root{--nav-h:76px}
+      body{padding-bottom:0}
+      section{padding:96px 0}
+      .container-narrow{width:min(100% - 48px,1160px)}
+      .navbar .container-narrow{width:min(100% - 40px,1160px)}
+      .navbar-brand img{height:52px}
+      .navbar-collapse{padding:0}
+
+      .section-title{font-size:clamp(2.5rem,5.8vw,4.2rem)}
+      .section-lead{font-size:1.18rem}
+
+      .hero{padding:calc(var(--nav-h) + 58px) 0 54px}
+      .hero-title{font-size:clamp(4.8rem,10vw,8rem)}
+      .hero-copy{font-size:1.2rem}
+      .hero-actions{display:flex;flex-wrap:wrap;gap:.7rem}
+      .hero-actions .btn{width:auto}
+      .meta-chip{font-size:.86rem;padding:.56rem .8rem}
+      .countdown-wrap{margin-top:1.8rem;padding-top:1.15rem}
+      .countdown{max-width:610px}
+      .countdown .num{font-size:clamp(2rem,4vw,3.5rem)}
+      .countdown .label{font-size:.7rem;letter-spacing:.14em}
+
+      .manifesto-copy{font-size:clamp(3rem,5.6vw,4.7rem)}
+      .manifesto-foot{grid-template-columns:1fr 1fr;gap:2rem}
+
+      .photo-break-inner{min-height:78vh}
+      .photo-break-copy{left:24px;right:24px;bottom:38px}
+
+      .experience-list{grid-template-columns:repeat(2,1fr);gap:16px}
+      .experience-item{padding:22px}
+
+      .story-grid{grid-template-columns:.85fr 1.15fr;gap:18px}
+      .story-card{min-height:520px}
+      .story-card.tall{min-height:640px}
+
+      .venue-grid{grid-template-columns:1.12fr .88fr;gap:18px}
+      .venue-visual{min-height:620px}
+      .venue-side{gap:14px}
+
+      .access-shell{padding:44px;border-radius:30px}
+      .access-grid{grid-template-columns:1.15fr .85fr;gap:2.5rem}
+      .access-shell .btn{width:auto}
+      .digital-pass{transform:rotate(1.5deg)}
+
+      .final-cta{min-height:82vh}
+      .final-cta-content{width:min(100% - 48px,1160px);padding:72px 0 58px}
+      .final-cta .btn{width:auto}
+
+      .mobile-buybar{display:none}
+      footer{padding-bottom:42px}
+    }
+
+    @media (min-width:992px){
+      section{padding:112px 0}
+      .experience-list{grid-template-columns:repeat(3,1fr)}
+      .experience-item{display:block;padding:26px;min-height:245px}
+      .experience-item .icon-box{margin-bottom:1.35rem}
+      .experience-item h3{font-size:1.08rem}
+      .story-grid{grid-template-columns:.72fr 1.28fr}
+      .story-card{min-height:600px}
+      .story-card.tall{min-height:700px}
+    }
+
+    @media (prefers-reduced-motion:reduce){
+      html{scroll-behavior:auto}
+      .marquee-track{animation:none}
+      *{transition:none!important}
+    }
+  </style>
+</head>
+<body>
+
+  <!--
+    ASSETS SUGERIDOS PARA LAS FOTOS REALES SIN SELLO:
+
+    assets/img/evento/escala-mobile.webp
+    assets/img/evento/escala-desktop.webp
+    assets/img/evento/personas.webp
+    assets/img/evento/pista.webp
+    assets/img/evento/palacio-mobile.webp
+    assets/img/evento/palacio-desktop.webp
+    assets/img/evento/cierre-mobile.webp
+    assets/img/evento/cierre-desktop.webp
+
+    VIDEO HERO:
+    assets/video/hero-mobile.mp4
+    assets/video/hero-desktop.mp4
+  -->
+
+  <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+    <div class="container-narrow d-flex align-items-center">
+      <a class="navbar-brand" href="#home" aria-label="AGAE">
+        <img src="assets/img/agae.png" alt="AGAE" />
+      </a>
+
+      <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Abrir navegación">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-1">
+          <li class="nav-item"><a class="nav-link" href="#evento">El evento</a></li>
+          <li class="nav-item"><a class="nav-link" href="#experiencia">La experiencia</a></li>
+          <li class="nav-item"><a class="nav-link" href="#venue">Palacio Alsina</a></li>
+          <li class="nav-item"><a class="nav-link" href="#faq">FAQ</a></li>
+          <li class="nav-item ms-lg-2">
+            <a class="btn btn-brand btn-sm js-buy" href="#accesos"><i class="fa-solid fa-ticket me-2"></i>Accesos</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <header id="home" class="hero">
+    <video class="hero-video" id="heroVideo" autoplay muted loop playsinline webkit-playsinline preload="metadata">
+      <source src="assets/video/hero-mobile.mp4" media="(max-width: 767.98px)" type="video/mp4" />
+      <source src="assets/video/hero-desktop.mp4" media="(min-width: 768px)" type="video/mp4" />
+    </video>
+
+    <div class="container-narrow">
+      <div class="hero-meta">
+        <span class="meta-chip"><i class="fa-regular fa-calendar"></i> 06 NOV 2026</span>
+        <span class="meta-chip"><i class="fa-regular fa-clock"></i> 20:30 H</span>
+        <span class="meta-chip"><i class="fa-solid fa-location-dot"></i> PALACIO ALSINA</span>
+      </div>
+
+      <h1 class="hero-title">
+        <span class="line-muted">El evento</span><br>
+        <span class="accent">más grande</span><br>
+        de la Abogacía
+      </h1>
+
+      <p class="hero-copy"><strong>Una vez por año, TODA LA ABOGACÍA se encuentra.</strong> Una noche que reúne profesionales, referentes, instituciones y nuevas generaciones en uno de los escenarios más emblemáticos de Buenos Aires.</p>
+
+      <div class="hero-actions">
+        <a href="#accesos" class="btn btn-brand btn-lg js-buy"><i class="fa-solid fa-ticket me-2"></i>Accesos</a>
+        <a href="#evento" class="btn btn-ghost btn-lg">El evento</a>
+      </div>
+
+      <div class="hero-countdown-simple">
+        <span class="countdown-kicker">Faltan</span>
+
+        <div class="countdown-days">
+          <span id="cd-days">--</span>
+          <small>días</small>
+        </div>
+      </div>
+
+    </div>
+  </header>
+
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track">
+
+    <div class="marquee-group">
+      <span>06.11.2026</span>
+      <i class="fa-solid fa-circle"></i>
+      <span>PALACIO ALSINA</span>
+      <i class="fa-solid fa-circle"></i>
+      <span>BARRA LIBRE</span>
+      <i class="fa-solid fa-circle"></i>
+      <span>CATERING</span>
+      <i class="fa-solid fa-circle"></i>
+      <span>SHOW EN VIVO</span>
+      <i class="fa-solid fa-circle"></i>
+      <span>PRODUCCIÓN</span>
+      <i class="fa-solid fa-circle"></i>
+      <span>TODA LA ABOGACÍA</span>
+      <i class="fa-solid fa-circle"></i>
+    </div>
+
+    <!-- COPIA EXACTA -->
+    <div class="marquee-group">
+      <span>06.11.2026</span>
+      <i class="fa-solid fa-circle"></i>
+      <span>PALACIO ALSINA</span>
+      <i class="fa-solid fa-circle"></i>
+      <span>BARRA LIBRE</span>
+      <i class="fa-solid fa-circle"></i>
+      <span>CATERING</span>
+      <i class="fa-solid fa-circle"></i>
+      <span>SHOW EN VIVO</span>
+      <i class="fa-solid fa-circle"></i>
+      <span>PRODUCCIÓN</span>
+      <i class="fa-solid fa-circle"></i>
+      <span>TODA LA ABOGACÍA</span>
+      <i class="fa-solid fa-circle"></i>
+    </div>
+
+  </div>
+</div>
+
+  <section id="evento">
+    <div class="container-narrow">
+      <div class="eyebrow">Una cita que ya es tradición</div>
+
+      <div class="manifesto-copy">
+        No es solamente una noche. <span>Es el momento del año en el que distintas generaciones, ámbitos y miradas de la profesión comparten un mismo lugar.</span>
+      </div>
+
+      <div class="manifesto-foot">
+        <p class="mb-0">AGAE vuelve al Palacio Alsina con su encuentro anual, ampliando la convocatoria a la Abogacía en toda su diversidad: sector público, sector privado, ejercicio independiente, academia e instituciones.</p>
+        <p class="mb-0">Una experiencia pensada para encontrarnos fuera de la rutina, fortalecer vínculos y celebrar una profesión que atraviesa todos los ámbitos de la vida pública y privada.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOTO 1: escala del evento. Sin referencia a año/edición. -->
+  <section class="photo-break" aria-label="El evento en Palacio Alsina">
+    <div class="photo-break-inner">
+      <picture>
+        <source media="(max-width: 767.98px)" srcset="assets/img/evento/escala-mobile.webp" />
+        <img src="assets/img/evento/escala-desktop.webp" alt="Palacio Alsina lleno durante el encuentro de la Abogacía" loading="lazy" decoding="async" />
+      </picture>
+      <div class="photo-break-copy">
+        <div class="eyebrow mb-3">Una vez por año</div>
+        <h2>Toda la Abogacía se encuentra.</h2>
+      </div>
+    </div>
+  </section>
+
+<section id="experiencia" class="experience-section">
+  <div class="container-narrow">
+
+    <div class="eyebrow">La experiencia</div>
+
+    <h2 class="section-title">
+      Una noche para vivirla<br>
+      de principio a fin.
+    </h2>
+
+    <p class="section-lead">
+      Tu acceso incluye una propuesta integral para disfrutar toda la noche:
+      <strong>barra libre, gastronomía de primer nivel y show en vivo.</strong>
+    </p>
+
+
+    <div class="experience-features">
+
+      <!-- BARRA LIBRE -->
+      <article class="experience-feature">
+        <img
+          src="assets/img/evento/barra.webp"
+          alt="Barra durante el evento"
+          loading="lazy"
+        >
+
+        <div class="experience-feature-overlay"></div>
+
+        <div class="experience-feature-content">
+          <div class="experience-feature-icon">
+            <i class="fa-solid fa-martini-glass-citrus"></i>
+          </div>
+
+          <div class="experience-feature-number">01</div>
+
+          <h3>Barra libre</h3>
+
+          <p>
+            Bebidas con y sin alcohol para acompañar la noche
+            de principio a fin.
+          </p>
+        </div>
+      </article>
+
+
+      <!-- GASTRONOMÍA -->
+      <article class="experience-feature">
+        <img
+          src="assets/img/evento/gastronomia.webp"
+          alt="Propuesta gastronómica del evento"
+          loading="lazy"
+        >
+
+        <div class="experience-feature-overlay"></div>
+
+        <div class="experience-feature-content">
+          <div class="experience-feature-icon">
+            <i class="fa-solid fa-utensils"></i>
+          </div>
+
+          <div class="experience-feature-number">02</div>
+
+          <h3>Gastronomía</h3>
+
+          <p>
+            Una propuesta gastronómica de primer nivel,
+            especialmente pensada para la ocasión.
+          </p>
+        </div>
+      </article>
+
+
+      <!-- SHOW -->
+      <article class="experience-feature">
+        <img
+          src="assets/img/evento/show.webp"
+          alt="Show en vivo durante el evento"
+          loading="lazy"
+        >
+
+        <div class="experience-feature-overlay"></div>
+
+        <div class="experience-feature-content">
+          <div class="experience-feature-icon">
+            <i class="fa-solid fa-music"></i>
+          </div>
+
+          <div class="experience-feature-number">03</div>
+
+          <h3>Show en vivo & cachengue</h3>
+
+          <p>
+            Show en vivo y música para seguir la noche
+            con cachengue hasta el final.
+          </p>
+        </div>
+      </article>
+
+    </div>
+
+  </div>
+</section>
+
+  <section id="venue">
+    <div class="container-narrow">
+      <div class="eyebrow">El escenario</div>
+      <h2 class="section-title">Volvemos al mítico Palacio Alsina.</h2>
+      <p class="section-lead">Historia, escala y tecnología en uno de los espacios más emblemáticos del centro porteño.</p>
+
+      <div class="venue-grid">
+        <div class="venue-visual">
+          <picture>
+            <source media="(max-width: 767.98px)" srcset="assets/img/evento/palacio-mobile.webp" />
+            <img src="assets/img/evento/palacio-desktop.webp" alt="Vista interior del Palacio Alsina durante el evento" loading="lazy" decoding="async" />
+          </picture>
+
+          <div class="venue-caption">
+            <div class="eyebrow mb-2">Palacio Alsina</div>
+            <h3 class="h2 fw-bold mb-1">Alsina 940, CABA</h3>
+            <p class="mb-0 text-white-50">Viernes 6 de noviembre · Apertura 20:30 h</p>
+          </div>
+        </div>
+
+        <div class="venue-side">
+          <div class="glass-card">
+            <div class="info-row">
+              <i class="fa-solid fa-location-dot"></i>
+              <div><h4 class="h6 mb-1">Ubicación</h4><p class="subtle mb-0">Alsina 940, Ciudad Autónoma de Buenos Aires. A metros de Av. 9 de Julio y con múltiples opciones de transporte público.</p></div>
+            </div>
+          </div>
+
+          <div class="glass-card">
+            <div class="info-row">
+              <i class="fa-solid fa-car"></i>
+              <div><h4 class="h6 mb-1">Estacionamiento</h4><p class="subtle mb-0">En las inmediaciones del Palacio hay estacionamientos privados con funcionamiento 24 h.</p></div>
+            </div>
+          </div>
+
+          <div class="glass-card">
+            <div class="info-row">
+              <i class="fa-solid fa-shirt"></i>
+              <div><h4 class="h6 mb-1">Dress code</h4><p class="subtle mb-0">Elegante / cocktail. Derecho de admisión y permanencia.</p></div>
+            </div>
+          </div>
+
+          <div class="glass-card">
+            <div class="info-row">
+              <i class="fa-solid fa-clock"></i>
+              <div><h4 class="h6 mb-1">Ingreso</h4><p class="subtle mb-0">La apertura será a las 20:30 h. Recomendamos llegar con anticipación y tener preparado el acceso digital.</p></div>
+            </div>
+          </div>
+
+          <a class="btn btn-ghost text-center" href="https://www.google.com/maps/search/?api=1&query=Palacio+Alsina+Alsina+940+CABA" target="_blank" rel="noopener"><i class="fa-solid fa-route me-2"></i>Cómo llegar</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+<section class="fomo-section">
+  <img
+    src="assets/img/evento/fomo.webp"
+    alt=""
+    loading="lazy"
+    class="fomo-image"
+  >
+
+  <div class="fomo-overlay"></div>
+
+  <div class="fomo-content">
+    <p>¿EL AÑO PASADO TE LA CONTARON?</p>
+
+    <h2>
+      ESTE AÑO,<br>
+      VIVILA.
+    </h2>
+  </div>
+</section>
+
+<section id="accesos">
+  <div class="container-narrow">
+    <div class="access-shell">
+      <div class="access-grid">
+        <div>
+          <div class="eyebrow">Acceso general</div>
+
+          <h2 class="section-title mb-3">
+            Tu acceso ahora es 100% digital.
+          </h2>
+
+          <div class="access-price">
+            $69.000 <small>ARS</small>
+          </div>
+
+          <div class="payment-installments">
+            <i class="fa-solid fa-credit-card"></i>
+            <span>
+              <strong>3 cuotas sin interés</strong> con Mercado Pago
+            </span>
+          </div>
+
+          <p class="access-note">
+            Comprás online, recibís tu acceso electrónico y el día del evento
+            ingresás presentando el QR desde tu celular. Sin retiro de entradas físicas.
+          </p>
+
+          <ul class="access-list">
+            <li>
+              <i class="fa-solid fa-circle-check"></i>
+              <span>Acceso individual al evento.</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-circle-check"></i>
+              <span>Entrega electrónica por email.</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-circle-check"></i>
+              <span>QR único para validación en el ingreso.</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-circle-check"></i>
+              <span>Compra de uno o más accesos desde la plataforma.</span>
+            </li>
+          </ul>
+
+          <a class="btn btn-brand btn-lg js-buy" href="#accesos">
+            <i class="fa-solid fa-bolt me-2"></i>
+            Comprar acceso
+          </a>
+        </div>
+
+        <div class="digital-pass" aria-label="Ejemplo visual de acceso digital">
+          <div class="digital-pass-top">
+            <div>
+              <div class="brand">AGAE 2026</div>
+              <small>EL EVENTO MÁS GRANDE<br>DE LA ABOGACÍA</small>
+            </div>
+
+            <div class="date text-end">
+              06 NOV<br>
+              <small>20:30 H</small>
+            </div>
+          </div>
+
+          <div class="qr-demo" aria-hidden="true"></div>
+          <div class="pass-code">6N26-XXXX-XXXX-A1</div>
+          <div class="pass-label">Acceso digital · QR personal</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+  <section id="faq">
+    <div class="container-narrow">
+      <div class="eyebrow">Información útil</div>
+      <h2 class="section-title">Preguntas frecuentes.</h2>
+
+      <div class="accordion mt-4" id="faqAcc">
+        <div class="accordion-item">
+          <h3 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">¿Cómo recibo mi acceso?</button></h3>
+          <div id="faq1" class="accordion-collapse collapse" data-bs-parent="#faqAcc"><div class="accordion-body">Una vez acreditado el pago, recibirás por email tu acceso electrónico con un código QR único. No necesitás retirar una entrada física.</div></div>
+        </div>
+
+        <div class="accordion-item">
+          <h3 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">¿Cómo ingreso el día del evento?</button></h3>
+          <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAcc"><div class="accordion-body">Presentá el QR de tu acceso desde el celular. El código será validado en el control de ingreso y podrá utilizarse una sola vez.</div></div>
+        </div>
+
+        <div class="accordion-item">
+          <h3 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">¿Puedo comprar más de un acceso?</button></h3>
+          <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAcc"><div class="accordion-body">Sí. La plataforma permite adquirir múltiples accesos e identificar a las personas que asistirán con cada uno.</div></div>
+        </div>
+
+        <div class="accordion-item">
+          <h3 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">¿Es un evento exclusivo para abogados del Estado?</button></h3>
+          <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAcc"><div class="accordion-body">No. La convocatoria reúne a profesionales de la Abogacía del sector público y privado, independientes, académicos, referentes institucionales e invitados vinculados con la profesión.</div></div>
+        </div>
+
+        <div class="accordion-item">
+          <h3 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq5">¿Qué incluye la propuesta gastronómica?</button></h3>
+          <div id="faq5" class="accordion-collapse collapse" data-bs-parent="#faqAcc"><div class="accordion-body">La propuesta gastronómica y de barras será informada próximamente en esta misma página y en los canales oficiales de AGAE.</div></div>
+        </div>
+
+        <div class="accordion-item">
+          <h3 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq6">¿Qué hago si no encuentro el email con mi acceso?</button></h3>
+          <div id="faq6" class="accordion-collapse collapse" data-bs-parent="#faqAcc"><div class="accordion-body">La plataforma contará con una opción para recuperar tus accesos utilizando el email informado al momento de la compra.</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container-narrow d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
+      <div class="small text-center text-md-start"><span id="year"></span> AGAE — Asociación Gremial de la Abogacía del Estado</div>
+      <div class="socials d-flex align-items-center gap-3">
+        <a href="https://www.instagram.com/agaeok" target="_blank" rel="noopener" aria-label="Instagram AGAE"><i class="fa-brands fa-instagram"></i></a>
+        <a href="https://x.com/agaeok" target="_blank" rel="noopener" aria-label="X AGAE"><i class="fa-brands fa-x-twitter"></i></a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- CTA persistente sólo en mobile -->
+  <div class="mobile-buybar" id="mobileBuybar">
+    <div class="mobile-buybar-copy">
+      <strong>06 NOV · $65.000</strong>
+      <span>Palacio Alsina · 20:30 h</span>
+    </div>
+    <a class="btn btn-brand js-buy" href="#accesos">Comprar</a>
+  </div>
+
+  <script>
+    // ==========================================================
+    // INTEGRACIÓN CHECKOUT
+    // Pegá acá la URL de inicio de tu plataforma de pagos.
+    // Ejemplo: const CHECKOUT_URL = '/eventos/checkout.php';
+    // Mientras quede vacío, los botones llevan a la sección Accesos.
+    // ==========================================================
+    const CHECKOUT_URL = '';
+
+    document.querySelectorAll('.js-buy').forEach(btn => {
+      if (CHECKOUT_URL) btn.setAttribute('href', CHECKOUT_URL);
+    });
+
+    // Año footer
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Countdown: 06/11/2026 20:30 Argentina (-03:00)
+    const target = new Date('2026-11-06T20:30:00-03:00').getTime();
+
+    function tick(){
+      const diff = Math.max(0, target - Date.now());
+      const days = Math.ceil(diff / 86400000);
+
+      document.getElementById('cd-days').textContent = days;
+    }
+
+    tick();
+    setInterval(tick, 60000);
+
+    tick();
+    setInterval(tick,1000);
+
+    // Autoplay tolerante a iOS / Android
+    const heroVideo = document.getElementById('heroVideo');
+    if (heroVideo) {
+      heroVideo.muted = true;
+      heroVideo.playsInline = true;
+
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        heroVideo.removeAttribute('autoplay');
+        heroVideo.pause();
+      } else {
+        heroVideo.play().catch(() => {
+          document.addEventListener('touchstart', () => heroVideo.play().catch(()=>{}), { once:true });
+        });
+      }
+    }
+
+    // Cierra navbar mobile al navegar
+    document.querySelectorAll('#mainNav .nav-link, #mainNav .btn').forEach(link => {
+      link.addEventListener('click', () => {
+        const nav = document.getElementById('mainNav');
+        if (nav.classList.contains('show')) {
+          bootstrap.Collapse.getOrCreateInstance(nav).hide();
+        }
+      });
+    });
+  </script>
+</body>
+</html>
